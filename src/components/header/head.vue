@@ -20,6 +20,7 @@
 <script>
 import search_ico from '../../assets/search.png'
 import user_ico from '../../assets/user.png'
+import {getUser} from '../../service/getDate'
 export default {
     data(){
         return {
@@ -27,6 +28,9 @@ export default {
             search_ico,
             user_ico,
         }
+    },
+    created(){
+        getUser();
     }
 }
 </script>
