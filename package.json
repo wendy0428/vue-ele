@@ -2,9 +2,10 @@
   "name": "vue-ele",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+  "scripts":{
+    "serve":"vue-cli-service serve --mode dev",
+    "btest":"vue-cli-service build --mode test",
+    "build":"vue-cli-service build --mode prod"
   },
   "dependencies": {
     "amfe-flexible": "^2.2.1",
