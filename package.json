@@ -2,15 +2,15 @@
   "name": "vue-ele",
   "version": "0.1.0",
   "private": true,
-  "scripts":{
-    "serve":"vue-cli-service serve --mode dev",
-    "btest":"vue-cli-service build --mode test",
-    "build":"vue-cli-service build --mode prod"
+  "scripts": {
+    "serve": "vue-cli-service serve --mode dev",
+    "btest": "vue-cli-service build --mode test",
+    "build": "vue-cli-service build --mode prod"
   },
   "dependencies": {
     "amfe-flexible": "^2.2.1",
     "axios": "^0.20.0",
-    "core-js": "^3.6.5",
+    "core-js": "^3.6.4",
     "px2rem-loader": "^0.1.9",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
