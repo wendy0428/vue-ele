@@ -37,26 +37,26 @@ export default {
 <style scoped>
 #head {
     background-color: #3190e8;
-    height: 1.3rem;
+    height: 90px;
     width: 100%;
     color: #fff;
-    font-size: 0.5rem;
+    font-size: 35px;
     display: flex;
-    line-height: 1.3rem;
+    line-height: 90px;
     position: fixed;
     top:0;
 }
 
 #head img{
-    width: 0.7rem;
+    width: 50px;
     position: absolute;
-    top: 0.3rem;
+    top: 20px;
 }
 .head_left img{
-    left: 0.4rem;
+    left: 20px;
 }
 .head_right img{
-    right: 0.4rem;
+    right: 20px;
 }
 .head_left,.head_right{
     width: 20%;

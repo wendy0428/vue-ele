@@ -39,14 +39,14 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
 	response => {
 	 	// 定时刷新access-token
-	 	if (!response.data.data && response.data.data.message === 'token invalid') {
-	  		// 刷新token
-	  		store.dispatch('refresh').then(response => {
-				setStore('access_token', response.data)
-	  		}).catch(error => {
-	   			throw new Error('token刷新' + error)
-	  		})
-		};
+	 	// if (!response.data.data && response.data.data.message === 'token invalid') {
+	  	// 	// 刷新token
+	  	// 	store.dispatch('refresh').then(response => {
+		// 		setStore('access_token', response.data)
+	  	// 	}).catch(error => {
+	   	// 		throw new Error('token刷新' + error)
+	  	// 	})
+		// };
 		// 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
   		// 否则的话抛出错误
 		if (response.status === 200) {
