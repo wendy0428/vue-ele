@@ -1,5 +1,5 @@
 import { getStore,setStore,removeStore } from './mUtils';
-import {httpGet} from './getHttp'
+import {httpGet,httpPost} from './axios'
 
 // 获取首页热门城市
 export const cityGuess = () => httpGet({url:'/v1/cities',params:{type: 'guess'}})
