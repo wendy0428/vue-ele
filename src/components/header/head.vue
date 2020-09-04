@@ -1,19 +1,17 @@
 <template>
     <div id="head">
         <div class="head_left">
-            <router-link :to="{}" v-if="userInfo" tag="div">ele.me</router-link>
-            <router-link :to="{}" v-else>
-                <img :src="search_ico"/>
-            </router-link>
+            <slot name="ele"></slot>
+            <slot name="search"></slot>
+            <slot name="goBack"></slot>
         </div>
         <div class="head_mid">
             <slot>111</slot>
         </div>
         <div class="head_right">
-            <router-link :to="{}" v-if="userInfo">
-                <img :src="user_ico"/>
-            </router-link>
-            <router-link :to="{}" v-else tag="div">登录/注册</router-link>
+            <slot name="userIco"></slot>
+            <slot name="loginRegister"></slot>
+            <slot name="changeCity"></slot>
         </div>
     </div>
 </template>
@@ -45,6 +43,7 @@ export default {
     line-height: 90px;
     position: fixed;
     top:0;
+    z-index:999;
 }
 
 #head img{
@@ -59,12 +58,20 @@ export default {
     right: 20px;
 }
 .head_left,.head_right{
-    width: 20%;
-    /* background-color:red; */
+    width: 30%;
     position: relative;
+}
+.head_left span{
+    width: 100%;
+    position: absolute;
+    left: 5px;
+}
+.head_right span{
+    width: 100%;
+    position: absolute;
+    right: 5px;
 }
 .head_mid{
     width: 60%;
-    /* background-color: yellow; */
 }
 </style>
