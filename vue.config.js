@@ -12,18 +12,22 @@ module.exports = {
                 remUnit: 75
         })
     },
-    // 本项目是vue cli3搭建的，代理配置是在vue.config.js文件中:
-    devServer: {
+	// 本项目是vue cli3搭建的，代理配置是在vue.config.js文件中:
+	devServer: {
+        host: '127.0.0.1',
+        disableHostCheck: true,
         proxy: {
-          '/proxyApi': {
-            target: 'http://cangdu.org:8001',
-            changeOrigin: true,
-            pathRewrite: {
-              '/proxyApi': ''
-            }
-          }
-        }
-    }
+            '/api': {
+                target: 'http://cangdu.org:8001', //对应自己的接口
+                changeOrigin: true,
+                ws: true,
+                pathRewrite: {
+					'^/api': ''
+				},
+         
+        	}
+		},
+	}
 }
  
 
