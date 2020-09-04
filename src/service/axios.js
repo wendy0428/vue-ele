@@ -3,11 +3,12 @@ import { getStore,setStore } from './mUtils'
 import store from '../store'
 import axios from 'axios' 
 
-// axios.defaults.baseURL = '/api';
+axios.defaults.baseURL = '/api';
 // axios很好用，其中之一就是它的拦截器十分强大，我们就可以为请求和响应设置拦截器
 // 请求拦截器可以在每个请求里加上token，做了统一处理后维护起来也方便，
 // 响应拦截器可以在接收到响应后先做一层操作，如根据状态码判断登录状态、授权。
 // request 拦截器实现
+/*
 axios.interceptors.request.use(
 	config => {
 		config.baseURL = baseUrl;
@@ -72,7 +73,7 @@ axios.interceptors.response.use(
   		}
 	}
 )
-
+*/
 
 // get 请求
 export function httpGet({
