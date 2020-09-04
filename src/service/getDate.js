@@ -10,10 +10,16 @@ export const getUser = () => httpGet({url: '/v1/user',params: {user_id: getStore
 export const cityGuess = () => httpGet({url: '/v1/cities',params: {type: 'guess'}})
 
 // 3.获取 热门城市列表
-export const hotcity = () => httpGet({url:'/v1/cities',params: {type: 'hot'}})
+export const hotcity = () => httpGet({url: '/v1/cities',params: {type: 'hot'}})
 
 // 4. 获取所有城市
 export const groupcity = () => httpGet({url: '/v1/cities',params: {type: 'group'}})
+
+// 5. 获取当前所在城市
+export const currentcity = (number) => httpGet({url: '/v1/cities/'+number})
+
+// 6. 获取搜索地址
+export const searchplace = (cityid, value) => httpGet({url:'/v1/pois', params: {type: 'search', city_id: cityid, keyword: value }})
 
 
 
