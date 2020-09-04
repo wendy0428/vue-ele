@@ -1,7 +1,14 @@
 <template>
     <div id="home">
         <!-- 公共头部 -->
-        <common-head></common-head>
+        <common-head>
+            <template v-slot:ele>
+                <router-link :to="{path:'/'}" tag="span">ele.me</router-link>
+            </template>
+            <template v-slot:loginRegister>
+                <router-link :to="{}" tag="span">登录/注册</router-link>
+            </template>
+        </common-head>
         <!-- 猜想的城市 -->
         <section class="city_guess_box">
             <div>
@@ -9,7 +16,7 @@
                 <span>定位不准时,请在城市列表中选择</span>
             </div>
             <div>
-                <span v-if="city_guess">{{city_guess}}</span>
+                <router-link :to="{path:`/city/${city_guess.id}`}" tag="span" v-if="city_guess">{{city_guess.name}}</router-link>
                 <span class="right_arrow"></span>
             </div>
         </section>
@@ -18,7 +25,7 @@
             <div class="hot_city_box_title">热门城市</div>
             <div class="hot_city_box_container">
                 <router-link 
-                :to="{}" 
+                :to="{path:`/city/${item.id}`}" 
                 tag="div" 
                 v-for="(item,index) in hot_city_list" :key="index"
                 class="each_hot_city"
@@ -31,7 +38,7 @@
                 <div class="each_group_city_title"><span>{{Initials}}</span><span class="tips" v-if="Initials=='A'">(按字母顺序显示)</span></div>
                 <div class="group_city_list_container">
                     <router-link 
-                        :to="{}"
+                        :to="{name:'City',params:{id:city.id}}"
                         tag="div"
                         v-for="(city,city_index) in cities" :key="city_index" 
                         class="each_city"
@@ -51,7 +58,7 @@ import {cityGuess,hotcity,groupcity} from '../../service/getDate'
 export default {
     data(){
         return {
-            city_guess: '',
+            city_guess: {},
             hot_city_list: [],
             group_city: {},
         }
@@ -61,20 +68,21 @@ export default {
     },
     created(){
         let that = this;
-        // 猜想的城市
+        // 1. 猜想的城市
         cityGuess().then((res) => {
-            that.city_guess = res.name;
+            that.city_guess = res;
         })
-        // 热门的城市列表
+        // 2. 热门的城市列表
         hotcity().then((res) => {
             that.hot_city_list = res;
         });
-        // 获取所有城市
+        // 3. 获取所有城市
         groupcity().then((res) => {
             that.group_city = res;
         })
     },
     computed:{
+        // 按字母 A-Z 的顺序重新排列,获取的所有城市
         group_city_list(){
             let that = this;
             // 用来保存,按顺序的数据
