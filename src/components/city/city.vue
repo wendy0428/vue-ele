@@ -26,12 +26,15 @@
                     v-for="(place,place_index) in searchPlaceList" :key="place_index"
                     tag="li"
                     :to="{}"
-                    @click="pushToPlaceHistory(place)"
+                    @click.native="pushToPlaceHistory(place)"
                 >
                     <div class="place_name">{{place.name}}</div>
                     <div class="pace_address">{{place.address}}</div>
                 </router-link>
             </ul>
+        </section>
+        <section v-else class="has_no_result">
+            <div>很抱歉,无搜索结果!</div>
         </section>
     </div>
 </template>
@@ -42,6 +45,8 @@ const commonHead = () => import('@/components/header/head')
 import leftArrowIcon from '../../assets/img/left_arrow.png'
 import {getCurrentCity,searchPlace} from '../../service/getData'
 import {setStore,getStore} from '../../config/utils'
+
+// import { Toast } from 'mint-ui';
 export default {
     data(){
         return {
@@ -71,9 +76,13 @@ export default {
             let placeHistory = getStore('placeHistory');
             if(placeHistory){
                 this.placeHistory = JSON.parse(placeHistory); 
-            }else{
-                this.placeHistory = [];
+                this.searchPlaceList = this.placeHistory;
             }
+            this.$Toast({
+                    message: "邮箱已拷贝",
+                    position: "center",
+                    duration: 1000
+                });
         },
         // 返回上一页
         goBackPage(){
@@ -83,7 +92,11 @@ export default {
         searchAddress(){
             // 2. 获取搜索的地址
             searchPlace(this.id,this.inputKeyValue).then((res) => {
-                this.searchPlaceList = res;
+                if(res.length!== undefined){
+                    this.searchPlaceList = res;
+                }
+            }).catch((err)=>{
+                console.log(err);
             });
         },
         // 清除 input 框中的值
@@ -92,8 +105,19 @@ export default {
             _this.inputKeyValue = '';
         },
         // 搜索历史 存入缓存
-        pushToPlaceHistory(placeHistory){
-            // ... 2020.9.4
+        pushToPlaceHistory(place){
+            let selectedPlace = place;
+            if(this.placeHistory.length!=0){
+                for(var i=0;i<this.placeHistory.length;i++){
+                    if(this.placeHistory[i].latitude==selectedPlace.latitude){
+                        return;
+                    }
+                }
+                this.placeHistory.unshift(selectedPlace);   
+            }else{
+                this.placeHistory.unshift(selectedPlace);
+            }
+            setStore('placeHistory',this.placeHistory)
         }
        
     }
@@ -161,5 +185,11 @@ export default {
 .pace_address{
     color: #999;
     font-size: 25px;
+}
+.has_no_result{
+    font-size: 20px;
+    color: #333;
+    background: #fff;
+    padding-top: 30px;
 }
 </style>

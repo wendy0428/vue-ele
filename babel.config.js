@@ -1,5 +1,35 @@
 module.exports = {
   presets: [
-    '@vue/cli-plugin-babel/preset'
-  ]
-}
+    [
+      "env",
+      {
+        modules: false,
+        targets: {
+          browsers: ["> 1%", "last 2 versions", "not ie <= 8"],
+        },
+      },
+    ],
+    "stage-2",
+  ],
+  plugins: [
+    "transform-vue-jsx",
+    "transform-runtime",
+    [
+      "component",
+      {
+        libraryName: "mint-ui",
+        styleLibraryName: "theme-chalk",
+      },
+    ],
+  ],
+  env: {
+    test: {
+      presets: ["env", "stage-2"],
+      plugins: [
+        "transform-vue-jsx",
+        "transform-es2015-modules-commonjs",
+        "dynamic-import-node",
+      ],
+    },
+  },
+};
