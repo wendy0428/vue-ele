@@ -16,9 +16,9 @@
     </div>
 </template>
 <script>
-import search_ico from '../../assets/search.png'
-import user_ico from '../../assets/user.png'
-import {getUser} from '../../service/getDate'
+import search_ico from '../../assets/img/search.png'
+import user_ico from '../../assets/img/user.png'
+import {getUser} from '../../service/getData'
 export default {
     data(){
         return {

@@ -54,7 +54,7 @@
 <script>
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
-import {cityGuess,hotcity,groupcity} from '../../service/getDate'
+import {guessCity,getHotCity,getGroupCity} from '../../service/getData'
 export default {
     data(){
         return {
@@ -67,29 +67,36 @@ export default {
         commonHead
     },
     created(){
-        let that = this;
+        let _this = this;
+
         // 1. 猜想的城市
-        cityGuess().then((res) => {
-            that.city_guess = res;
-        })
+        guessCity().then((res) => {
+            _this.city_guess = res;
+        }).catch((err) => {
+            console.log(err);
+        });
         // 2. 热门的城市列表
-        hotcity().then((res) => {
-            that.hot_city_list = res;
+        getHotCity().then((res) => {
+            _this.hot_city_list = res;
+        }).catch((err) => {
+            console.log(err);
         });
         // 3. 获取所有城市
-        groupcity().then((res) => {
-            that.group_city = res;
-        })
+        getGroupCity().then((res) => {
+            _this.group_city = res;
+        }).catch((err) => {
+            console.log(err);
+        });
     },
     computed:{
         // 按字母 A-Z 的顺序重新排列,获取的所有城市
         group_city_list(){
-            let that = this;
+            let _this = this;
             // 用来保存,按顺序的数据
             let obj = {};
             for(var i=65;i<=90;i++){
                 var captial = String.fromCharCode(i);
-                var get_corresponding_city = that.group_city[captial];
+                var get_corresponding_city = _this.group_city[captial];
                 if(get_corresponding_city){
                     obj[captial] = get_corresponding_city;
                 }
@@ -130,7 +137,7 @@ export default {
     width: 50px;
     height: 50px;
     display: inline-block;
-    background: url(../../assets/right_arrow.png) no-repeat;
+    background: url(../../assets/img/right_arrow.png) no-repeat;
     background-size:contain;
 }
 /* 热门城市 */

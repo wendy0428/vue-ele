@@ -2,10 +2,10 @@
     <div id="city">
         <common-head>
             <template v-slot:goBack>
-                <img :src="left_arrow_icon" @click="goBackPage"/>
+                <img :src="leftArrowIcon" @click="goBackPage"/>
             </template>
             <template>
-                <span v-if="current_city_name">{{current_city_name}}</span>
+                <span v-if="currentCityName">{{currentCityName}}</span>
             </template>
             <template v-slot:changeCity>
                 <router-link :to="{name:'Home'}" tag="span">切换城市</router-link>
@@ -13,17 +13,17 @@
         </common-head>
         <!-- 搜索 -->
         <section class="search_box">
-            <input type="text" placeholder="输入学校、商务楼、地址" autocomplete="true" v-model="input_key_value"  v-on:keyup.13="searchAddress"/>
-            <span class="clear_btn" v-if="input_key_value" @click="clearInputValue"></span>
+            <input type="text" placeholder="输入学校、商务楼、地址" autocomplete="true" v-model="inputKeyValue"  v-on:keyup.13="searchAddress"/>
+            <span class="clear_btn" v-if="inputKeyValue" @click="clearInputValue"></span>
             <div class="submit">
                 <span @click="searchAddress">提交</span>
             </div>
         </section>
         <!-- 搜索地址列表 -->
-        <section class="search_place_list_box" v-if="search_place_list.length!=0">
+        <section class="searchPlaceList_box" v-if="searchPlaceList.length!=0">
             <ul>
                 <router-link 
-                    v-for="(place,place_index) in search_place_list" :key="place_index"
+                    v-for="(place,place_index) in searchPlaceList" :key="place_index"
                     tag="li"
                     :to="{}"
                     @click="pushToPlaceHistory(place)"
@@ -37,19 +37,19 @@
 </template>
 <script>
 // 公共头部组件
-import left_arrow_icon from '../../assets/left_arrow.png'
-import clear_icon from '../../assets/clear.png'
 const commonHead = () => import('@/components/header/head')
-import {currentcity,searchplace} from '../../service/getDate'
-import {setStore,getStore} from '../../service/mUtils'
+
+import leftArrowIcon from '../../assets/img/left_arrow.png'
+import {getCurrentCity,searchPlace} from '../../service/getData'
+import {setStore,getStore} from '../../config/utils'
 export default {
     data(){
         return {
-            left_arrow_icon,
+            leftArrowIcon,
             id: '',
-            current_city_name:'',
-            input_key_value: '',
-            search_place_list : [],
+            currentCityName:'',
+            inputKeyValue: '',
+            searchPlaceList : [],
             placeHistory: [],
         }
     },
@@ -57,22 +57,22 @@ export default {
         commonHead
     },
     created(){
-        let that = this;
+        let _this = this;
         // 获取当前城市的 id
-        that.id = that.$route.params.id;
+        _this.id = _this.$route.params.id;
         // 1. 获取当前城市的信息
-        currentcity(that.id).then((res) => {
-            that.current_city_name = res.name;
+        getCurrentCity(_this.id).then((res) => {
+            _this.currentCityName = res.name;
         })
-        that.initDate();
+        _this.initData();
     },
     methods:{
-        initDate(){
+        initData(){
             let placeHistory = getStore('placeHistory');
             if(placeHistory){
-                this.placeHistory = placeHistory;
+                this.placeHistory = JSON.parse(placeHistory); 
             }else{
-                setStore('placeHistory',[])
+                this.placeHistory = [];
             }
         },
         // 返回上一页
@@ -81,21 +81,21 @@ export default {
         },
         // 搜索地址
         searchAddress(){
-            let that = this;
             // 2. 获取搜索的地址
-            searchplace(that.id,this.input_key_value).then((res) => {
-                that.search_place_list = res;
+            searchPlace(this.id,this.inputKeyValue).then((res) => {
+                this.searchPlaceList = res;
             });
         },
         // 清除 input 框中的值
         clearInputValue(){
-            let that = this;
-            that.input_key_value = '';
+            let _this = this;
+            _this.inputKeyValue = '';
         },
         // 搜索历史 存入缓存
         pushToPlaceHistory(placeHistory){
             // ... 2020.9.4
         }
+       
     }
 }
 </script>
@@ -135,26 +135,26 @@ export default {
     display: block;
     width: 50px;
     height: 50px;
-    background: url(../../assets/clear.png) no-repeat;
+    background: url(../../assets/img/clear.png) no-repeat;
     background-size: contain;
     position: absolute;
     top: 40px;
     right: 50px
 }
 /* 搜索地址列表 */
-.search_place_list_box ul{
+.searchPlaceList_box ul{
     list-style: none;
     padding: 0;
     margin: 0;
     font-size: 30px;
     background-color: #fff;
 }
-.search_place_list_box ul li{
+.searchPlaceList_box ul li{
     border-bottom: 1px solid #e4e4e4;
     padding: 30px;
     text-align: left;
 }
-.search_place_list_box ul li div{
+.searchPlaceList_box ul li div{
     margin-bottom: 10px;
 }
 
