@@ -1,4 +1,4 @@
-import { getStore} from "../config/utils";
+import { getStore } from "../config/utils";
 import { httpGet, httpPost } from "../config/axios";
 
 // 1. 获取 用户信息
@@ -26,4 +26,19 @@ export const searchPlace = (cityid, value) =>
   httpGet({
     url: "/v1/pois",
     params: { type: "search", city_id: cityid, keyword: value },
+  });
+
+// 7. 获取msite页面地址信息
+export const getMsiteAddress = (geohash) =>
+  httpGet({ url: "/v2/pois/" + geohash });
+
+// 8. 获取msite页面食品分类列表
+export const getMsiteFoodTypes = (geohash) =>
+  httpGet({
+    url: "/v2/index_entry",
+    params: {
+      geohash,
+      group_type: "1",
+      "flags[]": "F",
+    },
   });

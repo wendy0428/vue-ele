@@ -5,9 +5,6 @@
             <template v-slot:ele>
                 <router-link :to="{path:'/'}" tag="span">ele.me</router-link>
             </template>
-            <template v-slot:loginRegister>
-                <router-link :to="{}" tag="span">登录/注册</router-link>
-            </template>
         </common-head>
         <!-- 猜想的城市 -->
         <section class="city_guess_box">
@@ -67,25 +64,43 @@ export default {
         commonHead
     },
     created(){
+        this.$toast({
+                message: 111,
+                position: "center",
+                duration: 1000
+            });
         let _this = this;
 
         // 1. 猜想的城市
         guessCity().then((res) => {
+            console.log('res',res);
             _this.city_guess = res;
-        }).catch((err) => {
-            console.log(err);
+        }).catch((err)=>{
+            this.$toast({
+                message: err,
+                position: "center",
+                duration: 1000
+            });
         });
         // 2. 热门的城市列表
         getHotCity().then((res) => {
             _this.hot_city_list = res;
-        }).catch((err) => {
-            console.log(err);
+        }).catch((err)=>{
+            this.$toast({
+                message: err,
+                position: "center",
+                duration: 1000
+            });
         });
         // 3. 获取所有城市
         getGroupCity().then((res) => {
             _this.group_city = res;
-        }).catch((err) => {
-            console.log(err);
+        }).catch((err)=>{
+            this.$toast({
+                message: err,
+                position: "center",
+                duration: 1000
+            });
         });
     },
     computed:{

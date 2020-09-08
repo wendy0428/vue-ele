@@ -9,26 +9,36 @@
             <slot>111</slot>
         </div>
         <div class="head_right">
-            <slot name="userIco"></slot>
-            <slot name="loginRegister"></slot>
-            <slot name="changeCity"></slot>
+            <slot name="head_right">
+                <router-link :to="{}" tag="span" v-if="userInfo.status == 0">登录/注册</router-link>
+                <router-link :to="{}" tag="span" v-else>
+                    <img :src="user_ico"/>
+                </router-link>
+            </slot>
         </div>
     </div>
 </template>
 <script>
-import search_ico from '../../assets/img/search.png'
+
 import user_ico from '../../assets/img/user.png'
 import {getUser} from '../../service/getData'
 export default {
     data(){
         return {
-            userInfo: true,
-            search_ico,
+            userInfo: '',
             user_ico,
         }
     },
     created(){
-        getUser();
+        getUser().then((res) => {
+            this.userInfo = res;
+        }).catch((err) => {
+            this.$toast({
+                message: err,
+                position: "center",
+                duration: 1000
+            });
+        })
     }
 }
 </script>
@@ -72,6 +82,9 @@ export default {
     right: 5px;
 }
 .head_mid{
-    width: 60%;
+    width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 </style>
