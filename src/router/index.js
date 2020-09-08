@@ -17,6 +17,11 @@ Vue.use(VueRouter)
         name: 'City',
         component: () => import("@/components/city/city")
     },
+    {
+        path: '/msite', // 商铺列表
+        name: 'Msite',
+        component: () => import("@/components/msite/msite")
+    }
 ]
 
 const router = new VueRouter({
