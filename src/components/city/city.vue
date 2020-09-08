@@ -25,11 +25,7 @@
                 <router-link 
                     v-for="(place,place_index) in searchPlaceList" :key="place_index"
                     tag="li"
-<<<<<<< HEAD
                     :to="{path:'/msite',query:{latitude:place.latitude,longitude:place.longitude}}"
-=======
-                    :to="{}"
->>>>>>> 6b8df87351eb25bee89a56186769a0a17e7e7593
                     @click.native="pushToPlaceHistory(place)"
                 >
                     <div class="place_name">{{place.name}}</div>
@@ -100,15 +96,11 @@ export default {
                     this.searchPlaceList = res;
                 }
             }).catch((err)=>{
-<<<<<<< HEAD
                 this.$toast({
                     message: err,
                     position: "center",
                     duration: 1000
                 });
-=======
-                console.log(err);
->>>>>>> 6b8df87351eb25bee89a56186769a0a17e7e7593
             });
         },
         // 清除 input 框中的值

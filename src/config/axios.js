@@ -3,7 +3,6 @@ import { getStore,setStore } from './utils'
 import store from '../store'
 import axios from 'axios' 
 
-axios.defaults.baseURL = '/api';
 
 // axios很好用，其中之一就是它的拦截器十分强大，我们就可以为请求和响应设置拦截器
 // 请求拦截器可以在每个请求里加上token，做了统一处理后维护起来也方便，

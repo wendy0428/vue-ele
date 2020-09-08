@@ -10,10 +10,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background: #F5F5F5;
+  
 }
 body{
   padding: 0;
   margin:0;
+  background: #F5F5F5;
 }
 </style>

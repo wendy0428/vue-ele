@@ -5,23 +5,17 @@ import store from './store'
 import axios from 'axios'
 // 手淘 H5 适配
 import 'amfe-flexible/index.js'
-import { Button, Cell,Toast} from 'mint-ui'
-Vue.component(Button.name, Button);
-
-Vue.prototype.$Toast = Toast;
-
 
 // 引入 Mint-ui 组件库
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 Vue.use(MintUI)
 
-
-
-
 Vue.config.productionTip = false
 
 Vue.prototype.axios = axios
+
+axios.defaults.baseURL = '/api';
 
 
 new Vue({

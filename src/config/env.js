@@ -11,13 +11,13 @@ let imgBaseUrl = '';
 
 if (process.env.NODE_ENV == 'development') {
 	// baseUrl = 'http://cangdu.org:8001';
-    imgBaseUrl = '/img/';
+    imgBaseUrl = 'https://fuss10.elemecdn.com';
 
 }else if(process.env.NODE_ENV == 'production'){
 	baseUrl = '//elm.cangdu.org';
     imgBaseUrl = '//elm.cangdu.org/img/';
 }
-
+console.log('imgBaseUrl',imgBaseUrl)
 export {
 	baseUrl,
 	routerMode,
