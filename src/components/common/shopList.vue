@@ -2,7 +2,7 @@
     <div id="CommonshopList">
         <ul v-if="mShopList.length!=0" v-load-more="loadMoreShopList">
             <router-link :to="{}" tag="li"
-            v-for="(shop,shopIndex) in list" :key="shopIndex"
+            v-for="(shop,shopIndex) in mShopList" :key="shopIndex"
             class="each_shop"
             >
                 <div class="box_left">
@@ -61,7 +61,6 @@ export default {
         ratingStar
     },
     props:{
-        list: Array,
         geograph: Object
     },
   
@@ -69,10 +68,13 @@ export default {
         ...mapState['latitude','longitude']
     },
     mounted(){
-        console.log('this.geograph.latitude',this.geograph.latitude);
         // 3. 获取商铺列表
-        getShopList({latitude:this.latitude,longitude: this.longitude,offset: this.offset}).then((res) => {
+        getShopList({latitude:this.geograph.latitude,longitude: this.geograph.longitude,offset: this.offset}).then((res) => {
             this.mShopList = res;
+            console.log('this.mShopList',this.mShopList)
+            if(this.mShopList.length<20){
+                this.touchend = true
+            }
         })
     },
     methods:{
@@ -102,8 +104,8 @@ export default {
             this.preventRepeatReuqest = true;
             // 数据定位加20
             this.offset += 20;
-            let res = await getShopList(this.latitude, this.longitude, this.offset, this.restaurantCategoryId);
-            this.shopListArr = [...this.shopListArr,...res];
+            let res = await getShopList({latitude:this.geograph.latitude,longitude: this.geograph.longitude,offset: this.offset});
+            this.mShopList = [...this.mShopList,...res];
             // 当获取的数据小于20的时候,说明没有更多数据了,不需要再次请求数据
             if(res.length < 20){
                 this.touchend = true;
