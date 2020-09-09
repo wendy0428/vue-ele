@@ -24,7 +24,7 @@
         </mt-swipe>
         <section class="shop_list_container">
             <span class="shop_list_container_title">附近商家</span>
-            <shop-list :list="mShopList"></shop-list>
+            <shop-list :geograph={latitude,longitude}></shop-list>
         </section>
         
     </div>
@@ -112,10 +112,7 @@ export default {
                     duration: 1000
                 });
             });
-            // 3. 获取商铺列表
-            getShopList({latitude:this.latitude,longitude: this.longitude,offset: this.offset}).then((res) => {
-                this.mShopList = res;
-            })
+           
         }
     }
 }
