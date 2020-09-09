@@ -10,7 +10,7 @@
         </common-head>
         <!-- 头部轮播图 -->
         <mt-swipe class="swipe_container">
-            <mt-swipe-item v-for="(swipe,swipeIndex) in swipeList" :key="swipeIndex" class="swipe_page" :auto="0">
+            <mt-swipe-item v-for="(swipe,swipeIndex) in swipeList" :key="swipeIndex" class="swipe_page" :auto="5000">
                 <router-link 
                     :to="{}" 
                     tag="div" 
@@ -79,6 +79,8 @@ export default {
                 _this.longitude = address.longitude;
                 _this.geograph = address.latitude + ','+address.longitude ;
             }
+            this.RECORD_ADDRESS({latitude:_this.latitude,longitude:_this.longitude });
+            this.SAVE_GEOHASH({geograph: _this.geograph})
             getMsiteAddress(_this.geograph).then((res) => {
                 let name = res.name;
                 _this.msiteAddress = name;

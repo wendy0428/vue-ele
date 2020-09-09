@@ -9,7 +9,7 @@ export default new Vuex.Store({
   state: {
     latitude: "", // 纬度
 	longitude: "", // 经度
-	geograph: '', // 地理位置
+	geograph: '31.22299,121.36025', // 地理位置
 	
   },
   mutations: {
@@ -20,7 +20,7 @@ export default new Vuex.Store({
 	},
 	// 保存地理位置
 	[SAVE_GEOHASH](state,{geograph}){
-
+		state.geograph = geograph;
 	}
   },
   actions: {},
