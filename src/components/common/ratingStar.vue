@@ -37,5 +37,18 @@ export default {
 }
 </script>
 <style scoped>
-
+#ratingStar ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#ratingStar ul{
+    display: flex;
+}
+#ratingStar ul li{
+    line-height: 15px;;
+}
+img{
+    width: 15px;
+}
 </style>

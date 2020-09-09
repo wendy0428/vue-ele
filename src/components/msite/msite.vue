@@ -23,6 +23,7 @@
             </mt-swipe-item>    
         </mt-swipe>
         <section class="shop_list_container">
+            <span class="shop_list_container_title">附近商家</span>
             <shop-list :list="mShopList"></shop-list>
         </section>
         
@@ -142,11 +143,32 @@ export default {
     display: block;
     margin: 20px;
 }
-
-.swipe_container .mint-swipe-indicators{
-    bottom: -9px !important;
+.swipe_container{
+   border-bottom: 2px solid #e4e4e4; 
 }
-mint-swipe-indicators .mint-swipe-indicator.is-active{
-    background-color: blue !important;
+
+.shop_list_container{
+    background-color: #fff;
+    margin-top: 20px;
+    border-top: 2px solid #e4e4e4;
+}
+.shop_list_container_title{
+    color: #999;
+    font-size: 0.4rem;
+    display: block;
+    text-align: left;
+    margin-left: 50px;
+    margin-top: 10px;
+}
+.shop_list_container_title::before{
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: url('../../assets/img/house.png') no-repeat;
+    background-size:cover;
+    position: relative;
+    top: 8px;
+    right: 15px;
 }
 </style>
