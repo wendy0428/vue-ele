@@ -43,7 +43,7 @@ export const getMsiteFoodTypes = (geohash) =>
     },
   });
 // 9. 获取msite商铺列表
-export const  getShopList = (latitude,longitude,offset,restaurant_category_id = '',restaurant_category_ids = '',order_by = '',ery_mode = '', support_ids = []) => {
+export const  getShopList = ({latitude, longitude,offset,restaurant_category_id = '',restaurant_category_ids = '',order_by = '',ery_mode = '',delivery_mode = '', support_ids = []}) => {
 	let supportStr = '';
 	support_ids.forEach(item => {
 		if (item.status) {
@@ -62,6 +62,6 @@ export const  getShopList = (latitude,longitude,offset,restaurant_category_id = 
 		order_by,
 		'delivery_mode[]': delivery_mode + supportStr
 	};
-	return httpGet({url:'/shopping/restaurants',params: data })
+	return httpGet({url:'/shopping/restaurants',params: data})
 }
 

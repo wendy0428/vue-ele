@@ -22,18 +22,25 @@
                 </router-link>
             </mt-swipe-item>    
         </mt-swipe>
+        <section class="shop_list_container">
+            <shop-list :list="mShopList"></shop-list>
+        </section>
         
     </div>
 </template>
 <script>
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
+const shopList = () => import('@/components/common/shopList')
+
 // 图标
 import searchIco from '../../assets/img/search.png'
 // 接口
-import {getMsiteAddress,getMsiteFoodTypes,getShopList} from '../../service/getData'
+import {getMsiteAddress,getMsiteFoodTypes,getShopList,guessCity} from '../../service/getData'
 // 公共域名
 import {imgBaseUrl} from '../../config/env'
+// 引入 vuex
+import {mapMutations} from 'vuex'
 export default {
     data(){
         return {
@@ -44,50 +51,69 @@ export default {
             geograph: '',
             msiteAddress: '',
             swipeList : [],
+            mShopList: [],
+            offset:0,
         }
     },
     components:{
-        commonHead
+        commonHead,
+        shopList
     },
     created(){
-        this.latitude = this.$route.query.latitude;
-        this.longitude = this.$route.query.longitude;
-        this.geograph = this.latitude + ','+this.longitude ;
-        // 1. 获取当前地址
-        getMsiteAddress(this.geograph).then((res) => {
-            let name = res.name;
-            this.msiteAddress = name;
-        }).catch((err) => {
-            this.$toast({
-                message: err,
-                position: "center",
-                duration: 1000
-            });
-        });
-        // 2.获取轮播图的食品分类
-        getMsiteFoodTypes(this.geograph).then((res) => {
-            // 处理轮播图数据 swipeList = [[...],[...]];
-            let swipePageOne = [];
-            let swipePageTwo = [];
-            for(var i=0;i<res.length;i++){
-                if(i<8){
-                    swipePageOne.push(res[i]);
-                }else{
-                    swipePageTwo.push(res[i]);
-                }
+        this.initData();
+    },
+    methods:{
+        ...mapMutations(['RECORD_ADDRESS','SAVE_GEOHASH']),
+        // 初始化,获取latitude,longitude
+        async initData(){
+            let _this = this;
+            _this.latitude = _this.$route.query.latitude;
+            _this.longitude = _this.$route.query.longitude;
+            _this.geograph = _this.latitude + ','+_this.longitude ;
+            if(!(_this.latitude && _this.longitude)){
+                const address = await guessCity().then((res) => {
+                    return res
+                })
+                _this.latitude = address.latitude;
+                _this.longitude = address.longitude;
+                _this.geograph = address.latitude + ','+address.longitude ;
             }
-            this.swipeList.push(swipePageOne);
-            this.swipeList.push(swipePageTwo);
-        }).catch((err) => {
-            this.$toast({
-                message: err,
-                position: "center",
-                duration: 1000
+            getMsiteAddress(_this.geograph).then((res) => {
+                let name = res.name;
+                _this.msiteAddress = name;
+            }).catch((err) => {
+                this.$toast({
+                    message: err,
+                    position: "center",
+                    duration: 1000
+                });
             });
-        });
-        // 3. 获取商铺列表
-        // getShopList().then((res) => {
-        // })
+            // 2.获取轮播图的食品分类
+            getMsiteFoodTypes(this.geograph).then((res) => {
+                // 处理轮播图数据 swipeList = [[...],[...]];
+                let swipePageOne = [];
+                let swipePageTwo = [];
+                for(var i=0;i<res.length;i++){
+                    if(i<8){
+                        swipePageOne.push(res[i]);
+                    }else{
+                        swipePageTwo.push(res[i]);
+                    }
+                }
+                this.swipeList.push(swipePageOne);
+                this.swipeList.push(swipePageTwo);
+            }).catch((err) => {
+                this.$toast({
+                    message: err,
+                    position: "center",
+                    duration: 1000
+                });
+            });
+            // 3. 获取商铺列表
+            getShopList({latitude:this.latitude,longitude: this.longitude,offset: this.offset}).then((res) => {
+                this.mShopList = res;
+            })
+        }
     }
 }
 </script>

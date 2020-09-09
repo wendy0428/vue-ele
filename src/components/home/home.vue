@@ -7,33 +7,33 @@
             </template>
         </common-head>
         <!-- 猜想的城市 -->
-        <section class="city_guess_box">
+        <section class="cityGuess_box">
             <div>
                 <span>当前定位的城市:</span>
                 <span>定位不准时,请在城市列表中选择</span>
             </div>
             <div>
-                <router-link :to="{path:`/city/${city_guess.id}`}" tag="span" v-if="city_guess">{{city_guess.name}}</router-link>
+                <router-link :to="{path:`/city/${cityGuess.id}`}" tag="span" v-if="cityGuess">{{cityGuess.name}}</router-link>
                 <span class="right_arrow"></span>
             </div>
         </section>
         <!-- 热门城市 -->
-        <section class="hot_city_box" v-if="hot_city_list.length!=0">
+        <section class="hot_city_box" v-if="hotCityList.length!=0">
             <div class="hot_city_box_title">热门城市</div>
             <div class="hot_city_box_container">
                 <router-link 
                 :to="{path:`/city/${item.id}`}" 
                 tag="div" 
-                v-for="(item,index) in hot_city_list" :key="index"
+                v-for="(item,index) in hotCityList" :key="index"
                 class="each_hot_city"
                 >{{item.name}}</router-link>
             </div>
         </section>
         <!-- 所有城市选项 -->
-        <section class="city_group" v-if="group_city_list.length!=0">
-            <div v-for="(cities,Initials) in group_city_list" :key="Initials" class="each_group_city">
-                <div class="each_group_city_title"><span>{{Initials}}</span><span class="tips" v-if="Initials=='A'">(按字母顺序显示)</span></div>
-                <div class="group_city_list_container">
+        <section class="city_group" v-if="groupCity_list.length!=0">
+            <div v-for="(cities,Initials) in groupCity_list" :key="Initials" class="each_groupCity">
+                <div class="each_groupCity_title"><span>{{Initials}}</span><span class="tips" v-if="Initials=='A'">(按字母顺序显示)</span></div>
+                <div class="groupCity_list_container">
                     <router-link 
                         :to="{name:'City',params:{id:city.id}}"
                         tag="div"
@@ -55,26 +55,21 @@ import {guessCity,getHotCity,getGroupCity} from '../../service/getData'
 export default {
     data(){
         return {
-            city_guess: {},
-            hot_city_list: [],
-            group_city: {},
+            cityGuess: {},
+            hotCityList: [],
+            groupCity: {},
         }
     },
     components:{
         commonHead
     },
     created(){
-        this.$toast({
-                message: 111,
-                position: "center",
-                duration: 1000
-            });
         let _this = this;
 
         // 1. 猜想的城市
         guessCity().then((res) => {
             console.log('res',res);
-            _this.city_guess = res;
+            _this.cityGuess = res;
         }).catch((err)=>{
             this.$toast({
                 message: err,
@@ -84,7 +79,7 @@ export default {
         });
         // 2. 热门的城市列表
         getHotCity().then((res) => {
-            _this.hot_city_list = res;
+            _this.hotCityList = res;
         }).catch((err)=>{
             this.$toast({
                 message: err,
@@ -94,7 +89,7 @@ export default {
         });
         // 3. 获取所有城市
         getGroupCity().then((res) => {
-            _this.group_city = res;
+            _this.groupCity = res;
         }).catch((err)=>{
             this.$toast({
                 message: err,
@@ -105,45 +100,45 @@ export default {
     },
     computed:{
         // 按字母 A-Z 的顺序重新排列,获取的所有城市
-        group_city_list(){
+        groupCity_list(){
             let _this = this;
             // 用来保存,按顺序的数据
             let obj = {};
             for(var i=65;i<=90;i++){
                 var captial = String.fromCharCode(i);
-                var get_corresponding_city = _this.group_city[captial];
+                var get_corresponding_city = _this.groupCity[captial];
                 if(get_corresponding_city){
                     obj[captial] = get_corresponding_city;
                 }
             }
             return obj;
         }
-    }
+    },
 }
 </script>
 <style scoped>
 /* 猜想的城市 */
-.city_guess_box{
+.cityGuess_box{
     margin-top: 90px;
     background-color: #fff;
 }
-.city_guess_box>div{
+.cityGuess_box>div{
     display: flex;
     justify-content: space-between;
 }
-.city_guess_box>div:nth-child(1){
+.cityGuess_box>div:nth-child(1){
     font-size: 30px;
     color: #666;
     padding: 25px;
     border-bottom: 2px solid #e4e4e4
 }
-.city_guess_box>div:nth-child(2){
+.cityGuess_box>div:nth-child(2){
     color: #3190e8;
     font-size: 35px;
     padding: 15px 25px;
     border-bottom: 4px solid #e4e4e4
 }
-.city_guess_box>div:nth-child(1)>span:nth-child(2){
+.cityGuess_box>div:nth-child(1)>span:nth-child(2){
     color: #9f9f9f;
     font-weight: 900;
     font-size: 25px;
@@ -167,7 +162,7 @@ export default {
     border-top: 4px solid #e4e4e4;
     margin-top:25px;
 }
-.hot_city_box_container,.group_city_list_container{
+.hot_city_box_container,.groupCity_list_container{
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -186,7 +181,7 @@ export default {
     border-right: 0;
 }
 /* 所有城市列表 */
-.each_group_city{
+.each_groupCity{
     background-color: #fff;
     font-size: 35px;
     margin: 20px 0px;
@@ -200,7 +195,7 @@ export default {
     overflow:hidden; 
 }
 
-.each_group_city_title{
+.each_groupCity_title{
     font-size: 25px;
     text-align: left;
     color: #666;

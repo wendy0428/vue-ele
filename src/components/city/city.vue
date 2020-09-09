@@ -41,12 +41,11 @@
 <script>
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
-
+// 图标
 import leftArrowIcon from '../../assets/img/left_arrow.png'
+// 接口
 import {getCurrentCity,searchPlace} from '../../service/getData'
 import {setStore,getStore} from '../../config/utils'
-
-// import { Toast } from 'mint-ui';
 export default {
     data(){
         return {
@@ -59,7 +58,7 @@ export default {
         }
     },
     components:{
-        commonHead
+        commonHead,
     },
     created(){
         let _this = this;
@@ -78,11 +77,6 @@ export default {
                 this.placeHistory = JSON.parse(placeHistory); 
                 this.searchPlaceList = this.placeHistory;
             }
-            this.$Toast({
-                    message: "邮箱已拷贝",
-                    position: "center",
-                    duration: 1000
-                });
         },
         // 返回上一页
         goBackPage(){
