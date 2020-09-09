@@ -22,7 +22,19 @@
                     </div>
                     <!-- 第二行 -->
                     <div class="box_right_mid">
-                        <rating-star :rating="rating"></rating-star>
+                        <div class="box_right_mid_rating">
+                            <rating-star :rating="shop.rating"></rating-star>
+                            <span>{{shop.rating}}</span>
+                            <span>月售{{shop.recent_order_num}}单</span>
+                        </div>
+                        <div class="box_right_mid_delivery_mode">
+
+                        </div>
+                    </div>
+                    <!-- 第三行 -->
+                    <div class="box_right_bottom">
+                        <span>¥{{shop.float_minimum_order_amount}}起送/配送费约¥{{shop.float_delivery_fee}}</span>
+                        <span>{{shop.distance}}公里/<span>{{shop.order_lead_time}}</span></span>
                     </div>
                 </div>
             </router-link>
@@ -33,7 +45,7 @@
 // 公共域名
 import {imgBaseUrl} from '../../config/env'
 // 引入评分组件
-import ratingStar from './ratingStar'
+const ratingStar = () => import('@/components/common/ratingStar')
 export default {
     data(){
         return {}
