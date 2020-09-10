@@ -21,6 +21,11 @@ Vue.use(VueRouter)
         path: '/msite', // 商铺列表
         name: 'Msite',
         component: () => import("@/components/msite/msite")
+    },
+    {
+        path: '/food',  // 食品筛选排序页
+        name: 'Food',
+        component: () => import("@/components/food/food")
     }
 ]
 
