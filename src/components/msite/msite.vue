@@ -9,7 +9,7 @@
         <mt-swipe class="swipe_container">
             <mt-swipe-item v-for="(swipe,swipeIndex) in swipeList" :key="swipeIndex" class="swipe_page" :auto="5000">
                 <div class="swipe" v-for="(foodType,foodIndex) in swipe" :key="foodIndex">
-                    <router-link :to="{path:'/food',query:{title:foodType.title}}" tag="div">
+                    <router-link :to="{path:'/food',query:{title:foodType.title,geograph,restaurant_category_id: getCategoryId(foodType.link)}}" tag="div">
                         <img :src="imgBaseUrl+foodType.image_url"/>
                         <span>{{foodType.title}}</span>
                     </router-link>
@@ -107,7 +107,16 @@ export default {
                 });
             });
            
-        }
+        },
+        // 解码url地址，求去restaurant_category_id值
+    	getCategoryId(url){
+    		let urlData = decodeURIComponent(url.split('=')[1].replace('&target_name',''));
+    		if (/restaurant_category_id/gi.test(urlData)) {
+    			return JSON.parse(urlData).restaurant_category_id.id
+    		}else{
+    			return ''
+    		}
+    	}
     }
 }
 </script>

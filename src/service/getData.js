@@ -42,26 +42,61 @@ export const getMsiteFoodTypes = (geohash) =>
       "flags[]": "F",
     },
   });
+
 // 9. 获取msite商铺列表
-export const  getShopList = ({latitude, longitude,offset,restaurant_category_id = '',restaurant_category_ids = '',order_by = '',ery_mode = '',delivery_mode = '', support_ids = []}) => {
-	let supportStr = '';
-	support_ids.forEach(item => {
-		if (item.status) {
-			supportStr += '&support_ids[]=' + item.id;
-		}
-	});
-	let data = {
-		latitude,
-		longitude,
-		offset,
-		limit: '20',
-		'extras[]': 'activities',
-		keyword: '',
-		restaurant_category_id,
-		'restaurant_category_ids[]': restaurant_category_ids,
-		order_by,
-		'delivery_mode[]': delivery_mode + supportStr
-	};
-	return httpGet({url:'/shopping/restaurants',params: data})
-}
+export const getShopList = ({
+  latitude,
+  longitude,
+  offset,
+  restaurant_category_id = "",
+  restaurant_category_ids = "",
+  order_by = "",
+  ery_mode = "",
+  delivery_mode = "",
+  support_ids = [],
+}) => {
+  let supportStr = "";
+  support_ids.forEach((item) => {
+    if (item.status) {
+      supportStr += "&support_ids[]=" + item.id;
+    }
+  });
+  let data = {
+    latitude,
+    longitude,
+    offset,
+    limit: "20",
+    "extras[]": "activities",
+    keyword: "",
+    restaurant_category_id,
+    "restaurant_category_ids[]": restaurant_category_ids,
+    order_by,
+    "delivery_mode[]": delivery_mode + supportStr,
+  };
+  return httpGet({ url: "/shopping/restaurants", params: data });
+};
+
+// 10. 获取food页面的 category 种类列表
+export const getFoodCategory = (latitude, longitude) =>
+  httpGet({
+    url: "/shopping/v2/restaurant/category",
+    params: {
+      latitude,
+      longitude,
+    },
+  });
+
+// 11. 获取food页面的配送方式
+export const getFoodDelivery = (latitude, longitude) => httpGet({url: '/shopping/v1/restaurants/delivery_modes',params:{
+	latitude,
+	longitude,
+	kw: ''
+}});
+
+// 12.获取food页面的商家属性活动列表
+export const getShopAttribute = (latitude, longitude) => httpGet({url :'/shopping/v1/restaurants/activity_attributes', params:{
+	latitude,
+	longitude,
+	kw: ''
+}});
 
