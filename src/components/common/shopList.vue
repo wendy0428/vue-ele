@@ -31,7 +31,7 @@
                     <!-- 第三行 -->
                     <div class="box_right_bottom">
                         <span>¥{{shop.float_minimum_order_amount}}起送/配送费约¥{{shop.float_delivery_fee}}</span>
-                        <span>{{shop.distance}}公里/<span>{{shop.order_lead_time}}</span></span>
+                        <span>{{shop.distance}}/<span>{{shop.order_lead_time}}</span></span>
                     </div>
                 </div>
             </router-link>
@@ -72,7 +72,6 @@ export default {
         // 3. 获取商铺列表
         getShopList({latitude:this.latitude,longitude: this.longitude,offset: this.offset}).then((res) => {
             this.mShopList = res;
-            console.log('this.mShopList',this.mShopList)
             if(this.mShopList.length<20){
                 this.touchend = true
             }
@@ -119,9 +118,8 @@ export default {
     directives: {
         'load-more':{
             bind: (el,binding) => {
-                console.log('e',el);
                 let windowHeight = window.screen.height;
-                console.log("返回以像素计的访问者屏幕的高度",windowHeight);
+                // console.log("返回以像素计的访问者屏幕的高度",windowHeight);
                 let clientHeight;
                 let offsetTop;
                 let oldScrollTop;
@@ -130,10 +128,10 @@ export default {
                 el.addEventListener('touchstart',() => {
                     // element.clientHeight: 在页面上返回内容的可视高度（不包括边框，边距或滚动条）height+上下padding
                     clientHeight = el.clientHeight;
-                    console.log('在页面上返回内容的可视高度',clientHeight);
+                    // console.log('在页面上返回内容的可视高度',clientHeight);
                     // offsetTop:返回当前元素的相对垂直偏移位置的偏移容器. 可以理解为容器相对于document的top的绝对偏移。等于top+margin
                     offsetTop = el.offsetTop;
-                    console.log('返回当前元素的相对垂直偏移位置的偏移容器',offsetTop);
+                    // console.log('返回当前元素的相对垂直偏移位置的偏移容器',offsetTop);
                 },false)
 
                 el.addEventListener('touchmove',() => {
@@ -142,7 +140,7 @@ export default {
 
                 el.addEventListener('touchend',() => {
                     oldScrollTop = document.documentElement.scrollTop;
-                    console.log('oldScrollTop',oldScrollTop);
+                    // console.log('oldScrollTop',oldScrollTop);
                     moveEnd();
                 },false);
 
@@ -176,7 +174,7 @@ export default {
     height: 100vh;
 }
 .box_left{
-    width: 30%;
+    width: 25%;
     display: flex;
     justify-content: center;
     align-items: center;  

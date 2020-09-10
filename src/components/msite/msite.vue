@@ -8,15 +8,12 @@
         <!-- 头部轮播图 -->
         <mt-swipe class="swipe_container">
             <mt-swipe-item v-for="(swipe,swipeIndex) in swipeList" :key="swipeIndex" class="swipe_page" :auto="5000">
-                <router-link 
-                    :to="{path:'/food'}" 
-                    tag="div" 
-                    class="swipe"
-                    v-for="(foodType,foodIndex) in swipe" :key="foodIndex"
-                >
-                    <img :src="imgBaseUrl+foodType.image_url"/>
-                    <span>{{foodType.title}}</span>
-                </router-link>
+                <div class="swipe" v-for="(foodType,foodIndex) in swipe" :key="foodIndex">
+                    <router-link :to="{path:'/food',query:{title:foodType.title}}" tag="div">
+                        <img :src="imgBaseUrl+foodType.image_url"/>
+                        <span>{{foodType.title}}</span>
+                    </router-link>
+                </div>
             </mt-swipe-item>    
         </mt-swipe>
         <section class="shop_list_container">

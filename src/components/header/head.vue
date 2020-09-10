@@ -12,7 +12,7 @@
             </slot>
         </div>
         <div class="head_mid">
-            <slot>111</slot>
+            <slot></slot>
         </div>
         <div class="head_right">
             <slot name="head_right">
@@ -35,7 +35,7 @@ export default {
             userInfo: '',
             user_ico,
             leftArrowIcon,
-            searchIco
+            searchIco,
         }
     },
     props:{

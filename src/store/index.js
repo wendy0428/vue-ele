@@ -17,12 +17,10 @@ export default new Vuex.Store({
     [RECORD_ADDRESS](state, { longitude, latitude }) {
     	state.longitude = longitude;
 		state.latitude = latitude;
-		console.log('longitude',state.longitude);
 	},
 	// 保存地理位置
 	[SAVE_GEOHASH](state,{geograph}){
 		state.geograph = geograph;
-		console.log('geograph',state.geograph);
 	}
   },
   actions: {},
