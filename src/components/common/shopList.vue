@@ -1,6 +1,6 @@
 <template>
     <div id="CommonshopList">
-        <ul v-if="mShopList.length!=0" v-load-more="loadMoreShopList">
+        <ul v-if="mShopList.length!==0" v-load-more="loadMoreShopList">
             <router-link :to="{}" tag="li"
             v-for="(shop,shopIndex) in mShopList" :key="shopIndex"
             class="each_shop"
@@ -36,6 +36,7 @@
                 </div>
             </router-link>
         </ul>
+        <span v-else class="serch_no_shop">暂时,没有数据!</span>
     </div>
 </template>
 <script>
@@ -65,11 +66,11 @@ export default {
     },
   
     computed:{
-        ...mapState['latitude','longitude']
+        ...mapState(['latitude','longitude'])
     },
-    mounted(){
+    created(){
         // 3. 获取商铺列表
-        getShopList({latitude:this.geograph.latitude,longitude: this.geograph.longitude,offset: this.offset}).then((res) => {
+        getShopList({latitude:this.latitude,longitude: this.longitude,offset: this.offset}).then((res) => {
             this.mShopList = res;
             console.log('this.mShopList',this.mShopList)
             if(this.mShopList.length<20){
@@ -171,6 +172,9 @@ export default {
 }
 </script>
 <style scoped>
+#CommonshopList{
+    height: 100vh;
+}
 .box_left{
     width: 30%;
     display: flex;
@@ -257,6 +261,9 @@ ul{
 }
 .box_right_bottom span{
     color: #666;
+    font-size: 20px;
+}
+.serch_no_shop{
     font-size: 20px;
 }
 </style>
