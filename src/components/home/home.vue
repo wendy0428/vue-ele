@@ -1,11 +1,7 @@
 <template>
     <div id="home">
         <!-- 公共头部 -->
-        <common-head>
-            <template v-slot:ele>
-                <router-link :to="{path:'/'}" tag="span">ele.me</router-link>
-            </template>
-        </common-head>
+        <common-head :headData=headData></common-head>
         <!-- 猜想的城市 -->
         <section class="cityGuess_box">
             <div>
@@ -55,6 +51,9 @@ import {guessCity,getHotCity,getGroupCity} from '../../service/getData'
 export default {
     data(){
         return {
+            headData:{
+                showEle: true
+            },
             cityGuess: {},
             hotCityList: [],
             groupCity: {},

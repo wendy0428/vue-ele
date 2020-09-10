@@ -1,9 +1,15 @@
 <template>
     <div id="head">
         <div class="head_left">
-            <slot name="ele"></slot>
-            <slot name="search"></slot>
-            <slot name="goBack"></slot>
+            <slot name="ele" v-if="headData.showEle">
+                <router-link :to="{path:'/'}" tag="span">ele.me</router-link>
+            </slot>
+            <slot name="search" v-if="headData.showSearchIco">
+                <img :src="searchIco"/>
+            </slot>
+            <slot name="goBack" v-if="headData.goBack">
+                <img :src="leftArrowIcon" @click="goBackPage"/>
+            </slot>
         </div>
         <div class="head_mid">
             <slot>111</slot>
@@ -19,7 +25,8 @@
     </div>
 </template>
 <script>
-
+import leftArrowIcon from '../../assets/img/left_arrow.png'
+import searchIco from '../../assets/img/search.png'
 import user_ico from '../../assets/img/user.png'
 import {getUser} from '../../service/getData'
 export default {
@@ -27,7 +34,12 @@ export default {
         return {
             userInfo: '',
             user_ico,
+            leftArrowIcon,
+            searchIco
         }
+    },
+    props:{
+        headData: Object
     },
     created(){
         getUser().then((res) => {
@@ -39,6 +51,12 @@ export default {
                 duration: 1000
             });
         })
+    },
+    methods:{
+         // 返回上一页
+        goBackPage(){
+            this.$router.go(-1);
+        },
     }
 }
 </script>

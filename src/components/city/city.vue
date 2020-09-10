@@ -1,9 +1,6 @@
 <template>
     <div id="city">
-        <common-head>
-            <template v-slot:goBack>
-                <img :src="leftArrowIcon" @click="goBackPage"/>
-            </template>
+        <common-head :headData=headData>
             <template>
                 <span v-if="currentCityName">{{currentCityName}}</span>
             </template>
@@ -41,15 +38,15 @@
 <script>
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
-// 图标
-import leftArrowIcon from '../../assets/img/left_arrow.png'
 // 接口
 import {getCurrentCity,searchPlace} from '../../service/getData'
 import {setStore,getStore} from '../../config/utils'
 export default {
     data(){
         return {
-            leftArrowIcon,
+            headData:{
+                goBack: true
+            },
             id: '',
             currentCityName:'',
             inputKeyValue: '',

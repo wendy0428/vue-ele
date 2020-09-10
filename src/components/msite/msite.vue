@@ -1,18 +1,15 @@
 <template>
     <div id="msite">
-        <common-head>
+        <common-head :headData=headData>
             <template>
                 {{msiteAddress}}
-            </template>
-            <template v-slot:search>
-                <img :src="searchIco"/>
             </template>
         </common-head>
         <!-- 头部轮播图 -->
         <mt-swipe class="swipe_container">
             <mt-swipe-item v-for="(swipe,swipeIndex) in swipeList" :key="swipeIndex" class="swipe_page" :auto="5000">
                 <router-link 
-                    :to="{}" 
+                    :to="{path:'/food'}" 
                     tag="div" 
                     class="swipe"
                     v-for="(foodType,foodIndex) in swipe" :key="foodIndex"
@@ -24,7 +21,7 @@
         </mt-swipe>
         <section class="shop_list_container">
             <span class="shop_list_container_title">附近商家</span>
-            <shop-list :geograph={latitude,longitude}></shop-list>
+            <shop-list></shop-list>
         </section>
         
     </div>
@@ -34,8 +31,6 @@
 const commonHead = () => import('@/components/header/head')
 const shopList = () => import('@/components/common/shopList')
 
-// 图标
-import searchIco from '../../assets/img/search.png'
 // 接口
 import {getMsiteAddress,getMsiteFoodTypes,getShopList,guessCity} from '../../service/getData'
 // 公共域名
@@ -45,7 +40,9 @@ import {mapMutations} from 'vuex'
 export default {
     data(){
         return {
-            searchIco,
+            headData:{
+                showSearchIco: true,
+            },
             imgBaseUrl,
             latitude:'',
             longitude: '',
