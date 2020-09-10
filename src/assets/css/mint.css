@@ -1,0 +1,11 @@
+/* 覆盖掉原有的 mint-ui 的样式 */
+.mint-swipe-indicator{
+    background-color: #007aff;
+    margin: 5px;
+    position: relative;
+    top: 20px;
+}
+.mint-swipe-indicator.is-active{
+    opacity: 0.5;
+    background-color: #007aff;
+}

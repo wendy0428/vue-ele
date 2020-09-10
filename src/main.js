@@ -9,6 +9,8 @@ import 'amfe-flexible/index.js'
 // 引入 Mint-ui 组件库
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
+// 引入自定义样式去覆盖 mint-ui的样式
+import './assets/css/mint.css'
 Vue.use(MintUI)
 
 Vue.config.productionTip = false
