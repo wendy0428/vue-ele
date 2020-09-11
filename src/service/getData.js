@@ -55,13 +55,10 @@ export const getShopList = ({
   delivery_mode = "",
   support_ids = [],
 }) => {
-  console.log('restaurant_category_id22',restaurant_category_id);
-  let supportStr = "";
-  support_ids.forEach((item) => {
-    if (item.status) {
-      supportStr += "&support_ids[]=" + item.id;
-    }
-  });
+  // let supportStr = "";
+  // support_ids.forEach((item) => {
+  //     supportStr += "&support_ids[]=" + item;
+  // });
   let data = {
     latitude,
     longitude,
@@ -72,8 +69,10 @@ export const getShopList = ({
     restaurant_category_id,
     "restaurant_category_ids[]": restaurant_category_ids,
     order_by,
-    "delivery_mode[]": delivery_mode + supportStr,
+    "delivery_mode[]": delivery_mode ,
+    support_ids:support_ids
   };
+  console.log('data',data);
   return httpGet({ url: "/shopping/restaurants", params: data });
 };
 

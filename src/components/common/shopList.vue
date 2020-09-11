@@ -63,8 +63,11 @@ export default {
     },
     props:{
         geograph: String,
-        'restaurantCategoryId': String, // '分类'中的一级目录 id
-        'restaurantCategoryIds': String, // '分类'中的二级目录 id
+        restaurantCategoryId: [String, Number], // '分类'中的一级目录 id
+        restaurantCategoryIds: [String, Number], // '分类'中的二级目录 id
+        deliveryMode : String, // '筛选'中的配送方式
+        supportIds : Array, // '筛选'中的商家属性
+        searchSelected: Boolean, // 用来监听,父组件的确认按钮
     },
     computed:{
         ...mapState(['latitude','longitude'])
@@ -77,7 +80,28 @@ export default {
                 longitude:_this.longitude,
                 offset: _this.offset,
                 restaurant_category_id: _this.restaurantCategoryId,
-                restaurant_category_ids: _this.restaurantCategoryIds
+                restaurant_category_ids: _this.restaurantCategoryIds,
+                delivery_mode: _this.deliveryMode,
+                support_ids: _this.supportIds
+            }).then((res) => {
+                _this.mShopList = res;
+                if(_this.mShopList.length<20){
+                    _this.touchend = true
+                }
+            })
+        },
+        searchSelected(){
+             let _this = this;
+                console.log('delivery_mode',_this.deliveryMode)
+
+              getShopList({
+                latitude:_this.latitude,
+                longitude:_this.longitude,
+                offset: _this.offset,
+                restaurant_category_id: _this.restaurantCategoryId,
+                restaurant_category_ids: _this.restaurantCategoryIds,
+                delivery_mode: _this.deliveryMode,
+                support_ids: _this.supportIds
             }).then((res) => {
                 _this.mShopList = res;
                 if(_this.mShopList.length<20){
@@ -112,7 +136,9 @@ export default {
                 longitude:_this.longitude,
                 offset: _this.offset,
                 restaurant_category_id: _this.restaurantCategoryId,
-                restaurant_category_ids: _this.restaurantCategoryIds
+                restaurant_category_ids: _this.restaurantCategoryIds,
+                delivery_mode: _this.deliveryMode,
+                support_ids: _this.supportIds
             }).then((res) => {
                 _this.mShopList = res;
                 if(_this.mShopList.length<20){
@@ -135,6 +161,7 @@ export default {
             return supportStatus
         },
         async loadMoreShopList(){
+            let _this = this;
             // 当第一次请求回来的商铺列表小于20条的时候,说明已经没有更多数据了就直接返回
             if(_this.touchend){
                 return;
@@ -151,7 +178,9 @@ export default {
                 longitude: _this.longitude,
                 offset: _this.offset,
                 restaurant_category_id: _this.restaurantCategoryId,
-                restaurant_category_id: _this.restaurantCategoryIds
+                restaurant_category_id: _this.restaurantCategoryIds,
+                delivery_mode: _this.deliveryMode,
+                support_ids: _this.supportIds
             }).then((res) => {
                 return  res;
             });

@@ -3,16 +3,17 @@
         <common-head :headData=headData>
             <template v-if="title">{{title}}</template>
         </common-head>
+        <div class="back_cover" v-if="showBackCover"></div>
         <section class="navbar_container">
             <mt-navbar v-model="selected">
-                <mt-tab-item id="1" @click.native="changeClassify">{{classify?title:'排序'}}</mt-tab-item>
+                <mt-tab-item id="1" @click.native="changeClassify">{{title}}</mt-tab-item>
                 <mt-tab-item id="2">排序</mt-tab-item>
                 <mt-tab-item id="3">筛选</mt-tab-item>
             </mt-navbar>
 
             <!-- tab-container -->
             <!--  :title="eachCategory" -->
-            <mt-tab-container v-model="selected">
+            <mt-tab-container v-model="selected" v-if="showBackCover">
                 <!-- 分类 -->
                 <mt-tab-container-item id="1" class="category_container">
                     <li>
@@ -26,7 +27,7 @@
                                 <span class="count">{{eachCategory.count}}</span>
                             </div>
                         </div>
-                        <div class="category_right" v-if="subCategories.length!=0">
+                        <div class="category_right" v-if="subCategories">
                             <li  v-for="(subCategory,subCategoryIndex) in subCategories" :key="subCategoryIndex" 
                                 @click="changeFoodType(subCategory.id,subCategory.name)"    
                                 :class="restaurant_category_ids ==subCategory.id ?'activeClass2':''"
@@ -40,20 +41,59 @@
                 <!--  -->
               <!-- <mt-tab-container-item id="2">
                 <mt-cell v-for="n in 4" :key="n"  :title="'测试 ' + n" />
-              </mt-tab-container-item>
-              <mt-tab-container-item id="3">
-                <mt-cell v-for="n in deliveryModes" :key="n"  :title="'选项 ' + n" />
-              </mt-tab-container-item> -->
+              </mt-tab-container-item>-->
+                <!-- 筛选 -->
+                <mt-tab-container-item id="3">
+                    <div class="delivery_attr_container">
+                        <div class="delivery_title">配送方式</div>
+                        <div class="delivery_container">
+                            <span  v-for="(delivery,deliveryIndex) in deliveryModes" :key="deliveryIndex" 
+                                class="each_delivery"
+                                @click="chooseDelivery(delivery.id)"
+                            >
+                                <img :src="delivery_mode_arr.indexOf(delivery.id)==-1?fengniao:duigou"/>
+                                <span>{{delivery.text}}</span>
+                            </span>
+                        </div>
+                        <div class="attr_title">商家属性(可以多选)</div>
+                        <div class="attr_container">
+                            <span v-for="(atrr,attrIndex) in shopAttribute" :key="attrIndex" 
+                                class="each_atrr"
+                                @click="chooseAttrs(atrr.id)"
+                            >
+                                <img :src="support_ids.indexOf(atrr.id)==-1?iconsArr[attrIndex]:duigou"/>
+                                <span>{{atrr.name}}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="btns">
+                        <span class="clear" @click="clear">清空</span>
+                        <span class="confirm" @click="search">确定</span>
+                    </div>
+                </mt-tab-container-item> 
             </mt-tab-container>
         </section>
         <shop-list 
-            :restaurant-category-id ="restaurant_category_id"
-            :restaurant-category-ids="restaurant_category_ids"
-            :geograph=geograph
+            :restaurant-category-id = restaurant_category_id
+            :restaurant-category-ids = restaurant_category_ids
+            :delivery-mode = delivery_mode
+            :support-ids = support_ids
+            :geograph = geograph
+            :search-selected = searchSelected
+            class="shop_list"
         ></shop-list>
     </div>
 </template>
 <script>
+// 引入图标
+import duigou from '../../assets/img/duigou.png'
+import fengniao from '../../assets/img/fengniao.png'
+import pinpai from '../../assets/img/pinpai.png'
+import bao from '../../assets/img/bao.png'
+import zhun from '../../assets/img/zhun.png'
+import xin from '../../assets/img/xin.png'
+import fu from '../../assets/img/fu.png'
+import piao from '../../assets/img/piao.png'
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
 const shopList = () => import('@/components/common/shopList')
@@ -65,25 +105,51 @@ export default {
             headData:{
                 goBack: true
             },
-            title:'',
+            fengniao,
+            duigou,
+            iconsArr:[
+                pinpai,
+                bao,
+                zhun,
+                xin,
+                fu,
+                piao
+            ],
+            title:'排序',
             geograph:'',
             selected:'',
+
             classify: true, // 控制分类目录中的标题显示
             foodCategory: [], // 分类中的一级目录
             subCategories: [], // 分类中的二级目录
             restaurant_category_id:'', // "分类 "中 的一级目录中的的 id
             restaurant_category_ids: '', // "分类 "中 的二级分类的 id
-            sortTypeList :[], // 排序
-            deliveryModes: [], // 配送方式
-            shopAttribute:[], // 商家属性
-            // mShopList: [], // 商铺列表
-           
 
+            sortTypeList :[], // 排序
+
+            deliveryModes: [], // 配送方式
+            delivery_mode_arr: [], // 选中的配送方式的 id
+            delivery_mode: '', // 选中的配送方式的 id 转为字符串
+            shopAttribute:[], // 商家属性
+            support_ids: [], //选中的商家属性的 id
+            searchSelected: true, // 点击筛选中的确认按钮,子组件进行监听,调用列表接口
+            showBackCover: false,
         }
     },
     components:{
         commonHead,
         shopList
+    },
+    watch:{
+        // 是否显示背景遮罩层
+        selected(){
+            if(!this.selected){
+                this.showBackCover = false;
+            }else{
+                this.showBackCover = true;
+            }
+        },
+
     },
     created(){
         this.title = this.$route.query.title;
@@ -136,6 +202,7 @@ export default {
         // 点击"分类 "中 的二级目录: ①当前选中添加 activeClass2 样式 ②改变整体页面的 title
         changeFoodType(id,name){
             this.restaurant_category_ids = id;
+            console.log('id',id,typeof id)
             this.title = name;
             this.selected = ''
 
@@ -149,8 +216,35 @@ export default {
                 this.selected = ''
             }
         },
+        // 点击"筛选"中的'配送方式':所有的配送方式,都保存在delivery_mode_arr中,点击的时候,判断,如果已经存在该配送方式,就删除,如果不存在,就保存
+        chooseDelivery(delivery){
+            var deliveryIndex = this.delivery_mode_arr.indexOf(delivery);
+            if(deliveryIndex == -1){
+                this.delivery_mode_arr.push(delivery);
+            }else{
+                this.delivery_mode_arr.splice(deliveryIndex,1)
+            }
+            this.delivery_mode = this.delivery_mode_arr.join(',');
+        },
+        // 点击"筛选"中的'商家属性'
+        chooseAttrs(attr){
+            var attrIndex = this.support_ids.indexOf(attr);
+            if(attrIndex == -1){
+                this.support_ids.push(attr);
+            }else{
+                this.support_ids.splice(attrIndex,1)
+            }
+        },
+        search(){
+            this.searchSelected = !this.searchSelected;
+            this.selected = ''
+        },
+        clear(){
+            this.delivery_mode_arr = [];
+            this.support_ids = [];
+        },
         show(){
-           
+            
         }
     },
     computed:{
@@ -160,7 +254,12 @@ export default {
 </script>
 <style scoped>
 .navbar_container{
-    margin-top: 90px;
+    top: 90px;
+    width: 100%;
+    background-color: #f1f1f1;
+    position: fixed;
+    /* height: 700px; */
+    z-index: 11;
 }
 .category_container{
     background-color: #fff;
@@ -230,5 +329,68 @@ export default {
 }
 .activeClass2>span{
     color: #3190e8 !important;
+}
+.delivery_attr_container{
+    font-size: 25px;
+    color: #333;
+    background-color: #fff;
+}
+.delivery_title{
+    text-align: left;
+    padding: 20px 0;
+}
+.attr_title{
+    text-align: left;
+    margin: 20px 0;
+}
+.each_delivery,.each_atrr{
+    border: 1px solid #eee;
+    padding: 20px;
+    margin: 10px;
+    width: 180px;
+    text-align: left;
+    
+}
+.each_delivery img,.each_atrr img{
+    width: 40px;
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 20px;
+}
+.delivery_container,.attr_container{
+    display: flex;
+    flex-wrap: wrap;
+}
+.btns{
+    margin-bottom: 20px;
+}
+.btns>span{
+    font-size: 40px;
+    width: 200px;
+    display: inline-block;
+    border-radius: 10px;
+    padding: 10px 50px;
+    margin: 0 20px;
+}
+.clear{
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #fff;
+}
+.confirm{
+    background-color: #56d176;
+    border: 1px solid #56d176;
+    color: #fff;
+}
+.back_cover{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.shop_list{
+    margin-top: 180px;
+    background-color: #fff;
 }
 </style>
