@@ -216,7 +216,6 @@ export default {
                 this.showBackCover = true;
             }
         },
-
     },
     created(){
         this.title = this.$route.query.title;
@@ -239,7 +238,6 @@ export default {
             });
             // 默认二级目录,显示一级目录下面的
             this.subCategories = this.foodCategory[0].sub_categories;
-            console.log('this.subCategories',this.subCategories);
             // 2. 配送方式
             this.deliveryModes = await getFoodDelivery(this.latitude,this.longitude).then((res) => {
                 return res;
@@ -269,7 +267,6 @@ export default {
         // 点击"分类 "中 的二级目录: ①当前选中添加 activeClass2 样式 ②改变整体页面的 title
         changeFoodType(id,name){
             this.restaurant_category_ids = id;
-            console.log('id',id,typeof id)
             this.title = name;
             this.selected = ''
 
@@ -316,10 +313,12 @@ export default {
                 this.support_ids.splice(attrIndex,1)
             }
         },
+        // 点击"筛选"中的"确认"
         search(){
             this.searchSelected = !this.searchSelected;
             this.selected = ''
         },
+         // 点击"筛选"中的"取消"
         clear(){
             this.delivery_mode_arr = [];
             this.support_ids = [];
@@ -329,9 +328,6 @@ export default {
             this.selectSortTypeId = id;
             this.selected = '';
         },
-        show(){
-            
-        }
     },
     computed:{
         ...mapState(['latitude','longitude'])
