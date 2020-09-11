@@ -66,9 +66,25 @@ export default {
         'restaurantCategoryId': String, // '分类'中的一级目录 id
         'restaurantCategoryIds': String, // '分类'中的二级目录 id
     },
-  
     computed:{
         ...mapState(['latitude','longitude'])
+    },
+    watch:{
+        restaurantCategoryIds(){
+            let _this = this;
+              getShopList({
+                latitude:_this.latitude,
+                longitude:_this.longitude,
+                offset: _this.offset,
+                restaurant_category_id: _this.restaurantCategoryId,
+                restaurant_category_ids: _this.restaurantCategoryIds
+            }).then((res) => {
+                _this.mShopList = res;
+                if(_this.mShopList.length<20){
+                    _this.touchend = true
+                }
+            })
+        }
     },
     created(){
         this.initDate();
@@ -76,24 +92,20 @@ export default {
     methods:{
         ...mapMutations(['RECORD_ADDRESS']),
         async initDate(){
-           
             let _this = this;
-             console.log('this',this);
-            console.log('_this',_this.restaurantCategoryId);
             // 1. 防止刷新页面时，vuex状态丢失，经度纬度需要重新获取，并存入vuex
-            if((!this.latitude)||(!this.longitude)){
-                let msiteAddress = await getMsiteAddress(this.geograph).then((res) => {
+            if((!_this.latitude)||(!_this.longitude)){
+                let msiteAddress = await getMsiteAddress(_this.geograph).then((res) => {
                     return res;
                 }).catch((err)=>{
-                    this.$toast({
+                    _this.$toast({
                         message: err,
                         position: 'center',
                         duration: 1000
                     })
                 });
-                this.RECORD_ADDRESS({latitude:msiteAddress.latitude,longitude:msiteAddress.longitude})
+                _this.RECORD_ADDRESS({latitude:msiteAddress.latitude,longitude:msiteAddress.longitude})
             };
-            console.log('restaurant_category_id11',_this.restaurantCategoryId);
             // 3. 获取商铺列表
             getShopList({
                 latitude:_this.latitude,
@@ -124,32 +136,32 @@ export default {
         },
         async loadMoreShopList(){
             // 当第一次请求回来的商铺列表小于20条的时候,说明已经没有更多数据了就直接返回
-            if(this.touchend){
+            if(_this.touchend){
                 return;
             }
             // 用该变量,防止重复加载
-            if(this.preventRepeatReuqest){
+            if(_this.preventRepeatReuqest){
                 return;
             }
-            this.preventRepeatReuqest = true;
+            _this.preventRepeatReuqest = true;
             // 数据定位加20
-            this.offset += 20;
+            _this.offset += 20;
             let res = await getShopList({
-                latitude:this.latitude,
-                longitude: this.longitude,
-                offset: this.offset,
-                restaurant_category_id: this.restaurantCategoryId,
-                restaurant_category_id: this.restaurantCategoryIds
+                latitude:_this.latitude,
+                longitude: _this.longitude,
+                offset: _this.offset,
+                restaurant_category_id: _this.restaurantCategoryId,
+                restaurant_category_id: _this.restaurantCategoryIds
             }).then((res) => {
                 return  res;
             });
-            this.mShopList = [...this.mShopList,...res];
+            _this.mShopList = [..._this.mShopList,...res];
             // 当获取的数据小于20的时候,说明没有更多数据了,不需要再次请求数据
             if(res.length < 20){
-                this.touchend = true;
+                _this.touchend = true;
                 return;
             }
-            this.preventRepeatReuqest = false;
+            _this.preventRepeatReuqest = false;
         },
 
     },

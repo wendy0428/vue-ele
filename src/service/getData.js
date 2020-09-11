@@ -70,7 +70,7 @@ export const getShopList = ({
     "extras[]": "activities",
     keyword: "",
     restaurant_category_id,
-    "restaurant_category_ids": restaurant_category_ids,
+    "restaurant_category_ids[]": restaurant_category_ids,
     order_by,
     "delivery_mode[]": delivery_mode + supportStr,
   };

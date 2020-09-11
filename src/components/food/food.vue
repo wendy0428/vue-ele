@@ -137,7 +137,7 @@ export default {
         changeFoodType(id,name){
             this.restaurant_category_ids = id;
             this.title = name;
-            // this.selected = ''
+            this.selected = ''
 
         },
         // 点击 "分类", ①切换对应的文案 ②显示隐藏对应的 navbar 具体内容
