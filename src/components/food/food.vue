@@ -6,13 +6,21 @@
         <div class="back_cover" v-if="showBackCover"></div>
         <section class="navbar_container">
             <mt-navbar v-model="selected">
-                <mt-tab-item id="1" @click.native="changeClassify">{{title}}</mt-tab-item>
-                <mt-tab-item id="2">排序</mt-tab-item>
-                <mt-tab-item id="3">筛选</mt-tab-item>
+                <mt-tab-item id="1" @click.native="changeClassify">
+                    <span>{{title}}</span>
+                    <img :src="classify?upIcon:downIcon"/>
+                </mt-tab-item>
+                <mt-tab-item id="2" @click.native="changeSort">
+                    <span>排序</span>
+                    <img :src="sort?upIcon:downIcon"/>
+                </mt-tab-item>
+                <mt-tab-item id="3" @click.native="changeSelect">
+                    <span>筛选</span>
+                    <img :src="classify?upIcon:downIcon"/>
+                </mt-tab-item>
             </mt-navbar>
 
             <!-- tab-container -->
-            <!--  :title="eachCategory" -->
             <mt-tab-container v-model="selected" v-if="showBackCover">
                 <!-- 分类 -->
                 <mt-tab-container-item id="1" class="category_container">
@@ -94,6 +102,9 @@
 </template>
 <script>
 // 引入图标
+import upIcon from '../../assets/img/upIcon.png'
+import downIcon from '../../assets/img/downIcon.png'
+
 import duigou from '../../assets/img/duigou.png'
 import fengniao from '../../assets/img/fengniao.png'
 import pinpai from '../../assets/img/pinpai.png'
@@ -121,6 +132,8 @@ export default {
             headData:{
                 goBack: true
             },
+            upIcon,
+            downIcon,
             fengniao,
             duigou,
             iconsArr:[
@@ -137,6 +150,9 @@ export default {
 
             // 分类
             classify: true, // 控制分类目录中的标题显示
+            sort: true, // 控制排序目录中的标题显示
+            select: true,// 控制排序目录中的标题显示
+
             foodCategory: [], // 分类中的一级目录
             subCategories: [], // 分类中的二级目录
             restaurant_category_id:'', // "分类 "中 的一级目录中的的 id
@@ -264,6 +280,20 @@ export default {
             this.classify = !(this.classify);
             // 控制显示和隐藏,下面的种类框
             if(this.classify){
+                this.selected = ''
+            }
+        },
+        // 点击排序
+        changeSort(){
+            this.sort = !this.sort
+            if(this.sort){
+                this.selected = ''
+            }
+        },
+        // 点击 筛选
+        changeSelect(){
+            this.select = !this.select
+            if(this.select){
                 this.selected = ''
             }
         },

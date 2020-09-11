@@ -9,3 +9,11 @@
     opacity: 0.5;
     background-color: #007aff;
 }
+.mint-tab-item-label{
+    position: relative;
+}
+.mint-tab-item-label img{
+    width: 20px;
+    position: absolute;
+    top: -5px;
+}
