@@ -26,7 +26,12 @@ Vue.use(VueRouter)
         path: '/food',  // 食品筛选排序页
         name: 'Food',
         component: () => import("@/components/food/food")
-    }
+    },
+    {
+        path: '/shop',  // 商铺详情页
+        name: 'Shop',
+        component: () => import("@/components/shop/shop")
+    },
 ]
 
 const router = new VueRouter({
