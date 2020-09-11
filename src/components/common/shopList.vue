@@ -68,6 +68,7 @@ export default {
         deliveryMode : String, // '筛选'中的配送方式
         supportIds : Array, // '筛选'中的商家属性
         searchSelected: Boolean, // 用来监听,父组件的确认按钮
+        selectSortTypeId: [String, Number], // '排序'中选择具体的方式
     },
     computed:{
         ...mapState(['latitude','longitude'])
@@ -82,7 +83,8 @@ export default {
                 restaurant_category_id: _this.restaurantCategoryId,
                 restaurant_category_ids: _this.restaurantCategoryIds,
                 delivery_mode: _this.deliveryMode,
-                support_ids: _this.supportIds
+                support_ids: _this.supportIds,
+                order_by: _this.selectSortTypeId
             }).then((res) => {
                 _this.mShopList = res;
                 if(_this.mShopList.length<20){
@@ -90,10 +92,9 @@ export default {
                 }
             })
         },
+        
         searchSelected(){
              let _this = this;
-                console.log('delivery_mode',_this.deliveryMode)
-
               getShopList({
                 latitude:_this.latitude,
                 longitude:_this.longitude,
@@ -101,7 +102,26 @@ export default {
                 restaurant_category_id: _this.restaurantCategoryId,
                 restaurant_category_ids: _this.restaurantCategoryIds,
                 delivery_mode: _this.deliveryMode,
-                support_ids: _this.supportIds
+                support_ids: _this.supportIds,
+                order_by: _this.selectSortTypeId
+            }).then((res) => {
+                _this.mShopList = res;
+                if(_this.mShopList.length<20){
+                    _this.touchend = true
+                }
+            })
+        },
+        selectSortTypeId(){
+            let _this = this;
+              getShopList({
+                latitude:_this.latitude,
+                longitude:_this.longitude,
+                offset: _this.offset,
+                restaurant_category_id: _this.restaurantCategoryId,
+                restaurant_category_ids: _this.restaurantCategoryIds,
+                delivery_mode: _this.deliveryMode,
+                support_ids: _this.supportIds,
+                order_by: _this.selectSortTypeId
             }).then((res) => {
                 _this.mShopList = res;
                 if(_this.mShopList.length<20){
@@ -138,7 +158,8 @@ export default {
                 restaurant_category_id: _this.restaurantCategoryId,
                 restaurant_category_ids: _this.restaurantCategoryIds,
                 delivery_mode: _this.deliveryMode,
-                support_ids: _this.supportIds
+                support_ids: _this.supportIds,
+                order_by: _this.selectSortTypeId
             }).then((res) => {
                 _this.mShopList = res;
                 if(_this.mShopList.length<20){

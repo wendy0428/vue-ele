@@ -38,10 +38,17 @@
                         </div>
                     </li>
                 </mt-tab-container-item>
-                <!--  -->
-              <!-- <mt-tab-container-item id="2">
-                <mt-cell v-for="n in 4" :key="n"  :title="'测试 ' + n" />
-              </mt-tab-container-item>-->
+                <!-- 排序 -->
+                <mt-tab-container-item id="2" class="sort_container">
+                    <div v-for="(sortType,sortTypeIndex) in sortTypeList" :key="sortTypeIndex" 
+                        class="sortType"
+                        @click="selectSortType(sortType.id)"
+                    >
+                        <img :src="sortType.icon"/>
+                        <span>{{sortType.name}}</span>
+                        <img :src="duigou" v-if="sortType.id == selectSortTypeId" class="is_selected"/>
+                    </div>
+                </mt-tab-container-item>
                 <!-- 筛选 -->
                 <mt-tab-container-item id="3">
                     <div class="delivery_attr_container">
@@ -80,6 +87,7 @@
             :support-ids = support_ids
             :geograph = geograph
             :search-selected = searchSelected
+            :select-sort-type-id = selectSortTypeId
             class="shop_list"
         ></shop-list>
     </div>
@@ -94,6 +102,14 @@ import zhun from '../../assets/img/zhun.png'
 import xin from '../../assets/img/xin.png'
 import fu from '../../assets/img/fu.png'
 import piao from '../../assets/img/piao.png'
+
+import paixu from '../../assets/img/paixu.png'
+import juli from '../../assets/img/juli.png'
+import xiaoliang from '../../assets/img/xiaoliang.png'
+import jiage from '../../assets/img/jiage.png'
+import shijian from '../../assets/img/shijian.png'
+import pingfen from '../../assets/img/pingfen.png'
+
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
 const shopList = () => import('@/components/common/shopList')
@@ -119,14 +135,49 @@ export default {
             geograph:'',
             selected:'',
 
+            // 分类
             classify: true, // 控制分类目录中的标题显示
             foodCategory: [], // 分类中的一级目录
             subCategories: [], // 分类中的二级目录
             restaurant_category_id:'', // "分类 "中 的一级目录中的的 id
             restaurant_category_ids: '', // "分类 "中 的二级分类的 id
 
-            sortTypeList :[], // 排序
-
+            // 排序
+            sortTypeList :[
+                {
+                    id: 0,
+                    icon: paixu,
+                    name: '智能排序'    
+                },
+                {
+                    id: 5,
+                    icon: juli,
+                    name: '距离最近'    
+                },
+                {
+                    id: 6,
+                    icon: xiaoliang,
+                    name: '销量最高'    
+                },
+                {
+                    id: 1,
+                    icon: jiage,
+                    name: '起送价最低'    
+                },
+                {
+                    id: 2,
+                    icon: shijian,
+                    name: '配送时间最快'    
+                },
+                {
+                    id: 3,
+                    icon: pingfen,
+                    name: '评分最高'    
+                },
+            ],
+            selectSortTypeId: '', //选中排序方式的 id 
+            
+            // 筛选
             deliveryModes: [], // 配送方式
             delivery_mode_arr: [], // 选中的配送方式的 id
             delivery_mode: '', // 选中的配送方式的 id 转为字符串
@@ -242,6 +293,11 @@ export default {
         clear(){
             this.delivery_mode_arr = [];
             this.support_ids = [];
+        },
+        // 选择排序方式
+        selectSortType(id){
+            this.selectSortTypeId = id;
+            this.selected = '';
         },
         show(){
             
@@ -392,5 +448,34 @@ export default {
 .shop_list{
     margin-top: 180px;
     background-color: #fff;
+}
+
+.sort_container{
+    background: #fff;
+    color: #666;
+    font-size: 20px;
+}
+.sortType{
+    position: relative;
+}
+.sortType>img{
+    width: 45px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.sortType>span{
+    display: inline-block;
+    width: 80%;
+    text-align: left;
+    border-bottom: 1px solid #e4e4e4;
+    padding: 40px 20px;
+    margin-left: 10px;
+
+}
+.is_selected{
+    position: absolute;
+    top: 30px;
+    right: 30px
 }
 </style>
