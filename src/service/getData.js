@@ -72,7 +72,6 @@ export const getShopList = ({
     "delivery_mode[]": delivery_mode ,
     support_ids:support_ids
   };
-  console.log('data',data);
   return httpGet({ url: "/shopping/restaurants", params: data });
 };
 
