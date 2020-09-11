@@ -55,6 +55,7 @@ export const getShopList = ({
   delivery_mode = "",
   support_ids = [],
 }) => {
+  console.log('restaurant_category_id22',restaurant_category_id);
   let supportStr = "";
   support_ids.forEach((item) => {
     if (item.status) {
@@ -69,7 +70,7 @@ export const getShopList = ({
     "extras[]": "activities",
     keyword: "",
     restaurant_category_id,
-    "restaurant_category_ids[]": restaurant_category_ids,
+    "restaurant_category_ids": restaurant_category_ids,
     order_by,
     "delivery_mode[]": delivery_mode + supportStr,
   };

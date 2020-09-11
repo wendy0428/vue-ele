@@ -13,24 +13,31 @@
             <!-- tab-container -->
             <!--  :title="eachCategory" -->
             <mt-tab-container v-model="selected">
-              <mt-tab-container-item id="1" class="category_container">
-                <li>
-                    <div class="category_left">
-                        <div v-for="(eachCategory,categoryIndex) in foodCategory" :key="categoryIndex" @click="changeCategory(eachCategory.id,eachCategory.sub_categories)" :class="restaurant_category_id==eachCategory.id ?'activeClass1':''">
-                            <img :src="'https://fuss10.elemecdn.com/'+eachCategory.image_url" class="icon"/>
-                            <span class="name">{{eachCategory.name}}</span>
-                            <span class="count">{{eachCategory.count}}</span>
+                <!-- 分类 -->
+                <mt-tab-container-item id="1" class="category_container">
+                    <li>
+                        <div class="category_left">
+                            <div  v-for="(eachCategory,categoryIndex) in foodCategory" :key="categoryIndex" 
+                                @click="changeCategory(eachCategory.id,eachCategory.sub_categories)"     
+                                :class="restaurant_category_id==eachCategory.id ?'activeClass1':''"
+                            >
+                                <img :src="'https://fuss10.elemecdn.com/'+eachCategory.image_url" class="icon"/>
+                                <span class="name">{{eachCategory.name}}</span>
+                                <span class="count">{{eachCategory.count}}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="category_right" v-if="subCategories.length!=0">
-                        <li v-for="(subCategory,subCategoryIndex) in subCategories" :key="subCategoryIndex" @click="changeFoodType(subCategory.id,subCategory.name)" :class="restaurant_category_ids ==subCategory.id ?'activeClass2':''">
-                            <span class="sub_name">{{subCategory.name}}</span>
-                            <span class="sub_count">{{subCategory.count}}</span>
-                        </li>
-                    </div>
-
-                </li>
-              </mt-tab-container-item>
+                        <div class="category_right" v-if="subCategories.length!=0">
+                            <li  v-for="(subCategory,subCategoryIndex) in subCategories" :key="subCategoryIndex" 
+                                @click="changeFoodType(subCategory.id,subCategory.name)"    
+                                :class="restaurant_category_ids ==subCategory.id ?'activeClass2':''"
+                            >
+                                <span class="sub_name">{{subCategory.name}}</span>
+                                <span class="sub_count">{{subCategory.count}}</span>
+                            </li>
+                        </div>
+                    </li>
+                </mt-tab-container-item>
+                <!--  -->
               <!-- <mt-tab-container-item id="2">
                 <mt-cell v-for="n in 4" :key="n"  :title="'测试 ' + n" />
               </mt-tab-container-item>
@@ -39,14 +46,18 @@
               </mt-tab-container-item> -->
             </mt-tab-container>
         </section>
-        
+        <shop-list 
+            :restaurant-category-id ="restaurant_category_id"
+            :restaurant-category-ids="restaurant_category_ids"
+            :geograph=geograph
+        ></shop-list>
     </div>
 </template>
 <script>
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
-
-import {getMsiteAddress,getFoodCategory,getFoodDelivery,getShopAttribute} from '../../service/getData'
+const shopList = () => import('@/components/common/shopList')
+import {getMsiteAddress,getFoodCategory,getFoodDelivery,getShopAttribute,getShopList} from '../../service/getData'
 import {mapMutations,mapState} from 'vuex'
 export default {
     data(){
@@ -57,21 +68,22 @@ export default {
             title:'',
             geograph:'',
             selected:'',
-            activeIndex1: 0, // 控制 "分类 "中 的 左边分类的激活样式
-            activeIndex2: 0, // 控制 "分类 "中 的 右边分类的激活样式
-            classify: true,
-            sortTypeList :[],
-            foodCategory: [],
-            subCategories: [],
-            deliveryModes: [],
-            shopAttribute:[],
-            restaurant_category_id:'', // "分类 "中 的左边分类的 id
-            restaurant_category_ids: '', // "分类 "中 的左边分类的 id
+            classify: true, // 控制分类目录中的标题显示
+            foodCategory: [], // 分类中的一级目录
+            subCategories: [], // 分类中的二级目录
+            restaurant_category_id:'', // "分类 "中 的一级目录中的的 id
+            restaurant_category_ids: '', // "分类 "中 的二级分类的 id
+            sortTypeList :[], // 排序
+            deliveryModes: [], // 配送方式
+            shopAttribute:[], // 商家属性
+            // mShopList: [], // 商铺列表
+           
 
         }
     },
     components:{
-        commonHead
+        commonHead,
+        shopList
     },
     created(){
         this.title = this.$route.query.title;
@@ -82,20 +94,7 @@ export default {
     methods:{
         ...mapMutations(['RECORD_ADDRESS','SAVE_GEOHASH']),
         async initDate(){
-            // 1. 防止刷新页面时，vuex状态丢失，经度纬度需要重新获取，并存入vuex
-            if((!this.latitude)||(!this.longitude)){
-                let msiteAddress = await getMsiteAddress(this.geograph).then((res) => {
-                    return res;
-                }).catch((err)=>{
-                    this.$toast({
-                        message: err,
-                        position: 'center',
-                        duration: 1000
-                    })
-                });
-                this.RECORD_ADDRESS({latitude:msiteAddress.latitude,longitude:msiteAddress.longitude})
-            };
-            // 2. 分类
+            // 1. 分类
             this.foodCategory = await getFoodCategory(this.latitude,this.longitude).then((res) => {
                 return res;
             }).catch((err)=>{
@@ -108,7 +107,7 @@ export default {
             // 默认二级目录,显示一级目录下面的
             this.subCategories = this.foodCategory[0].sub_categories;
             console.log('this.subCategories',this.subCategories);
-            // 3. 配送方式
+            // 2. 配送方式
             this.deliveryModes = await getFoodDelivery(this.latitude,this.longitude).then((res) => {
                 return res;
             }).catch((err)=>{
@@ -118,7 +117,7 @@ export default {
                     duration: 1000
                 })
             });
-            // 4. 商家属性
+            // 3. 商家属性
             this.shopAttribute = await getShopAttribute(this.latitude,this.longitude).then((res) => {
                 return res;
             }).catch((err)=>{
@@ -129,16 +128,14 @@ export default {
                 })
             });
         },
-        // 点击"分类"中的 左边分类 : ①当前选中添加 activeClass1 样式 ②切换右边分类中的对应的数据
+        // 点击"分类 "中 的一级目录: ①当前选中添加 activeClass1 样式 ②切换右边分类中的对应的数据
         changeCategory(id,sub_categories){
-            // this.activeIndex1 = index;
             this.restaurant_category_id = id;
             this.subCategories = sub_categories;
         },
-        // 点击"分类"中的 右边分类: ①当前选中添加 activeClass2 样式 ②改变整体页面的 title
+        // 点击"分类 "中 的二级目录: ①当前选中添加 activeClass2 样式 ②改变整体页面的 title
         changeFoodType(id,name){
             this.restaurant_category_ids = id;
-            // this.activeIndex1 = index;
             this.title = name;
             // this.selected = ''
 

@@ -18,7 +18,7 @@
         </mt-swipe>
         <section class="shop_list_container">
             <span class="shop_list_container_title">附近商家</span>
-            <shop-list></shop-list>
+            <shop-list :geograph=geograph></shop-list>
         </section>
         
     </div>
@@ -29,7 +29,7 @@ const commonHead = () => import('@/components/header/head')
 const shopList = () => import('@/components/common/shopList')
 
 // 接口
-import {getMsiteAddress,getMsiteFoodTypes,getShopList,guessCity} from '../../service/getData'
+import {getMsiteAddress,getMsiteFoodTypes,guessCity} from '../../service/getData'
 // 公共域名
 import {imgBaseUrl} from '../../config/env'
 // 引入 vuex

@@ -45,9 +45,9 @@ import {imgBaseUrl} from '../../config/env'
 // 引入评分组件
 const ratingStar = () => import('@/components/common/ratingStar')
 // 引入接口
-import {getShopList} from '../../service/getData'
+import {getShopList,getMsiteAddress} from '../../service/getData'
 // 引入 vuex
-import {mapState} from 'vuex'
+import {mapState,mapMutations} from 'vuex'
 export default {
     data(){
         return {
@@ -62,22 +62,52 @@ export default {
         ratingStar
     },
     props:{
-        geograph: Object
+        geograph: String,
+        'restaurantCategoryId': String, // '分类'中的一级目录 id
+        'restaurantCategoryIds': String, // '分类'中的二级目录 id
     },
   
     computed:{
         ...mapState(['latitude','longitude'])
     },
     created(){
-        // 3. 获取商铺列表
-        getShopList({latitude:this.latitude,longitude: this.longitude,offset: this.offset}).then((res) => {
-            this.mShopList = res;
-            if(this.mShopList.length<20){
-                this.touchend = true
-            }
-        })
+        this.initDate();
     },
     methods:{
+        ...mapMutations(['RECORD_ADDRESS']),
+        async initDate(){
+           
+            let _this = this;
+             console.log('this',this);
+            console.log('_this',_this.restaurantCategoryId);
+            // 1. 防止刷新页面时，vuex状态丢失，经度纬度需要重新获取，并存入vuex
+            if((!this.latitude)||(!this.longitude)){
+                let msiteAddress = await getMsiteAddress(this.geograph).then((res) => {
+                    return res;
+                }).catch((err)=>{
+                    this.$toast({
+                        message: err,
+                        position: 'center',
+                        duration: 1000
+                    })
+                });
+                this.RECORD_ADDRESS({latitude:msiteAddress.latitude,longitude:msiteAddress.longitude})
+            };
+            console.log('restaurant_category_id11',_this.restaurantCategoryId);
+            // 3. 获取商铺列表
+            getShopList({
+                latitude:_this.latitude,
+                longitude:_this.longitude,
+                offset: _this.offset,
+                restaurant_category_id: _this.restaurantCategoryId,
+                restaurant_category_ids: _this.restaurantCategoryIds
+            }).then((res) => {
+                _this.mShopList = res;
+                if(_this.mShopList.length<20){
+                    _this.touchend = true
+                }
+            })
+        },
         // 是否显示'准时达'标签
         zhunshi(supports){
             let supportStatus;
@@ -104,7 +134,15 @@ export default {
             this.preventRepeatReuqest = true;
             // 数据定位加20
             this.offset += 20;
-            let res = await getShopList({latitude:this.geograph.latitude,longitude: this.geograph.longitude,offset: this.offset});
+            let res = await getShopList({
+                latitude:this.latitude,
+                longitude: this.longitude,
+                offset: this.offset,
+                restaurant_category_id: this.restaurantCategoryId,
+                restaurant_category_id: this.restaurantCategoryIds
+            }).then((res) => {
+                return  res;
+            });
             this.mShopList = [...this.mShopList,...res];
             // 当获取的数据小于20的时候,说明没有更多数据了,不需要再次请求数据
             if(res.length < 20){
