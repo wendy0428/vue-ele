@@ -75,59 +75,14 @@ export default {
     },
     watch:{
         restaurantCategoryIds(){
-            let _this = this;
-              getShopList({
-                latitude:_this.latitude,
-                longitude:_this.longitude,
-                offset: _this.offset,
-                restaurant_category_id: _this.restaurantCategoryId,
-                restaurant_category_ids: _this.restaurantCategoryIds,
-                delivery_mode: _this.deliveryMode,
-                support_ids: _this.supportIds,
-                order_by: _this.selectSortTypeId
-            }).then((res) => {
-                _this.mShopList = res;
-                if(_this.mShopList.length<20){
-                    _this.touchend = true
-                }
-            })
+            this.getShopList()
         },
         
         searchSelected(){
-             let _this = this;
-              getShopList({
-                latitude:_this.latitude,
-                longitude:_this.longitude,
-                offset: _this.offset,
-                restaurant_category_id: _this.restaurantCategoryId,
-                restaurant_category_ids: _this.restaurantCategoryIds,
-                delivery_mode: _this.deliveryMode,
-                support_ids: _this.supportIds,
-                order_by: _this.selectSortTypeId
-            }).then((res) => {
-                _this.mShopList = res;
-                if(_this.mShopList.length<20){
-                    _this.touchend = true
-                }
-            })
+            this.getShopList()
         },
         selectSortTypeId(){
-            let _this = this;
-              getShopList({
-                latitude:_this.latitude,
-                longitude:_this.longitude,
-                offset: _this.offset,
-                restaurant_category_id: _this.restaurantCategoryId,
-                restaurant_category_ids: _this.restaurantCategoryIds,
-                delivery_mode: _this.deliveryMode,
-                support_ids: _this.supportIds,
-                order_by: _this.selectSortTypeId
-            }).then((res) => {
-                _this.mShopList = res;
-                if(_this.mShopList.length<20){
-                    _this.touchend = true
-                }
-            })
+            this.getShopList()
         }
     },
     created(){
@@ -151,21 +106,7 @@ export default {
                 _this.RECORD_ADDRESS({latitude:msiteAddress.latitude,longitude:msiteAddress.longitude})
             };
             // 3. 获取商铺列表
-            getShopList({
-                latitude:_this.latitude,
-                longitude:_this.longitude,
-                offset: _this.offset,
-                restaurant_category_id: _this.restaurantCategoryId,
-                restaurant_category_ids: _this.restaurantCategoryIds,
-                delivery_mode: _this.deliveryMode,
-                support_ids: _this.supportIds,
-                order_by: _this.selectSortTypeId
-            }).then((res) => {
-                _this.mShopList = res;
-                if(_this.mShopList.length<20){
-                    _this.touchend = true
-                }
-            })
+            _this.getShopList()
         },
         // 是否显示'准时达'标签
         zhunshi(supports){
@@ -213,6 +154,24 @@ export default {
             }
             _this.preventRepeatReuqest = false;
         },
+        getShopList: function() {
+            let _this = this;
+            getShopList({
+                latitude:_this.latitude,
+                longitude:_this.longitude,
+                offset: _this.offset,
+                restaurant_category_id: _this.restaurantCategoryId,
+                restaurant_category_ids: _this.restaurantCategoryIds,
+                delivery_mode: _this.deliveryMode,
+                support_ids: _this.supportIds,
+                order_by: _this.selectSortTypeId
+            }).then((res) => {
+                _this.mShopList = res;
+                if(_this.mShopList.length<20){
+                    _this.touchend = true
+                }
+            })
+    }
 
     },
     directives: {
@@ -266,7 +225,8 @@ export default {
 
             }
         }
-    }
+    },
+    
 }
 </script>
 <style scoped>
