@@ -1,7 +1,7 @@
 <template>
     <div id="CommonshopList">
         <ul v-if="mShopList.length!==0" v-load-more="loadMoreShopList">
-            <router-link :to="{path:'/shop',query:{geograph}}" tag="li"
+            <router-link :to="{path:'/shop',query:{geograph,id:shop.id}}" tag="li"
             v-for="(shop,shopIndex) in mShopList" :key="shopIndex"
             class="each_shop"
             >

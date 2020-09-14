@@ -99,3 +99,10 @@ export const getShopAttribute = (latitude, longitude) => httpGet({url :'/shoppin
 	kw: ''
 }});
 
+// 13. 获取shop页面商铺详情
+export const getShopDetails = (shopid, latitude, longitude) => httpGet({url: '/shopping/restaurant/' + shopid, params:{
+	latitude,
+	longitude: longitude + '&extras[]=activities&extras[]=album&extras[]=license&extras[]=identification&extras[]=statistics'
+}});
+
+
