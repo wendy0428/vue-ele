@@ -93,6 +93,7 @@ export default {
             menuList: [], // 当前商铺的菜单
             menuIndex: 0, // 左边 li 的 index
             foodListLiHeight: [], //右边食品列表每个 li 的 offsetTop
+            menuIndexChange: true, // 解决运动时listenScroll依然监听的bug
         }
     },
     created(){
@@ -158,7 +159,7 @@ export default {
                             return;
                         }
                         _this.foodListLiHeight.forEach((item,index) => {
-                            if(Math.abs(Math.round(pos.y)) >= item){
+                            if(_this.menuIndexChange && Math.abs(Math.round(pos.y)) >= item){
                                 this.menuIndex = index;
                                 const menuList=this.$refs.wrapperMenu.querySelectorAll('.activity_menu');
                                 const el = menuList[0];
@@ -194,8 +195,12 @@ export default {
         },
         // 点击左侧食品标题,右边相应的列表移动到最顶层
         chooseMenu(index){
+            this.menuIndexChange = false;
             this.menuIndex = index;
             this.foodScroll.scrollTo(0,-this.foodListLiHeight[index],400);
+            this.foodScroll.on('scrollEnd',()=>{
+                this.menuIndexChange = true;
+            });
         }
     },
     computed:{
