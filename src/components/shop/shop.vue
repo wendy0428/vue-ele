@@ -19,7 +19,54 @@
             <mt-tab-container v-model="selected">
                 <!-- 商品 -->
                 <mt-tab-container-item id="1">
-                
+                    <div class="menu_container">
+                        <div class="menu_left">
+                            <ul>
+                                <li v-for="(menuType,menuIndex) in menuList" :key="menuIndex">
+                                    <span>{{menuType.name}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="menu_right">
+                            <ul class="menu_right_ul">
+                                <li v-for="(menuType,menuIndex) in menuList" :key="menuIndex">
+                                    <header>
+                                        <span class="name">{{menuType.name}}</span>
+                                        <span class="description">{{menuType.description}}</span>
+                                    </header>
+                                    <ul class="foods">
+                                        <li v-for="(food,foodIndex) in menuType.foods" :key="foodIndex">
+                                            <div class="food_left">
+                                                <img :src="'http://cangdu.org:8001/img/'+food.image_path"/>
+                                            </div>
+                                            <div class="food_right">
+                                                <div class="food_name">
+                                                    <span>{{food.name}}</span>
+                                                    <ul v-if="food.attributes" class="attribute">
+                                                        <li v-for="(attr,attrIndex) in food.attributes" :key="attrIndex">
+                                                            <span v-if="attr">{{attr.icon_name}}</span>
+                                                            <span v-else></span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="description">{{food.description}}</div>
+                                                <div class="shop_date">
+                                                    <span v-if="food.month_sales">月售{{food.month_sales}}</span>
+                                                    <span v-if="food.satisfy_rate">好评率{{food.satisfy_rate}}%</span>
+                                                </div>
+                                                <div v-if="food.activity&&food.activity.image_text" class="activity">
+                                                    <span>{{food.activity.image_text}}</span>
+                                                </div>
+                                                <div class="price">
+                                                    <span>¥{{food.specfoods[0].price}}&nbsp;&nbsp;</span><span>起</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </mt-tab-container-item>
                 <!-- 评价 -->
                 <mt-tab-container-item id="2">
@@ -113,6 +160,7 @@ export default {
     display: flex;
     position: fixed;
     top: 0;
+    font-weight: bold;
 }
 .shop_header_left{
     width: 30%;
@@ -141,8 +189,111 @@ export default {
     position: fixed;
     top: 200px;
     width: 100%;
+    /* background-color: #fff; */
 }
 .select_title .mint-tab-item-label{
     font-size: 35px;
+}
+.menu_container{
+    display: flex;
+}
+.menu_container ul{
+    padding: 0;
+    margin: 0;
+}
+.menu_container li{
+    list-style-type: none;
+    font-size: 30px;
+}
+.menu_left{
+    width: 25%;
+}
+.menu_left li{
+    border-bottom: 1px solid #ededed;
+    box-sizing: border-box;
+    padding: 45px 0px;
+}
+.menu_right{
+    width: 75%;
+    text-align: left;
+}
+.menu_right_ul header{
+    padding: 25px;
+}
+.menu_right_ul .name{
+    color: #666;
+    font-size: 35px;
+    font-weight: bold;
+}
+.menu_right_ul .description{
+    color: #999;
+    font-size: 20px;
+    margin-left: 20px;
+}
+.foods>li{
+    width: 100%;
+    display: flex;
+    background-color:#fff;
+    border-bottom: 4px solid #f8f8f8;
+    padding: 10px 0px;
+}
+.food_left{
+    width: 25%;
+    position: relative;
+}
+.food_left img{
+    width: 70%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.food_right{
+    width: 75%;
+}
+.food_right div{
+    margin-top: 10px;
+}
+.food_name>span{
+    font-weight: bold;
+    font-size: 35px;
+}
+.food_name{
+    display: flex;
+    justify-content: space-between;
+}
+.food_name ul{
+    display: flex;
+}
+.food_name ul>li{
+    margin-right: 10px;
+}
+.food_name ul>li>span{
+    color: rgb(240, 115, 115);
+    border: 1px solid rgb(240, 115, 115);
+    border-radius: 10px;
+    font-size: 15px;
+    padding: 0 10px;
+
+}
+.food_name .description{
+    color: #999;
+}
+
+.shop_date span{
+    color: #333;
+    font-size: 25px;
+    padding-right: 10px;
+}
+.activity>span{
+    display: inline-block;
+    color: rgb(241, 136, 79);
+    border: 1px solid rgb(240, 115, 115);
+    font-size: 20px;
+    border-radius: 10px;
+}
+.price>span:nth-child(1){
+    color: #f60;
+    font-weight: bold;
 }
 </style>
