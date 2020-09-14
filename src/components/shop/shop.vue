@@ -19,8 +19,8 @@
             <mt-tab-container v-model="selected">
                 <!-- 商品 -->
                 <mt-tab-container-item id="1">
-                    <div class="menu_container">
-                        <div class="menu_left" ref="wrapperMenu">
+                    <div class="menu_container" :style="{height: wrapMenuHeight+'px'}">{{wrapMenuHeight}}
+                        <div class="menu_left" ref="wrapperMenu" :style="{height: wrapMenuHeight+'px'}">
                             <ul>
                                 <li v-for="(menuType,index) in menuList" :key="index" 
                                     :class="menuIndex==index?'activity_menu':''"
@@ -30,7 +30,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="menu_right" ref="menuFoodList">
+                        <div class="menu_right" ref="menuFoodList" :style="{height: wrapMenuHeight+'px'}">
                             <ul class="menu_right_ul">
                                 <li v-for="(menuType,menuIndex) in menuList" :key="menuIndex">
                                     <header>
@@ -94,6 +94,7 @@ export default {
             menuIndex: 0, // 左边 li 的 index
             foodListLiHeight: [], //右边食品列表每个 li 的 offsetTop
             menuIndexChange: true, // 解决运动时listenScroll依然监听的bug
+            wrapMenuHeight: '', 
         }
     },
     created(){
@@ -136,23 +137,28 @@ export default {
                 _this.$nextTick(() => {
                     // 获取可视区域的高度
                     const wrapMenuHeight = this.$refs.wrapperMenu.clientHeight;
+                    console.log('wrapMenuHeight',wrapMenuHeight);
+                    _this.wrapMenuHeight = wrapMenuHeight;
                     // 获取右边商品列表每个 li 的 offsetTop
                     _this.getRightFoodListHeight();
                     // 左边的 ul
                     _this.menu = new BScroll(_this.$refs.wrapperMenu,{
-                        click: true,
+                         probeType: 3,
+                        deceleration: 0.001,
                         bounce: false,
-                        useTransition:false,
+                        swipeTime: 2000,
+                        click: true,
                     });
+                    console.log('menu',this.menu)
                     // 右边的 ul
                     _this.foodScroll = new BScroll(_this.$refs.menuFoodList,{
                         probeType: 3,
-                        // deceleration: 0.001,
+                        deceleration: 0.001,
                         bounce: false,
-                        // swipeTime: 2000,
+                        swipeTime: 2000,
                         click: true,
-                        useTransition:false,
                     });
+                    console.log(this.foodScroll)
 
                     _this.foodScroll.on('scroll',(pos) => {
                         if(!_this.$refs.wrapperMenu){
@@ -190,7 +196,6 @@ export default {
                     foodListLiHeight[i] = foodListArr[i].offsetTop;
                 };
                 _this.foodListLiHeight = foodListLiHeight;
-                console.log('_this.foodListLiHeight',_this.foodListLiHeight);
             }
         },
         // 点击左侧食品标题,右边相应的列表移动到最顶层
@@ -255,16 +260,15 @@ export default {
 }   
 
 .menu{
-    position: fixed;
-    top: 200px;
+    margin-top: 200px;
     width: 100%;
-    /* background-color: #fff; */
 }
 .select_title .mint-tab-item-label{
     font-size: 35px;
 }
 .menu_container{
-    display: flex;
+    /* display: flex;s */
+    position: relative;
 }
 .menu_container ul{
     padding: 0;
@@ -275,8 +279,12 @@ export default {
     font-size: 30px;
 }
 .menu_left{
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 25%;
     height: 100vh;
+    /* height: 100%; */
 }
 .menu_left li{
     border-bottom: 1px solid #ededed;
@@ -284,9 +292,13 @@ export default {
     padding: 45px 0px;
 }
 .menu_right{
+    position: absolute;
+    top: 0;
+    left: 25%;
     width: 75%;
     text-align: left;
     height: 100vh;
+     /* height: 100%; */
 }
 .menu_right_ul header{
     padding: 25px;
