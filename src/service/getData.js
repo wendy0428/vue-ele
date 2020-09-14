@@ -69,8 +69,8 @@ export const getShopList = ({
     restaurant_category_id,
     "restaurant_category_ids[]": restaurant_category_ids,
     order_by,
-    "delivery_mode[]": delivery_mode ,
-    support_ids:support_ids
+    "delivery_mode[]": delivery_mode,
+    support_ids: support_ids,
   };
   return httpGet({ url: "/shopping/restaurants", params: data });
 };
@@ -86,23 +86,44 @@ export const getFoodCategory = (latitude, longitude) =>
   });
 
 // 11. 获取food页面的配送方式
-export const getFoodDelivery = (latitude, longitude) => httpGet({url: '/shopping/v1/restaurants/delivery_modes',params:{
-	latitude,
-	longitude,
-	kw: ''
-}});
+export const getFoodDelivery = (latitude, longitude) =>
+  httpGet({
+    url: "/shopping/v1/restaurants/delivery_modes",
+    params: {
+      latitude,
+      longitude,
+      kw: "",
+    },
+  });
 
 // 12.获取food页面的商家属性活动列表
-export const getShopAttribute = (latitude, longitude) => httpGet({url :'/shopping/v1/restaurants/activity_attributes', params:{
-	latitude,
-	longitude,
-	kw: ''
-}});
+export const getShopAttribute = (latitude, longitude) =>
+  httpGet({
+    url: "/shopping/v1/restaurants/activity_attributes",
+    params: {
+      latitude,
+      longitude,
+      kw: "",
+    },
+  });
 
 // 13. 获取shop页面商铺详情
-export const getShopDetails = (shopid, latitude, longitude) => httpGet({url: '/shopping/restaurant/' + shopid, params:{
-	latitude,
-	longitude: longitude + '&extras[]=activities&extras[]=album&extras[]=license&extras[]=identification&extras[]=statistics'
-}});
+export const getShopDetails = (shopid, latitude, longitude) =>
+  httpGet({
+    url: "/shopping/restaurant/" + shopid,
+    params: {
+      latitude,
+      longitude:
+        longitude +
+        "&extras[]=activities&extras[]=album&extras[]=license&extras[]=identification&extras[]=statistics",
+    },
+  });
 
-
+// 14. 获取shop页面菜单列表
+export const getFoodMenu = (restaurant_id) =>
+  httpGet({
+    url: "/shopping/v2/menu",
+    params: {
+      restaurant_id,
+    },
+  });

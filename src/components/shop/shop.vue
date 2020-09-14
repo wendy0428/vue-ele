@@ -15,24 +15,21 @@
                 <mt-tab-item id="1" class="select_title">商品</mt-tab-item>
                 <mt-tab-item id="2" class="select_title">评价</mt-tab-item>
             </mt-navbar>
-
             <!-- tab-container -->
             <mt-tab-container v-model="selected">
                 <!-- 商品 -->
-              <mt-tab-container-item id="1">
-                <mt-cell v-for="n in 10" :title="'内容 ' + n" />
-              </mt-tab-container-item>
-              <!-- 评价 -->
-              <mt-tab-container-item id="2">
-                <mt-cell v-for="n in 4" :title="'测试 ' + n" />
-              </mt-tab-container-item>
-           
+                <mt-tab-container-item id="1">
+                
+                </mt-tab-container-item>
+                <!-- 评价 -->
+                <mt-tab-container-item id="2">
+                </mt-tab-container-item>
             </mt-tab-container>
         </section>
     </div>
 </template>
 <script>
-import {getMsiteAddress,getShopDetails} from '../../service/getData'
+import {getMsiteAddress,getShopDetails,getFoodMenu} from '../../service/getData'
 import {mapState,mapMutations} from 'vuex'
 export default {
     data(){
@@ -41,6 +38,7 @@ export default {
             id: '', // 当前商铺的 id
             shopDetails:'', //当前商铺详情
             selected: "1",
+            menuList: [], // 当前商铺的菜单
         }
     },
     created(){
@@ -67,7 +65,18 @@ export default {
             };
             // 2. 获取当前商铺详情
             getShopDetails(_this.id,_this.latitude,_this.longitude).then((res)=>{
-                this.shopDetails = res;
+                _this.shopDetails = res;
+            }).catch((err)=>{
+                _this.$toast({
+                    message: err,
+                    position: 'center',
+                    duration: 1000
+                })
+            });
+
+            // 3. 获取shop页面菜单列表
+            getFoodMenu(_this.id).then((res) => {
+                _this.menuList = res;
             }).catch((err)=>{
                 _this.$toast({
                     message: err,
