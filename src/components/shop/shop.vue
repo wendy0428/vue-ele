@@ -10,6 +10,25 @@
                 <span class="promotion">公告{{shopDetails.promotion_info}}</span>
             </div>
         </section>
+        <section class="menu">
+            <mt-navbar v-model="selected">
+                <mt-tab-item id="1" class="select_title">商品</mt-tab-item>
+                <mt-tab-item id="2" class="select_title">评价</mt-tab-item>
+            </mt-navbar>
+
+            <!-- tab-container -->
+            <mt-tab-container v-model="selected">
+                <!-- 商品 -->
+              <mt-tab-container-item id="1">
+                <mt-cell v-for="n in 10" :title="'内容 ' + n" />
+              </mt-tab-container-item>
+              <!-- 评价 -->
+              <mt-tab-container-item id="2">
+                <mt-cell v-for="n in 4" :title="'测试 ' + n" />
+              </mt-tab-container-item>
+           
+            </mt-tab-container>
+        </section>
     </div>
 </template>
 <script>
@@ -21,6 +40,7 @@ export default {
             geograph:'', // 当前商铺的地理信息
             id: '', // 当前商铺的 id
             shopDetails:'', //当前商铺详情
+            selected: "1",
         }
     },
     created(){
@@ -74,6 +94,7 @@ export default {
 </script>
 <style scoped>
 .shop_header{
+    width: 100%;
     height: 200px;
     background-color: rgba(119, 103, 137, 0.43);
     /* 背景图片的上面再去叠加一层背景颜色 */
@@ -81,6 +102,8 @@ export default {
     font-size: 25px;
     color: #fff;
     display: flex;
+    position: fixed;
+    top: 0;
 }
 .shop_header_left{
     width: 30%;
@@ -104,4 +127,13 @@ export default {
 .shop_header_right .name{
     font-size: 35px;
 }   
+
+.menu{
+    position: fixed;
+    top: 200px;
+    width: 100%;
+}
+.select_title .mint-tab-item-label{
+    font-size: 35px;
+}
 </style>
