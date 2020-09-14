@@ -12,7 +12,6 @@ import 'mint-ui/lib/style.css'
 // 引入自定义样式去覆盖 mint-ui的样式
 import './assets/css/mint.css'
 
-import BScroll from 'better-scroll'
 
 Vue.use(MintUI)
 

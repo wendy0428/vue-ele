@@ -20,14 +20,17 @@
                 <!-- 商品 -->
                 <mt-tab-container-item id="1">
                     <div class="menu_container">
-                        <div class="menu_left">
+                        <div class="menu_left" ref="wrapperMenu">
                             <ul>
-                                <li v-for="(menuType,menuIndex) in menuList" :key="menuIndex">
+                                <li v-for="(menuType,index) in menuList" :key="index" 
+                                    :class="menuIndex==index?'activity_menu':''"
+                                    @click="chooseMenu(index)"
+                                >
                                     <span>{{menuType.name}}</span>
                                 </li>
                             </ul>
                         </div>
-                        <div class="menu_right">
+                        <div class="menu_right" ref="menuFoodList">
                             <ul class="menu_right_ul">
                                 <li v-for="(menuType,menuIndex) in menuList" :key="menuIndex">
                                     <header>
@@ -78,6 +81,8 @@
 <script>
 import {getMsiteAddress,getShopDetails,getFoodMenu} from '../../service/getData'
 import {mapState,mapMutations} from 'vuex'
+import BScroll from 'better-scroll'
+
 export default {
     data(){
         return {
@@ -86,6 +91,8 @@ export default {
             shopDetails:'', //当前商铺详情
             selected: "1",
             menuList: [], // 当前商铺的菜单
+            menuIndex: 0, // 左边 li 的 index
+            foodListLiHeight: [], //右边食品列表每个 li 的 offsetTop
         }
     },
     created(){
@@ -124,14 +131,71 @@ export default {
             // 3. 获取shop页面菜单列表
             getFoodMenu(_this.id).then((res) => {
                 _this.menuList = res;
+             
+                _this.$nextTick(() => {
+                    // 获取可视区域的高度
+                    const wrapMenuHeight = this.$refs.wrapperMenu.clientHeight;
+                    // 获取右边商品列表每个 li 的 offsetTop
+                    _this.getRightFoodListHeight();
+                    // 左边的 ul
+                    _this.menu = new BScroll(_this.$refs.wrapperMenu,{
+                        click: true,
+                        bounce: false,
+                        useTransition:false,
+                    });
+                    // 右边的 ul
+                    _this.foodScroll = new BScroll(_this.$refs.menuFoodList,{
+                        probeType: 3,
+                        // deceleration: 0.001,
+                        bounce: false,
+                        // swipeTime: 2000,
+                        click: true,
+                        useTransition:false,
+                    });
+
+                    _this.foodScroll.on('scroll',(pos) => {
+                        if(!_this.$refs.wrapperMenu){
+                            return;
+                        }
+                        _this.foodListLiHeight.forEach((item,index) => {
+                            if(Math.abs(Math.round(pos.y)) >= item){
+                                this.menuIndex = index;
+                                const menuList=this.$refs.wrapperMenu.querySelectorAll('.activity_menu');
+                                const el = menuList[0];
+                                _this.menu.scrollToElement(el, 800, 0, -(wrapMenuHeight/2 - 50));
+                           }
+                       });
+
+                    })
+                });
             }).catch((err)=>{
                 _this.$toast({
                     message: err,
                     position: 'center',
-                    duration: 1000
+                    duration: 2000
                 })
             });
 
+            
+        },
+        // 获取右边食品列表,每个 li 的高度
+        getRightFoodListHeight(){
+            let _this = this;
+            let rightFoodListContainer = _this.$refs.menuFoodList;
+            if(rightFoodListContainer){
+                let foodListArr = rightFoodListContainer.children[0].children;
+                let foodListLiHeight = [];
+                for(let i=0;i<foodListArr.length;i++){
+                    foodListLiHeight[i] = foodListArr[i].offsetTop;
+                };
+                _this.foodListLiHeight = foodListLiHeight;
+                console.log('_this.foodListLiHeight',_this.foodListLiHeight);
+            }
+        },
+        // 点击左侧食品标题,右边相应的列表移动到最顶层
+        chooseMenu(index){
+            this.menuIndex = index;
+            this.foodScroll.scrollTo(0,-this.foodListLiHeight[index],400);
         }
     },
     computed:{
@@ -207,6 +271,7 @@ export default {
 }
 .menu_left{
     width: 25%;
+    height: 100vh;
 }
 .menu_left li{
     border-bottom: 1px solid #ededed;
@@ -216,6 +281,7 @@ export default {
 .menu_right{
     width: 75%;
     text-align: left;
+    height: 100vh;
 }
 .menu_right_ul header{
     padding: 25px;
@@ -295,5 +361,8 @@ export default {
 .price>span:nth-child(1){
     color: #f60;
     font-weight: bold;
+}
+.activity_menu{
+    border-left: 4px solid red;
 }
 </style>
