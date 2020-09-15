@@ -10,71 +10,69 @@
                 <span class="promotion">公告{{shopDetails.promotion_info}}</span>
             </div>
         </section>
-        <section class="menu">
-            <mt-navbar v-model="selected">
-                <mt-tab-item id="1" class="select_title">商品</mt-tab-item>
-                <mt-tab-item id="2" class="select_title">评价</mt-tab-item>
-            </mt-navbar>
-            <!-- tab-container -->
-            <mt-tab-container v-model="selected">
-                <!-- 商品 -->
-                <mt-tab-container-item id="1">
-                    <div class="menu_container" :style="{height: wrapMenuHeight+'px'}">{{wrapMenuHeight}}
-                        <div class="menu_left" ref="wrapperMenu" :style="{height: wrapMenuHeight+'px'}">
-                            <ul>
-                                <li v-for="(menuType,index) in menuList" :key="index" 
-                                    :class="menuIndex==index?'activity_menu':''"
-                                    @click="chooseMenu(index)"
-                                >
-                                    <span>{{menuType.name}}</span>
+        <!-- 商品和评价 切换 -->
+        <section class="menu_header">
+            <span class="select_title" :class="selected?'title_active':''" @click="changeNavBar">商品</span>
+            <span class="select_title" :class="selected?'':'title_active'"  @click="changeNavBar">评价</span>
+        </section>
+        <section class="menu" ref="menu" :style="{height: wrapMenuHeight1+'px'}">
+            <!-- 商品 -->
+            <div v-if="selected" class="menu_container"  :style="{height: wrapMenuHeight1+'px'}">
+                <div class="menu_left" ref="wrapperMenu" :style="{height: wrapMenuHeight1+'px'}" >
+                    <ul>
+                        <li v-for="(menuType,index) in menuList" :key="index" 
+                            :class="menuIndex==index?'activity_menu':''"
+                            @click="chooseMenu(index)"
+                        >
+                            <span>{{menuType.name}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- :style="{height: wrapMenuHeight+'px'}" -->
+                <div class="menu_right" ref="menuFoodList" :style="{height: wrapMenuHeight1+'px'}" >
+                    <ul class="menu_right_ul">
+                        <li v-for="(menuType,menuIndex) in menuList" :key="menuIndex">
+                            <header>
+                                <span class="name">{{menuType.name}}</span>
+                                <span class="description">{{menuType.description}}</span>
+                            </header>
+                            <ul class="foods">
+                                <li v-for="(food,foodIndex) in menuType.foods" :key="foodIndex">
+                                    <div class="food_left">
+                                        <img :src="'http://cangdu.org:8001/img/'+food.image_path"/>
+                                    </div>
+                                    <div class="food_right">
+                                        <div class="food_name">
+                                            <span>{{food.name}}</span>
+                                            <ul v-if="food.attributes" class="attribute">
+                                                <li v-for="(attr,attrIndex) in food.attributes" :key="attrIndex">
+                                                    <span v-if="attr">{{attr.icon_name}}</span>
+                                                    <span v-else></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="description">{{food.description}}</div>
+                                        <div class="shop_date">
+                                            <span v-if="food.month_sales">月售{{food.month_sales}}</span>
+                                            <span v-if="food.satisfy_rate">好评率{{food.satisfy_rate}}%</span>
+                                        </div>
+                                        <div v-if="food.activity&&food.activity.image_text" class="activity">
+                                            <span>{{food.activity.image_text}}</span>
+                                        </div>
+                                        <div class="price">
+                                            <span>¥{{food.specfoods[0].price}}&nbsp;&nbsp;</span><span>起</span>
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
-                        </div>
-                        <div class="menu_right" ref="menuFoodList" :style="{height: wrapMenuHeight+'px'}">
-                            <ul class="menu_right_ul">
-                                <li v-for="(menuType,menuIndex) in menuList" :key="menuIndex">
-                                    <header>
-                                        <span class="name">{{menuType.name}}</span>
-                                        <span class="description">{{menuType.description}}</span>
-                                    </header>
-                                    <ul class="foods">
-                                        <li v-for="(food,foodIndex) in menuType.foods" :key="foodIndex">
-                                            <div class="food_left">
-                                                <img :src="'http://cangdu.org:8001/img/'+food.image_path"/>
-                                            </div>
-                                            <div class="food_right">
-                                                <div class="food_name">
-                                                    <span>{{food.name}}</span>
-                                                    <ul v-if="food.attributes" class="attribute">
-                                                        <li v-for="(attr,attrIndex) in food.attributes" :key="attrIndex">
-                                                            <span v-if="attr">{{attr.icon_name}}</span>
-                                                            <span v-else></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="description">{{food.description}}</div>
-                                                <div class="shop_date">
-                                                    <span v-if="food.month_sales">月售{{food.month_sales}}</span>
-                                                    <span v-if="food.satisfy_rate">好评率{{food.satisfy_rate}}%</span>
-                                                </div>
-                                                <div v-if="food.activity&&food.activity.image_text" class="activity">
-                                                    <span>{{food.activity.image_text}}</span>
-                                                </div>
-                                                <div class="price">
-                                                    <span>¥{{food.specfoods[0].price}}&nbsp;&nbsp;</span><span>起</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </mt-tab-container-item>
-                <!-- 评价 -->
-                <mt-tab-container-item id="2">
-                </mt-tab-container-item>
-            </mt-tab-container>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 评价 -->
+            <div v-else>
+                111
+            </div>
         </section>
     </div>
 </template>
@@ -89,18 +87,20 @@ export default {
             geograph:'', // 当前商铺的地理信息
             id: '', // 当前商铺的 id
             shopDetails:'', //当前商铺详情
-            selected: "1",
+            selected: true,
             menuList: [], // 当前商铺的菜单
             menuIndex: 0, // 左边 li 的 index
             foodListLiHeight: [], //右边食品列表每个 li 的 offsetTop
             menuIndexChange: true, // 解决运动时listenScroll依然监听的bug
-            wrapMenuHeight: '', 
+            wrapMenuHeight1: '', 
+            
         }
     },
-    created(){
+    mounted(){
         this.geograph = this.$route.query.geograph;
         this.id = this.$route.query.id;
         this.initData();
+      
     },
     methods:{
         ...mapMutations(['RECORD_ADDRESS']),
@@ -131,50 +131,8 @@ export default {
             });
 
             // 3. 获取shop页面菜单列表
-            getFoodMenu(_this.id).then((res) => {
-                _this.menuList = res;
-             
-                _this.$nextTick(() => {
-                    // 获取可视区域的高度
-                    const wrapMenuHeight = this.$refs.wrapperMenu.clientHeight;
-                    console.log('wrapMenuHeight',wrapMenuHeight);
-                    _this.wrapMenuHeight = wrapMenuHeight;
-                    // 获取右边商品列表每个 li 的 offsetTop
-                    _this.getRightFoodListHeight();
-                    // 左边的 ul
-                    _this.menu = new BScroll(_this.$refs.wrapperMenu,{
-                         probeType: 3,
-                        deceleration: 0.001,
-                        bounce: false,
-                        swipeTime: 2000,
-                        click: true,
-                    });
-                    console.log('menu',this.menu)
-                    // 右边的 ul
-                    _this.foodScroll = new BScroll(_this.$refs.menuFoodList,{
-                        probeType: 3,
-                        deceleration: 0.001,
-                        bounce: false,
-                        swipeTime: 2000,
-                        click: true,
-                    });
-                    console.log(this.foodScroll)
-
-                    _this.foodScroll.on('scroll',(pos) => {
-                        if(!_this.$refs.wrapperMenu){
-                            return;
-                        }
-                        _this.foodListLiHeight.forEach((item,index) => {
-                            if(_this.menuIndexChange && Math.abs(Math.round(pos.y)) >= item){
-                                this.menuIndex = index;
-                                const menuList=this.$refs.wrapperMenu.querySelectorAll('.activity_menu');
-                                const el = menuList[0];
-                                _this.menu.scrollToElement(el, 800, 0, -(wrapMenuHeight/2 - 50));
-                           }
-                       });
-
-                    })
-                });
+            _this.menuList = await getFoodMenu(_this.id).then((res) => {
+                return res;
             }).catch((err)=>{
                 _this.$toast({
                     message: err,
@@ -182,20 +140,67 @@ export default {
                     duration: 2000
                 })
             });
-
-            
+             
+            _this.$nextTick(() => {
+                // 获取右边商品列表每个 li 的 offsetTop
+                _this.getRightFoodListHeight();
+                
+            });
         },
         // 获取右边食品列表,每个 li 的高度
         getRightFoodListHeight(){
             let _this = this;
             let rightFoodListContainer = _this.$refs.menuFoodList;
             if(rightFoodListContainer){
+                // 获取右边商品列表中每个 li 的 offsetTop,保存到数组foodListLiHeight
                 let foodListArr = rightFoodListContainer.children[0].children;
                 let foodListLiHeight = [];
                 for(let i=0;i<foodListArr.length;i++){
                     foodListLiHeight[i] = foodListArr[i].offsetTop;
                 };
                 _this.foodListLiHeight = foodListLiHeight;
+
+                // 获取当前窗口可视区域的高度
+                const wrapMenuHeight = this.$refs.wrapperMenu.clientHeight;
+                const clientHeight = document.documentElement.clientHeight;
+
+                const wrapOfftopSet =  this.$refs.menu.offsetTop;
+                // 左右滚动列表的高度 = 当前屏幕的高度-左右滚动列表距离当前屏幕顶部的绝对高度
+                _this.wrapMenuHeight1 = clientHeight-wrapOfftopSet;
+                console.log('clientHeight',clientHeight)
+                console.log('wrapMenuHeight',wrapMenuHeight)
+                console.log('wrapOfftopSet',wrapOfftopSet)
+                // 左边的 ul
+                _this.menu = new BScroll(_this.$refs.wrapperMenu,{
+                    probeType: 3,
+                    deceleration: 0.001,
+                    bounce: false,
+                    swipeTime: 2000,
+                    click: true,
+                });
+                console.log('menu',this.menu)
+                // 右边的 ul
+                _this.foodScroll = new BScroll(_this.$refs.menuFoodList,{
+                    probeType: 3,
+                    deceleration: 0.001,
+                    bounce: false,
+                    swipeTime: 2000,
+                    click: true,
+                });
+                console.log(this.foodScroll)
+                _this.foodScroll.on('scroll',(pos) => {
+                    if(!_this.$refs.wrapperMenu){
+                        return;
+                    }
+                    _this.foodListLiHeight.forEach((item,index) => {
+                        if(_this.menuIndexChange && Math.abs(Math.round(pos.y)) >= item){
+                            this.menuIndex = index;
+                            const menuList=this.$refs.wrapperMenu.querySelectorAll('.activity_menu');
+                            const el = menuList[0];
+                            _this.menu.scrollToElement(el, 800, 0, -(wrapMenuHeight/2 - 50));
+                       }
+                    });
+                 })
             }
         },
         // 点击左侧食品标题,右边相应的列表移动到最顶层
@@ -206,7 +211,12 @@ export default {
             this.foodScroll.on('scrollEnd',()=>{
                 this.menuIndexChange = true;
             });
-        }
+        },
+        // 商品和评论切换
+        changeNavBar(){
+            this.selected = !this.selected;
+        },
+   
     },
     computed:{
         ...mapState(['longitude','latitude']),
@@ -223,6 +233,12 @@ export default {
 }
 </script>
 <style scoped>
+.shop{
+    position: relative;
+    
+}
+
+/* 头部布局 */
 .shop_header{
     width: 100%;
     height: 200px;
@@ -235,6 +251,7 @@ export default {
     position: fixed;
     top: 0;
     font-weight: bold;
+    z-index: 20;
 }
 .shop_header_left{
     width: 30%;
@@ -259,49 +276,86 @@ export default {
     font-size: 35px;
 }   
 
-.menu{
-    margin-top: 200px;
+/* 商品和评论 */
+.menu_header{
+    display: flex;
+    position: fixed;
     width: 100%;
+    height: 84px;
+    top:200px;
+    left: 0;
+    z-index: 20;
 }
-.select_title .mint-tab-item-label{
-    font-size: 35px;
+.menu_header>span{
+    display: inline-block;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 20px;
+    background-color: #fff;
 }
-.menu_container{
-    /* display: flex;s */
-    position: relative;
-}
-.menu_container ul{
-    padding: 0;
-    margin: 0;
-}
-.menu_container li{
-    list-style-type: none;
+.select_title{
     font-size: 30px;
 }
+.title_active{
+    color: #3190e8;
+    border-bottom: 4px solid #3190e8;
+}
+/* 主体列表 */
+.menu{
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top:284px;
+    box-sizing: border-box;
+
+}
+.menu_container{
+    position: fixed;
+    top: 284px;
+    width: 100%;
+    left: 0; 
+    overflow: hidden;
+}
+/* .menu_container::after{
+    content: '';
+    display: block;
+} */
+
 .menu_left{
+    width: 200px;
     position: absolute;
     top: 0;
     left: 0;
-    width: 25%;
     height: 100vh;
-    /* height: 100%; */
+    overflow: hidden;
 }
+
+ ul{
+    padding: 0;
+    margin: 0;
+}
+li{
+    list-style-type: none;
+    font-size: 30px;
+}
+
+.menu_right{
+    position: absolute;
+    top: 0;
+    left: 200px;
+    height: 100vh;
+    overflow: hidden;
+}
+
 .menu_left li{
     border-bottom: 1px solid #ededed;
     box-sizing: border-box;
     padding: 45px 0px;
+    /* height: 120px; */
 }
-.menu_right{
-    position: absolute;
-    top: 0;
-    left: 25%;
-    width: 75%;
-    text-align: left;
-    height: 100vh;
-     /* height: 100%; */
-}
+
 .menu_right_ul header{
-    padding: 25px;
+    padding: 20px;
 }
 .menu_right_ul .name{
     color: #666;
@@ -325,7 +379,10 @@ export default {
     position: relative;
 }
 .food_left img{
-    width: 70%;
+    border: 1px solid red;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -333,9 +390,11 @@ export default {
 }
 .food_right{
     width: 75%;
+    padding-left: 20px;
 }
-.food_right div{
-    margin-top: 10px;
+.food_right>div{
+    margin-top: 15px;
+    display: flex;
 }
 .food_name>span{
     font-weight: bold;
@@ -380,6 +439,7 @@ export default {
     font-weight: bold;
 }
 .activity_menu{
-    border-left: 4px solid red;
+    border-left: 8px solid #3190e8;
+    background-color: #fff;
 }
 </style>
