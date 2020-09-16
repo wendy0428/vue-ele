@@ -71,7 +71,7 @@ export default {
     line-height: 90px;
     position: fixed;
     top:0;
-    z-index:999;
+    z-index: 10;
 }
 
 #head img{

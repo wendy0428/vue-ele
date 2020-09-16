@@ -9,6 +9,8 @@
                 <span class="info">商家配送/{{shopDetails.order_lead_time}}/配送费{{shopDetails.float_delivery_fee}}</span>
                 <span class="promotion">公告{{shopDetails.promotion_info}}</span>
             </div>
+            <img :src="leftArrowIcon" class="leftArrow" @click="goBack"/>
+            <img :src="rightArrowIcon" class="rightArrow" @click="showShopDetail"/>
         </section>
         <!-- 商品和评价 切换 -->
         <section class="menu_header">
@@ -34,6 +36,10 @@
                             <header>
                                 <span class="name">{{menuType.name}}</span>
                                 <span class="description">{{menuType.description}}</span>
+                                <img :src="dotsIcon" class="dots" @click="showDescription(menuIndex)"/>
+                                <div class="description_tips" v-if="tipsIndex==menuIndex">
+                                    <span>{{menuType.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{menuType.description}}</span>
+                                </div>
                             </header>
                             <ul class="foods">
                                 <li v-for="(food,foodIndex) in menuType.foods" :key="foodIndex">
@@ -75,6 +81,10 @@
                 111
             </div>
         </section>
+        
+        <!-- 商铺详情 -->
+        <router-view></router-view>
+
     </div>
 </template>
 <script>
@@ -82,6 +92,9 @@ import {getMsiteAddress,getShopDetails,getFoodMenu} from '../../service/getData'
 import {mapState,mapMutations} from 'vuex'
 import BScroll from 'better-scroll'
 
+import dotsIcon from '../../assets/img/dots.png'
+import rightArrowIcon from '../../assets/img/right_arrow.png'
+import leftArrowIcon from '../../assets/img/left_arrow.png'
 export default {
     data(){
         return {
@@ -95,7 +108,10 @@ export default {
             menuIndexChange: true, // 解决运动时listenScroll依然监听的bug
             menuContainerHight: 0, // 左右列表的区域的高度
             htmlClientHeight: 0, // 当前页面可视区域的高度
-            
+            dotsIcon,
+            rightArrowIcon,
+            leftArrowIcon,
+            tipsIndex: null, // 右边 li 的 description的显示与隐藏 
         }
     },
     mounted(){
@@ -211,9 +227,29 @@ export default {
                 this.menuIndexChange = true;
             });
         },
+        // 返回上一页
+        goBack(){
+            this.$router.go(-1);
+        },
+        // 跳转至商家详情页
+        showShopDetail(){
+            this.$router.push({path:'/shop/shopDetail',query:{shopDetails:JSON.stringify(this.shopDetails)}});
+        },
         // 商品和评论切换
         changeNavBar(){
             this.selected = !this.selected;
+        },
+        // 展示与隐藏每个产品分类的描述
+        showDescription(menuIndex){
+            console.log('this.tipsIndex0',this.tipsIndex);
+            if(this.tipsIndex == undefined){
+                this.tipsIndex = menuIndex;
+                console.log('this.tipsIndex1',this.tipsIndex);
+            }else{
+                this.tipsIndex = null;
+                 console.log('this.tipsIndex2',this.tipsIndex);
+
+            }
         },
    
     },
@@ -246,6 +282,15 @@ export default {
     top: 0;
     font-weight: bold;
     z-index: 20;
+}
+.shop_header .leftArrow,.shop_header .rightArrow{
+    position: absolute;
+    width: 50px;
+}
+.shop_header .rightArrow{
+    width: 80px;
+    right: 0;
+    bottom: 40%;
 }
 .shop_header_left{
     width: 30%;
@@ -346,7 +391,35 @@ li{
 .menu_right_ul header{
     padding: 20px;
     text-align: left;
+    position: relative;
 }
+.dots{
+    display: inline-block;
+    vertical-align: middle;
+    width: 50px;
+    position: absolute;
+    right: 10px;
+}
+.description_tips{
+    position: absolute;
+    right: 10px;
+    background-color: #39373a;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 20px;
+    padding: 20px 80px 20px 20px;
+}
+.description_tips::after{
+    content:'';
+    width: 20px;
+    height: 20px;
+    background-color: #39373a;
+    position: absolute;
+    top: -10px;
+    right: 15px;
+    transform: rotate(-45deg);
+}
+
 .menu_right_ul .name{
     color: #666;
     font-size: 35px;

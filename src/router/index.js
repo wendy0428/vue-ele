@@ -27,10 +27,19 @@ Vue.use(VueRouter)
         name: 'Food',
         component: () => import("@/components/food/food")
     },
+    // 嵌套命名视图: (同级) 展示多个视图，而不是嵌套展示
     {
         path: '/shop',  // 商铺详情页
         name: 'Shop',
-        component: () => import("@/components/shop/shop")
+        component: () => import("@/components/shop/shop"),
+        children:[{
+            path:'shopDetail', // 商家信息
+            component: () => import("@/components/shop/children/shopDetail"),
+            children:[{
+                path:'shopSafe', // 食品监督安全公示
+                component: () => import("@/components/shop/children/children/shopSafe")
+            }]
+        }],
     },
 ]
 
