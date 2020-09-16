@@ -15,10 +15,10 @@
             <span class="select_title" :class="selected?'title_active':''" @click="changeNavBar">商品</span>
             <span class="select_title" :class="selected?'':'title_active'"  @click="changeNavBar">评价</span>
         </section>
-        <section class="menu" ref="menu" :style="{height: wrapMenuHeight1+'px'}">
+        <section class="menu" ref="menu">
             <!-- 商品 -->
-            <div v-if="selected" class="menu_container"  :style="{height: wrapMenuHeight1+'px'}">
-                <div class="menu_left" ref="wrapperMenu" :style="{height: wrapMenuHeight1+'px'}" >
+            <div v-if="selected" class="menu_container"  :style="{height: menuContainerHight+'px'}" >
+                <div class="menu_left" ref="menuClassification">
                     <ul>
                         <li v-for="(menuType,index) in menuList" :key="index" 
                             :class="menuIndex==index?'activity_menu':''"
@@ -28,8 +28,7 @@
                         </li>
                     </ul>
                 </div>
-                <!-- :style="{height: wrapMenuHeight+'px'}" -->
-                <div class="menu_right" ref="menuFoodList" :style="{height: wrapMenuHeight1+'px'}" >
+                <div class="menu_right" ref="menuFoodList">
                     <ul class="menu_right_ul">
                         <li v-for="(menuType,menuIndex) in menuList" :key="menuIndex">
                             <header>
@@ -90,25 +89,27 @@ export default {
             selected: true,
             menuList: [], // 当前商铺的菜单
             menuIndex: 0, // 左边 li 的 index
-            foodListLiHeight: [], //右边食品列表每个 li 的 offsetTop
+            foodListLiOffsetTop: [], //右边食品列表每个 li 的 offsetTop
             menuIndexChange: true, // 解决运动时listenScroll依然监听的bug
-            wrapMenuHeight1: '', 
+            menuContainerHight: 0, // 左右列表的区域的高度
+            htmlClientHeight: 0, // 当前页面可视区域的高度
             
         }
     },
     mounted(){
         this.geograph = this.$route.query.geograph;
         this.id = this.$route.query.id;
-        this.initData();
-        const clientHeight = document.documentElement.clientHeight;
 
-                const wrapOfftopSet =  this.$refs.menu.offsetTop;
-                // 左右滚动列表的高度 = 当前屏幕的高度-左右滚动列表距离当前屏幕顶部的绝对高度
-                this.wrapMenuHeight1 = clientHeight-wrapOfftopSet-50;
-                console.log('clientHeight',clientHeight)
-                console.log('wrapMenuHeight1',this.wrapMenuHeight1)
-                console.log('wrapOfftopSet',wrapOfftopSet)
-      
+        // 当前页面可视区域的高度
+        const htmlClientHeight = document.documentElement.clientHeight;
+        this.htmlClientHeight = htmlClientHeight;
+        // menu元素距离 body 顶部的距离(因为 menu 没有一个具有定位的祖宗元素,所以就只能找到 body)
+        const offsetTop =  this.$refs.menu.offsetTop;
+        // 左右列表的区域的高度 = 当前页面可视区域的高度-menu元素距离 body 顶部的距离
+        // -50是为了底部留白,放购物车组件
+        this.menuContainerHight = this.htmlClientHeight-offsetTop-50;
+
+        this.initData();
     },
     methods:{
         ...mapMutations(['RECORD_ADDRESS']),
@@ -150,37 +151,18 @@ export default {
             });
              
             _this.$nextTick(() => {
-                // 获取右边商品列表每个 li 的 offsetTop
+                // 获取右边食品列表,每个 li 距离 ul 顶部的绝对距离(offsetTop)
                 _this.getRightFoodListHeight();
-                
-            });
-        },
-        // 获取右边食品列表,每个 li 的高度
-        getRightFoodListHeight(){
-            let _this = this;
-            let rightFoodListContainer = _this.$refs.menuFoodList;
-            if(rightFoodListContainer){
-                // 获取右边商品列表中每个 li 的 offsetTop,保存到数组foodListLiHeight
-                let foodListArr = rightFoodListContainer.children[0].children;
-                let foodListLiHeight = [];
-                for(let i=0;i<foodListArr.length;i++){
-                    foodListLiHeight[i] = foodListArr[i].offsetTop;
-                };
-                _this.foodListLiHeight = foodListLiHeight;
-
-                // 获取当前窗口可视区域的高度
-                const wrapMenuHeight = this.$refs.wrapperMenu.clientHeight;
-                
-                // 左边的 ul
-                _this.menu = new BScroll(_this.$refs.wrapperMenu,{
+              
+                // 初始化 左边商品分类
+                _this.menuScroll = new BScroll(_this.$refs.menuClassification,{
                     probeType: 3,
                     deceleration: 0.001,
                     bounce: false,
                     swipeTime: 2000,
                     click: true,
                 });
-                console.log('menu',this.menu)
-                // 右边的 ul
+                // 初始化 右边的具体商品
                 _this.foodScroll = new BScroll(_this.$refs.menuFoodList,{
                     probeType: 3,
                     deceleration: 0.001,
@@ -188,28 +170,42 @@ export default {
                     swipeTime: 2000,
                     click: true,
                 });
-                console.log(this.foodScroll)
+                // 监听右边的滚动事件
                 _this.foodScroll.on('scroll',(pos) => {
-                    if(!_this.$refs.wrapperMenu){
-                        return;
-                    }
-                    _this.foodListLiHeight.forEach((item,index) => {
+                    _this.foodListLiOffsetTop.forEach((item,index) => {
                         if(_this.menuIndexChange && Math.abs(Math.round(pos.y)) >= item){
                             this.menuIndex = index;
-                            const menuList=this.$refs.wrapperMenu.querySelectorAll('.activity_menu');
+                            const menuList=this.$refs.menuClassification.querySelectorAll('.activity_menu');
                             const el = menuList[0];
-                            _this.menu.scrollToElement(el, 800, 0, -(wrapMenuHeight/2 - 50));
-                       }
+                            // 根据右边的鼠标滚动距离,左边移动到对应的分类上
+                            _this.menuScroll.scrollToElement(el, 800, 0, -(_this.htmlClientHeight/2 - 50));
+                        }
                     });
                  })
+                
+            });
+        },
+        // 获取右边食品列表,每个 li 距离 ul 顶部的绝对距离(offsetTop)
+        getRightFoodListHeight(){
+            let _this = this;
+            let menuFoodList = _this.$refs.menuFoodList;
+            if(menuFoodList){
+                // 获取右边商品列表中每个 li 的 offsetTop,保存到数组foodListLiOffsetTop
+                let foodListLiArr = Array.from(menuFoodList.children[0].children);
+                let foodListLiOffsetTop = [];
+                foodListLiArr.forEach((item,index)=>{
+                    foodListLiOffsetTop[index] = item.offsetTop;
+                });
+                _this.foodListLiOffsetTop = foodListLiOffsetTop;
             }
         },
-        // 点击左侧食品标题,右边相应的列表移动到最顶层
+        // 点击左侧商品分类,右边相应的列表移动到最顶层
         chooseMenu(index){
             this.menuIndexChange = false;
             this.menuIndex = index;
-            this.foodScroll.scrollTo(0,-this.foodListLiHeight[index],400);
+            this.foodScroll.scrollTo(0,-this.foodListLiOffsetTop[index],400);
             this.foodScroll.on('scrollEnd',()=>{
+                // 解决运动时listenScroll依然监听的bug
                 this.menuIndexChange = true;
             });
         },
@@ -234,11 +230,6 @@ export default {
 }
 </script>
 <style scoped>
-.shop{
-    position: relative;
-    
-}
-
 /* 头部布局 */
 .shop_header{
     width: 100%;
@@ -308,26 +299,22 @@ export default {
     left: 0;
     top:284px;
     box-sizing: border-box;
-
 }
 .menu_container{
-    position: fixed;
+    /* position: fixed;
     top: 284px;
     width: 100%;
+    height: 100vh;
     left: 0; 
-    overflow: hidden;
+    overflow: hidden; */
 }
-/* .menu_container::after{
-    content: '';
-    display: block;
-} */
 
 .menu_left{
     width: 200px;
     position: absolute;
     top: 0;
     left: 0;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -344,7 +331,7 @@ li{
     position: absolute;
     top: 0;
     left: 200px;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -352,11 +339,11 @@ li{
     border-bottom: 1px solid #ededed;
     box-sizing: border-box;
     padding: 45px 0px;
-    /* height: 120px; */
 }
 
 .menu_right_ul header{
     padding: 20px;
+    text-align: left;
 }
 .menu_right_ul .name{
     color: #666;
@@ -394,7 +381,7 @@ li{
     padding-left: 20px;
 }
 .food_right>div{
-    margin-top: 15px;
+    margin-top: 10px;
     display: flex;
 }
 .food_name>span{
