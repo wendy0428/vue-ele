@@ -100,6 +100,14 @@ export default {
         this.geograph = this.$route.query.geograph;
         this.id = this.$route.query.id;
         this.initData();
+        const clientHeight = document.documentElement.clientHeight;
+
+                const wrapOfftopSet =  this.$refs.menu.offsetTop;
+                // 左右滚动列表的高度 = 当前屏幕的高度-左右滚动列表距离当前屏幕顶部的绝对高度
+                this.wrapMenuHeight1 = clientHeight-wrapOfftopSet-50;
+                console.log('clientHeight',clientHeight)
+                console.log('wrapMenuHeight1',this.wrapMenuHeight1)
+                console.log('wrapOfftopSet',wrapOfftopSet)
       
     },
     methods:{
@@ -162,14 +170,7 @@ export default {
 
                 // 获取当前窗口可视区域的高度
                 const wrapMenuHeight = this.$refs.wrapperMenu.clientHeight;
-                const clientHeight = document.documentElement.clientHeight;
-
-                const wrapOfftopSet =  this.$refs.menu.offsetTop;
-                // 左右滚动列表的高度 = 当前屏幕的高度-左右滚动列表距离当前屏幕顶部的绝对高度
-                _this.wrapMenuHeight1 = clientHeight-wrapOfftopSet;
-                console.log('clientHeight',clientHeight)
-                console.log('wrapMenuHeight',wrapMenuHeight)
-                console.log('wrapOfftopSet',wrapOfftopSet)
+                
                 // 左边的 ul
                 _this.menu = new BScroll(_this.$refs.wrapperMenu,{
                     probeType: 3,
