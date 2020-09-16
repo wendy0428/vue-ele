@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="food_right">
                                         <div class="food_name">
-                                            <span>{{food.name}}</span>
+                                            <span class="name">{{food.name}}</span>
                                             <ul v-if="food.attributes" class="attribute">
                                                 <li v-for="(attr,attrIndex) in food.attributes" :key="attrIndex">
                                                     <span v-if="attr">{{attr.icon_name}}</span>
@@ -50,7 +50,9 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="description">{{food.description}}</div>
+                                        <div class="description">
+                                            <span>{{food.description}}</span>
+                                        </div>
                                         <div class="shop_date">
                                             <span v-if="food.month_sales">月售{{food.month_sales}}</span>
                                             <span v-if="food.satisfy_rate">好评率{{food.satisfy_rate}}%</span>
@@ -388,6 +390,15 @@ li{
     font-weight: bold;
     font-size: 35px;
 }
+.food_name .name{
+    display: inline-block;
+    width: 200px;
+    text-overflow:ellipsis; 
+    white-space:nowrap;
+	overflow:hidden;
+    text-align: left;
+}
+
 .food_name{
     display: flex;
     justify-content: space-between;
