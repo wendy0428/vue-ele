@@ -67,7 +67,8 @@
                                             <span>{{food.activity.image_text}}</span>
                                         </div>
                                         <div class="price">
-                                            <span>¥{{food.specfoods[0].price}}&nbsp;&nbsp;</span><span>起</span>
+                                            <div><span>¥{{food.specfoods[0].price}}&nbsp;&nbsp;</span>起</div>
+                                            <buy-cart :shopid="id" :food="food"></buy-cart>
                                         </div>
                                     </div>
                                 </li>
@@ -81,9 +82,17 @@
                 111
             </div>
         </section>
+        <section class="cart_container">
+            <div>
+                <!-- <img :src="grayartIcon"/> -->
+                <span>还差¥{{shopDetails.float_minimum_order_amount}}</span>
+            </div>
+        </section>
         
         <!-- 商铺详情 -->
-        <router-view></router-view>
+        <router-view>
+            
+        </router-view>
 
     </div>
 </template>
@@ -92,9 +101,13 @@ import {getMsiteAddress,getShopDetails,getFoodMenu} from '../../service/getData'
 import {mapState,mapMutations} from 'vuex'
 import BScroll from 'better-scroll'
 
+import buyCart from '../../components/common/buyCart'
+
 import dotsIcon from '../../assets/img/dots.png'
 import rightArrowIcon from '../../assets/img/right_arrow.png'
 import leftArrowIcon from '../../assets/img/left_arrow.png'
+import blueCartIcon from '../../assets/img/blueCart.png'
+import grayartIcon from '../../assets/img/grayCart.png'
 export default {
     data(){
         return {
@@ -111,6 +124,8 @@ export default {
             dotsIcon,
             rightArrowIcon,
             leftArrowIcon,
+            blueCartIcon,
+            grayartIcon,
             tipsIndex: null, // 右边 li 的 description的显示与隐藏 
         }
     },
@@ -251,10 +266,9 @@ export default {
 
             }
         },
-   
     },
     computed:{
-        ...mapState(['longitude','latitude']),
+        ...mapState(['longitude','latitude','cartList']),
         // 动态的设置头部的背景图片
         background(){
             return {
@@ -264,6 +278,9 @@ export default {
                 backgroundPosition: 'center,center'
             }
         }
+    },
+    components:{
+        buyCart
     }
 }
 </script>
@@ -506,12 +523,28 @@ li{
     font-size: 20px;
     border-radius: 10px;
 }
-.price>span:nth-child(1){
+.price {
+    justify-content: space-between;
+}
+.buyCart{
+    margin-right: 10px
+}
+
+.price span:nth-child(1){
     color: #f60;
     font-weight: bold;
 }
 .activity_menu{
     border-left: 8px solid #3190e8;
     background-color: #fff;
+}
+.cart_container{
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: 100px;
+    font-size: 40px;
+    color: #fff;
+    background-color: #3d3d3f;
 }
 </style>
