@@ -49,7 +49,7 @@
                                     <div class="food_right">
                                         <div class="food_name">
                                             <span class="name">{{food.name}}</span>
-                                            <ul v-if="food.attributes" class="attribute">
+                                            <ul v-if="food.attributes&&food.attributes.length!=0" class="attribute">
                                                 <li v-for="(attr,attrIndex) in food.attributes" :key="attrIndex">
                                                     <span v-if="attr">{{attr.icon_name}}</span>
                                                     <span v-else></span>
@@ -82,10 +82,21 @@
                 111
             </div>
         </section>
+        <!-- 底部购物车 -->
         <section class="cart_container">
-            <div>
-                <!-- <img :src="grayartIcon"/> -->
-                <span>还差¥{{shopDetails.float_minimum_order_amount}}</span>
+            <div class="cart_container_left">
+                <span>
+                    <img :src="grayartIcon"/>
+                </span>
+            </div>
+            <div class="cart_container_right">
+                <div>
+                    <div class="total_money">¥0.00</div>
+                    <div class="delivery_fee">配送费{{shopDetails.float_delivery_fee}}</div>
+                </div>
+                <div>
+                    <span>还差¥{{shopDetails.float_minimum_order_amount}}起送</span>
+                </div>
             </div>
         </section>
         
@@ -183,9 +194,13 @@ export default {
         this.menuContainerHight = this.htmlClientHeight-offsetTop-50;
 
         this.initData();
+
+        // 获取存储到本地的购物车列表数据,因为页面刷新,vuex 会丢失
+        this.INIT_BUYCART()
+		console.log('INIT_BUYCART cartList', this.cartList);
     },
     methods:{
-        ...mapMutations(['RECORD_ADDRESS','ADD_CART']),
+        ...mapMutations(['RECORD_ADDRESS','ADD_CART','INIT_BUYCART']),
         async initData(){
             let _this = this;
             // 1. 防止刷新页面时，vuex状态丢失，经度纬度需要重新获取，并存入vuex
@@ -256,6 +271,7 @@ export default {
                     });
                  })
             });
+            
         },
         // 获取右边食品列表,每个 li 距离 ul 顶部的绝对距离(offsetTop)
         getRightFoodListHeight(){
@@ -320,7 +336,7 @@ export default {
         // 加入购物车
         addToCart(category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock){
             this.ADD_CART({shopid:this.id,category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock})
-            // console.log('shopid:',this.shopid,'category_id:',category_id,'item_id:',item_id,'food_id:',food_id,'name:',name,'price:',price,'specs:',specs,'packing_fee:',packing_fee,'sku_id:',sku_id,'stock:',stock);
+            console.log('shopid:',this.id,'category_id:',category_id,'item_id:',item_id,'food_id:',food_id,'name:',name,'price:',price,'specs:',specs,'packing_fee:',packing_fee,'sku_id:',sku_id,'stock:',stock);
         },
 
     },
@@ -334,7 +350,12 @@ export default {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center,center'
             }
-        }
+        },
+        // 监听当前商家的购物车列表数据
+        // shopCart(){
+        //     console.log('this.cartList',this.cartList);
+        // }
+
     },
     components:{
         buyCart
@@ -595,6 +616,7 @@ li{
     border-left: 8px solid #3190e8;
     background-color: #fff;
 }
+/* 底部购物车样式 */
 .cart_container{
     position: fixed;
     bottom: 0px;
@@ -603,8 +625,52 @@ li{
     font-size: 40px;
     color: #fff;
     background-color: #3d3d3f;
+    display: flex;
+    font-size: 35px;
 }
-
+.cart_container .cart_container_left{
+    width: 20%;
+}
+.cart_container .cart_container_left>span{
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #3d3d3f;
+    position: relative;
+    top: -30px;
+    border: 1px solid #444;
+}
+.cart_container .cart_container_left img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 60px;
+    
+}
+.cart_container .cart_container_right{
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+.cart_container .cart_container_right>div:nth-child(1){
+    padding-left: 10px;
+}
+.cart_container .cart_container_right .total_money{
+    font-weight: bold;
+    padding: 3px 0px;
+}
+.cart_container .cart_container_right .delivery_fee{
+    font-size: 25px;
+}
+.cart_container .cart_container_right>div:nth-child(2){
+    width: 40%;
+    background-color: #535356;
+    line-height: 80px;
+    font-weight: bold;
+}
 /* 规格弹窗 */
 .pop_up_container{
     position: fixed;

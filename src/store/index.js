@@ -8,6 +8,7 @@ const RECORD_ADDRESS = "RECORD_ADDRESS";
 const SAVE_GEOHASH = "SAVE_GEOHASH";
 const ADD_CART = "ADD_CART";
 const REDUCE_CART = 'REDUCE_CART';
+const INIT_BUYCART = 'INIT_BUYCART';
 export default new Vuex.Store({
 	state: {
     	latitude: "", // 纬度
@@ -37,8 +38,8 @@ export default new Vuex.Store({
         	packing_fee,
         	sku_id,
         	stock
-      	}) {
-      		let cart = state.cartList;
+      	}){
+			let cart = state.cartList;
       		let shopId = (cart[shopid] = cart[shopid] || {});
       		let categoryId = (shopId[category_id] = shopId[category_id] || {});
       		let itemId = (categoryId[item_id] = categoryId[item_id] || {});
@@ -56,8 +57,9 @@ export default new Vuex.Store({
 				  stock: stock
         		};
 			}
+			console.log('cart',cart,typeof cart);
 			state.cartList = {...cart};
-			setStore('cartList',state.cartList);
+			setStore('buyCart',state.cartList);
 			// 因为 vuex 页面一刷新,就会丢失,所以要存入到localStorage 中
 			console.log('加入',state.cartList);  
 		},
@@ -86,9 +88,18 @@ export default new Vuex.Store({
 				}
 			}
 			state.cartList = {...cart};
-			setStore('cartList',state.cartList)
+			setStore('buyCart',state.cartList)
 			console.log('减少',state.cartList);  
+		},
+		// 页面初始化的时候,从本地缓存中获取购物车的数据,因为刷新页面,存储到vuex 中的数据会丢失
+		[INIT_BUYCART](state){
+			let initData = getStore('buyCart');
+			console.log('INIT_BUYCART initData', initData);
+			if(initData){
+				state.cartList = JSON.parse(initData);
+			}
 		}
+		
   	},
   	actions: {},
   	modules: {},
