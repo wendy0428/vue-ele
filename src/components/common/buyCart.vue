@@ -13,7 +13,7 @@
             />
         </section>
         <section v-else class="has_more_specfood">
-            <span>选规格</span>
+            <span @click="sendSpecs(food)">选规格</span>
         </section>
     </div>
 </template>
@@ -39,6 +39,10 @@ export default {
         removeOutCart(category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock){
             this.REDUCE_CART({shopid:this.shopid,category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock});
         },
+        // 选择规格,子组件buyCart向父组件传值
+        sendSpecs(){
+            this.$emit('getSpecs',this.food);
+        },
     },
     computed:{
         ...mapState(['cartList']),
@@ -54,7 +58,6 @@ export default {
                 let foods = this.shopCart[category_id][item_id];
                 let num = 0;
                 for(let i in foods){
-                    console.log('foods[i].num',foods[i].num);
                     num+=foods[i].num;
                 }
                 return num;
@@ -93,4 +96,5 @@ export default {
     border-radius: 10px;
     font-size: 16px;
 }
+
 </style>

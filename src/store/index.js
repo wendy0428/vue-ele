@@ -59,7 +59,7 @@ export default new Vuex.Store({
 			state.cartList = {...cart};
 			setStore('cartList',state.cartList);
 			// 因为 vuex 页面一刷新,就会丢失,所以要存入到localStorage 中
-			// console.log('加入',state.cartList);  
+			console.log('加入',state.cartList);  
 		},
 		// 移除购物车商品列表
 		[REDUCE_CART](state,{
@@ -87,7 +87,7 @@ export default new Vuex.Store({
 			}
 			state.cartList = {...cart};
 			setStore('cartList',state.cartList)
-			// console.log('减少',state.cartList);  
+			console.log('减少',state.cartList);  
 		}
   	},
   	actions: {},

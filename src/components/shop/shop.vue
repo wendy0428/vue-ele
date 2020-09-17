@@ -68,7 +68,7 @@
                                         </div>
                                         <div class="price">
                                             <div><span>¥{{food.specfoods[0].price}}&nbsp;&nbsp;</span>起</div>
-                                            <buy-cart :shopid="id" :food="food"></buy-cart>
+                                            <buy-cart :shopid="id" :food="food" @getSpecs="getSpecs"></buy-cart>
                                         </div>
                                     </div>
                                 </li>
@@ -89,10 +89,46 @@
             </div>
         </section>
         
-        <!-- 商铺详情 -->
-        <router-view>
-            
-        </router-view>
+        <!-- 当前商家详细信息 -->
+        <router-view></router-view>
+
+          <!-- 选规格 弹窗 -->
+        <section class="pop_up_container" v-if="chooseSpecs">
+            <div>
+                <div class="specs_header">
+                    {{chooseSpecs.name}}
+                    <img :src="closeIco" class="close" @click="closePopUp"/>
+                </div>
+                <div class="specs_main">
+                    <div class="spec">规格</div>
+                    <ul>
+                        <li v-for="(spec,specIndex) in chooseSpecs.specfoods" :key="specIndex"
+                            :class="selectIndex==specIndex?'active_spec':''"
+                            @click="changeSpec(specIndex)"
+                        >
+                            {{spec.specs_name}}
+                        </li>
+                    </ul>
+                </div>
+                <div class="specs_footer">
+                    <span class="price">¥{{chooseSpecs.specfoods[selectIndex].price}}</span>
+                    <span class="add" 
+                        @click="addToCart(
+                            chooseSpecs.category_id,
+                            chooseSpecs.item_id,
+                            chooseSpecs.specfoods[selectIndex].food_id,
+                            chooseSpecs.specfoods[selectIndex].name,
+                            chooseSpecs.specfoods[selectIndex].price,
+                            chooseSpecs.specfoods[selectIndex].specs,
+                            chooseSpecs.specfoods[selectIndex].packing_fee,
+                            chooseSpecs.specfoods[selectIndex].sku_id,
+                            chooseSpecs.specfoods[selectIndex].stock
+                        )">加入购物车</span>
+                </div>
+            </div>
+        </section>
+      
+
 
     </div>
 </template>
@@ -108,6 +144,7 @@ import rightArrowIcon from '../../assets/img/right_arrow.png'
 import leftArrowIcon from '../../assets/img/left_arrow.png'
 import blueCartIcon from '../../assets/img/blueCart.png'
 import grayartIcon from '../../assets/img/grayCart.png'
+import closeIco from '../../assets/img/close.png'
 export default {
     data(){
         return {
@@ -126,7 +163,10 @@ export default {
             leftArrowIcon,
             blueCartIcon,
             grayartIcon,
+            closeIco,
             tipsIndex: null, // 右边 li 的 description的显示与隐藏 
+            chooseSpecs: '', // 选择规格 当前商品的信息 子组件给父组件传递的数据
+            selectIndex: 0, // 选中的规格
         }
     },
     mounted(){
@@ -145,7 +185,7 @@ export default {
         this.initData();
     },
     methods:{
-        ...mapMutations(['RECORD_ADDRESS']),
+        ...mapMutations(['RECORD_ADDRESS','ADD_CART']),
         async initData(){
             let _this = this;
             // 1. 防止刷新页面时，vuex状态丢失，经度纬度需要重新获取，并存入vuex
@@ -215,7 +255,6 @@ export default {
                         }
                     });
                  })
-                
             });
         },
         // 获取右边食品列表,每个 li 距离 ul 顶部的绝对距离(offsetTop)
@@ -266,6 +305,24 @@ export default {
 
             }
         },
+        // 获取 buyCart子组件传来的值
+        getSpecs(data){
+            this.chooseSpecs = data;
+        },
+        // 关闭 选择规格 弹窗
+        closePopUp(){
+            this.chooseSpecs = '';
+        },
+        // 选择规格时,动态切换样式和食品规格的价格
+        changeSpec(specIndex){
+            this.selectIndex = specIndex;
+        },
+        // 加入购物车
+        addToCart(category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock){
+            this.ADD_CART({shopid:this.id,category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock})
+            // console.log('shopid:',this.shopid,'category_id:',category_id,'item_id:',item_id,'food_id:',food_id,'name:',name,'price:',price,'specs:',specs,'packing_fee:',packing_fee,'sku_id:',sku_id,'stock:',stock);
+        },
+
     },
     computed:{
         ...mapState(['longitude','latitude','cartList']),
@@ -546,5 +603,80 @@ li{
     font-size: 40px;
     color: #fff;
     background-color: #3d3d3f;
+}
+
+/* 规格弹窗 */
+.pop_up_container{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color:rgba(0, 0, 0, 0.4);
+    z-index: 300;
+}
+.pop_up_container>div{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 70%;
+    background-color: #fff;
+    color: #222;
+    font-size: 30px;
+    border-radius: 10px;
+}
+.specs_header{
+    text-align: center;
+    font-weight: bold;
+    padding: 20px;
+    position: relative;
+}
+.specs_header img{
+    position: absolute;
+    width: 40px;
+    top: 20px;
+    right:20px;
+
+}
+.specs_main{
+    text-align: left;
+    padding: 30px 0;
+}
+.specs_main .spec{
+    margin: 20px;
+}
+.specs_main ul {
+    display: flex;
+    margin: 20px;
+}
+.specs_main ul li{
+    border: 1px solid#ddd;
+    border-radius: 10px;
+    padding: 15px 30px;
+    font-size: 20px;
+    margin-right: 20px;
+}
+.specs_footer{
+    background-color:  #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.specs_footer .price{
+    color: #ff6000;
+    font-weight: bold;
+}
+.specs_footer .add{
+    display: inline-block;
+    background-color: #3199e8;
+    color: #fff;
+    font-size: 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+.active_spec{
+    border: 1px solid #3199e8 !important;
+    color:#3199e8;
 }
 </style>
