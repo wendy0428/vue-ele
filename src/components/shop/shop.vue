@@ -101,14 +101,35 @@
         </section>
         <!-- 展示购物车商品列表 -->
         <section class="showSelectedShopList">
+            <div class="showSelectedShopList_title">
+                <span>购物车</span>
+                <span>清空</span>
+            </div>
             <ul v-if="shopCart">
                 <li v-for="(selected,selectedIndex) in shopCart" :key="selectedIndex">
-                    <div>
-                        <span>{{selected.name}}</span>
-                        <span v-if="selected.specs.length">{{selected.specs[0].value}}</span>
+                    <div class="selected_title">
+                        <div>{{selected.name}}</div>
+                        <div v-if="selected.specs.length">{{selected.specs[0].value}}</div>
                     </div>
-                    <div>¥{{selected.num*selected.price}}</div>
-                    <buy-cart :shopid="id"></buy-cart>
+                    <div class="selected_price">¥{{selected.num*selected.price}}</div>
+                    <buy-cart 
+                        :shopid="id" 
+                        :food="{
+                            category_id: selected.category_id,
+                            item_id: selected.item_id,
+                            specfoods: [{
+                                food_id: selected.food_id,
+                                name: selected.name,
+                                price: selected.price,
+                                specs: selected.specs,
+                                packing_fee: selected.packing_fee,
+                                sku_id: selected.sku_id,
+                                stock: selected.stock
+                            }]
+
+                        }"
+                        class="selected_buyCart"
+                    ></buy-cart>
                 </li>
             </ul>
         </section>
@@ -810,5 +831,47 @@ li{
     bottom: 100px;
     background: #fff;
     z-index: 24;
+    padding-bottom: 20px;
 }
+.showSelectedShopList_title{
+    background-color: #eceff1;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    font-size: 35px;
+    padding: 20px;
+}
+.showSelectedShopList ul{
+    padding:0;
+    margin: 0;
+}
+.showSelectedShopList ul li{
+    display: flex;
+    padding: 20px;
+}
+.selected_title{
+    width: 50%;
+    padding-left: 20px;
+    text-align: left;
+    box-sizing: border-box;
+}
+.selected_title>div{
+    width: 100%;
+    display: block;
+}
+.selected_title>div:last-child{
+    color: #666;
+}
+.selected_price{
+    width: 30%;
+}
+.selected_buyCart{
+    width: 20%;
+}
+.selected_price{
+    color: #f60;
+    font-weight: bold;
+    line-height: 42px;;
+}
+
 </style>

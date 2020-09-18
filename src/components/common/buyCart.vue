@@ -53,17 +53,16 @@ export default {
         // 计算当前 cartList[shopid:'商铺 id'][category_id:'食品分类 id'][item_id:'当前食品'] ; 当前食品还有具体的规格是根据[food_id]去区分的,所以需要遍历,计算总数.
         foodNum(){
             // console.log('foodNum',this.shopCart)
+            let num = 0;
             let category_id = this.food.category_id;
             let item_id = this.food.item_id;
+            let food_id = this.food.specfoods[0].food_id;
             if(this.shopCart[category_id]&&this.shopCart[category_id][item_id]){
-                let foods = this.shopCart[category_id][item_id];
-                let num = 0;
-                for(let i in foods){
-                    num+=foods[i].num;
-                }
+                // 单个商品规格的商品数量
+                num = this.shopCart[category_id][item_id][food_id].num;
                 return num;
             }
-            return 0
+            return num;
         }
     },
     props:{
