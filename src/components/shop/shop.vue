@@ -99,6 +99,19 @@
                 </div>
             </div>
         </section>
+        <!-- 展示购物车商品列表 -->
+        <section class="showSelectedShopList">
+            <ul v-if="shopCart">
+                <li v-for="(selected,selectedIndex) in shopCart" :key="selectedIndex">
+                    <div>
+                        <span>{{selected.name}}</span>
+                        <span v-if="selected.specs.length">{{selected.specs[0].value}}</span>
+                    </div>
+                    <div>¥{{selected.num*selected.price}}</div>
+                    <buy-cart :shopid="id"></buy-cart>
+                </li>
+            </ul>
+        </section>
         
         <!-- 当前商家详细信息 -->
         <router-view></router-view>
@@ -178,6 +191,9 @@ export default {
             tipsIndex: null, // 右边 li 的 description的显示与隐藏 
             chooseSpecs: '', // 选择规格 当前商品的信息 子组件给父组件传递的数据
             selectIndex: 0, // 选中的规格
+            totalNum: 0, // 购物车总件数
+            totalPrice: 0, // 购物车总价格
+            ativeCaterotyIndexArr: [], // 在购物车中的商品分别属于哪个分类
         }
     },
     mounted(){
@@ -338,6 +354,9 @@ export default {
             this.ADD_CART({shopid:this.id,category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock})
             console.log('shopid:',this.id,'category_id:',category_id,'item_id:',item_id,'food_id:',food_id,'name:',name,'price:',price,'specs:',specs,'packing_fee:',packing_fee,'sku_id:',sku_id,'stock:',stock);
         },
+       flatten(arr){
+        return [].concat(...arr.map(item => [].concat(item, ...flatten(item.subitems))))
+       }
 
     },
     computed:{
@@ -351,10 +370,47 @@ export default {
                 backgroundPosition: 'center,center'
             }
         },
-        // 监听当前商家的购物车列表数据
-        // shopCart(){
-        //     console.log('this.cartList',this.cartList);
-        // }
+        // 监听 当前 shopid 商品,在购物车列表 cartList 的变化
+        shopCart(){
+            let _this = this;
+            let shopCartList = Object.assign({},this.cartList[this.id]);
+            // 在购物车中存在商品的对应目录
+            this.ativeCaterotyIndexArr = Object.keys(shopCartList);
+            //   购物车中商品的总价和商品的总数量
+            Object.keys(shopCartList).forEach((categoryId)=>{
+                Object.keys(shopCartList[categoryId]).forEach((itemId) => {
+                    Object.keys(shopCartList[categoryId][itemId]).forEach((foodId)=> {
+                        _this.totalNum += shopCartList[categoryId][itemId][foodId].num;
+                        _this.totalPrice += shopCartList[categoryId][itemId][foodId].num * shopCartList[categoryId][itemId][foodId].price;
+                    })
+                })
+            });
+            // 整理购物车中数据结构,渲染页面
+            let arr = [];
+            console.log('shopCartList',JSON.stringify(shopCartList));
+            for(let categoryId in shopCartList){
+                for(let itemId in shopCartList[categoryId]){
+                    for(let food_id in shopCartList[categoryId][itemId]){
+                        let food = {};
+                        food['category_id'] = categoryId;
+                        food['item_id'] = itemId;
+                        food['food_id'] = food_id;
+                        food['num'] = shopCartList[categoryId][itemId][food_id].num;
+                        food['id'] = shopCartList[categoryId][itemId][food_id].id;
+                        food['name'] = shopCartList[categoryId][itemId][food_id].name;
+                        food['price'] = shopCartList[categoryId][itemId][food_id].price;
+                        food['specs'] = shopCartList[categoryId][itemId][food_id].specs;
+                        food['packing_fee'] = shopCartList[categoryId][itemId][food_id].packing_fee;
+                        food['sku_id'] = shopCartList[categoryId][itemId][food_id].sku_id;
+                        food['stock'] = shopCartList[categoryId][itemId][food_id].stock;
+                        arr.push(food);
+                    }
+                }
+            }
+            console.log('arr',JSON.stringify(arr));
+            return arr;
+        },
+     
 
     },
     components:{
@@ -627,6 +683,7 @@ li{
     background-color: #3d3d3f;
     display: flex;
     font-size: 35px;
+    z-index: 30;
 }
 .cart_container .cart_container_left{
     width: 20%;
@@ -744,5 +801,14 @@ li{
 .active_spec{
     border: 1px solid #3199e8 !important;
     color:#3199e8;
+}
+
+/* 购物车列表弹窗 */
+.showSelectedShopList{
+    position: fixed;
+    width: 100%;
+    bottom: 100px;
+    background: #fff;
+    z-index: 24;
 }
 </style>

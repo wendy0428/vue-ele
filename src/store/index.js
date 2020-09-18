@@ -94,9 +94,10 @@ export default new Vuex.Store({
 		// 页面初始化的时候,从本地缓存中获取购物车的数据,因为刷新页面,存储到vuex 中的数据会丢失
 		[INIT_BUYCART](state){
 			let initData = getStore('buyCart');
+			initData = JSON.parse(initData);
 			console.log('INIT_BUYCART initData', initData);
 			if(initData){
-				state.cartList = JSON.parse(initData);
+				state.cartList = {...initData};
 			}
 		}
 		
