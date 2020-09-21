@@ -83,15 +83,18 @@
             </div>
         </section>
         <!-- 底部购物车 -->
-        <section class="cart_container">
+        <section class="cart_container" @click="hideShopCart">
             <div class="cart_container_left">
-                <span>
-                    <img :src="grayartIcon"/>
+                <span :style="totalNum>0?{backgroundColor: '#3190e8'}:''">
+                    <img :src="blueCartIcon" v-if="totalNum>0"/>
+
+                    <img :src="grayartIcon" v-else/>
                 </span>
+                <span v-if="totalNum" class="show_totalNum">{{totalNum}}</span>
             </div>
             <div class="cart_container_right">
                 <div>
-                    <div class="total_money">¥0.00</div>
+                    <div class="total_money">¥{{totalPrice.toFixed(2)}}</div>
                     <div class="delivery_fee">配送费{{shopDetails.float_delivery_fee}}</div>
                 </div>
                 <div>
@@ -100,38 +103,40 @@
             </div>
         </section>
         <!-- 展示购物车商品列表 -->
-        <section class="showSelectedShopList">
-            <div class="showSelectedShopList_title">
-                <span>购物车</span>
-                <span>清空</span>
-            </div>
-            <ul v-if="shopCart">
-                <li v-for="(selected,selectedIndex) in shopCart" :key="selectedIndex">
-                    <div class="selected_title">
-                        <div>{{selected.name}}</div>
-                        <div v-if="selected.specs.length">{{selected.specs[0].value}}</div>
-                    </div>
-                    <div class="selected_price" v-if="selected.num">¥{{selected.num*selected.price}}</div>
-                    <buy-cart 
-                        :shopid="id" 
-                        :food="{
-                            category_id: selected.category_id,
-                            item_id: selected.item_id,
-                            specfoods: [{
-                                food_id: selected.food_id,
-                                name: selected.name,
-                                price: selected.price,
-                                specs: selected.specs,
-                                packing_fee: selected.packing_fee,
-                                sku_id: selected.sku_id,
-                                stock: selected.stock
-                            }]
-
-                        }"
-                        class="selected_buyCart"
-                    ></buy-cart>
-                </li>
-            </ul>
+        <section class="showSelectedShopList_container" @click="hideShopCart"  v-if="shopStatus">
+            <section class="showSelectedShopList" @click.stop>
+                <div class="showSelectedShopList_title">
+                    <span>购物车</span>
+                    <span>清空</span>
+                </div>
+                <ul v-if="shopCart">
+                    <li v-for="(selected,selectedIndex) in shopCart" :key="selectedIndex">
+                        <div class="selected_title">
+                            <div>{{selected.name}}</div>
+                            <div v-if="selected.specs.length">{{selected.specs[0].value}}</div>
+                        </div>
+                        <div class="selected_price" v-if="selected.num">¥{{selected.num*selected.price}}</div>
+                        <buy-cart 
+                            :shopid="id" 
+                            :food="{
+                                category_id: selected.category_id,
+                                item_id: selected.item_id,
+                                specfoods: [{
+                                    food_id: selected.food_id,
+                                    name: selected.name,
+                                    price: selected.price,
+                                    specs: selected.specs,
+                                    packing_fee: selected.packing_fee,
+                                    sku_id: selected.sku_id,
+                                    stock: selected.stock
+                                }]
+    
+                            }"
+                            class="selected_buyCart"
+                        ></buy-cart>
+                    </li>
+                </ul>
+            </section>
         </section>
         
         <!-- 当前商家详细信息 -->
@@ -215,6 +220,7 @@ export default {
             totalNum: 0, // 购物车总件数
             totalPrice: 0, // 购物车总价格
             ativeCaterotyIndexArr: [], // 在购物车中的商品分别属于哪个分类
+            shopStatus: false, // 控制购物车列表是否展示
         }
     },
     mounted(){
@@ -375,9 +381,12 @@ export default {
             this.ADD_CART({shopid:this.id,category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock})
             console.log('shopid:',this.id,'category_id:',category_id,'item_id:',item_id,'food_id:',food_id,'name:',name,'price:',price,'specs:',specs,'packing_fee:',packing_fee,'sku_id:',sku_id,'stock:',stock);
         },
-       flatten(arr){
-        return [].concat(...arr.map(item => [].concat(item, ...flatten(item.subitems))))
-       }
+        // 隐藏购物车
+        hideShopCart(){
+            // if(this.totalNum>0){
+                this.shopStatus = !this.shopStatus;
+            // }
+        }
 
     },
     computed:{
@@ -394,7 +403,10 @@ export default {
         // 监听 当前 shopid 商品,在购物车列表 cartList 的变化
         shopCart(){
             let _this = this;
+            _this.totalNum = 0;
+            _this.totalPrice = 0;
             let shopCartList = Object.assign({},this.cartList[this.id]);
+            console.log(11111);
             // 在购物车中存在商品的对应目录
             this.ativeCaterotyIndexArr = Object.keys(shopCartList);
             //   购物车中商品的总价和商品的总数量
@@ -402,10 +414,12 @@ export default {
                 Object.keys(shopCartList[categoryId]).forEach((itemId) => {
                     Object.keys(shopCartList[categoryId][itemId]).forEach((foodId)=> {
                         _this.totalNum += shopCartList[categoryId][itemId][foodId].num;
+                        console.log('num:',shopCartList[categoryId][itemId][foodId].num,'price:', shopCartList[categoryId][itemId][foodId].price);
                         _this.totalPrice += shopCartList[categoryId][itemId][foodId].num * shopCartList[categoryId][itemId][foodId].price;
                     })
                 })
             });
+            console.log('_this.totalPrice',_this.totalPrice);
             // 整理购物车中数据结构,渲染页面
             let arr = [];
             console.log('shopCartList',JSON.stringify(shopCartList));
@@ -428,6 +442,7 @@ export default {
                     }
                 }
             }
+            console.log('arr',arr);
             return arr;
         },
      
@@ -707,8 +722,11 @@ li{
 }
 .cart_container .cart_container_left{
     width: 20%;
+    position: relative;
 }
-.cart_container .cart_container_left>span{
+
+
+.cart_container .cart_container_left>span:nth-child(1){
     display: inline-block;
     width: 100px;
     height: 100px;
@@ -717,6 +735,21 @@ li{
     position: relative;
     top: -30px;
     border: 1px solid #444;
+}
+
+.show_totalNum{
+    position: absolute;
+    display: inline-block;
+    color: #fff;
+    height: 35px;
+    width: 35px;
+    line-height: 35px;
+    background: #ff461d;
+    border-radius: 50%;
+    font-size: 25px;
+
+    top: -35px;
+    left: 90px;
 }
 .cart_container .cart_container_left img{
     position: absolute;
@@ -824,12 +857,21 @@ li{
 }
 
 /* 购物车列表弹窗 */
+.showSelectedShopList_container{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color:rgba(0, 0, 0, 0.4);
+    z-index: 29;
+}
 .showSelectedShopList{
     position: fixed;
     width: 100%;
     bottom: 100px;
     background: #fff;
-    z-index: 24;
+    z-index: 30;
     padding-bottom: 20px;
 }
 .showSelectedShopList_title{

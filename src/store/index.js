@@ -80,7 +80,7 @@ export default new Vuex.Store({
       		let shopId = (cart[shopid] = cart[shopid] || {});
       		let categoryId = (shopId[category_id] = shopId[category_id] || {});
 			let itemId = (categoryId[item_id] = categoryId[item_id] || {});
-			if(itemId[food_id]){
+			if(itemId&&itemId[food_id]){
 				if(itemId[food_id].num > 1){
 					itemId[food_id].num--;
 				}else{

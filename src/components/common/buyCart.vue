@@ -3,7 +3,17 @@
         <section v-if="food.specfoods.length == 1" class="has_one_specfood">
             <img 
                 :src="reduceIco" 
-                @click="removeOutCart(food.category_id,food.item_id,food.specfoods[0].food_id,food.specfoods[0].name,food.specfoods[0].price,food.specfoods[0].specs,food.specfoods[0].packing_fee,food.specfoods[0].sku_id,food.specfoods[0].stock)" 
+                @click="removeOutCart(
+                    food.category_id,
+                    food.item_id,
+                    food.specfoods[0].food_id,
+                    food.specfoods[0].name,
+                    food.specfoods[0].price,
+                    food.specfoods[0].specs,
+                    food.specfoods[0].packing_fee,
+                    food.specfoods[0].sku_id,
+                    food.specfoods[0].stock)
+                " 
                 v-if="foodNum>0"
             />           
             <span v-if="foodNum>0">{{foodNum}}</span>
@@ -33,7 +43,7 @@ export default {
         // 加入购物车
         addToCart(category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock){
             this.ADD_CART({shopid:this.shopid,category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock})
-            // console.log('shopid:',this.shopid,'category_id:',category_id,'item_id:',item_id,'food_id:',food_id,'name:',name,'price:',price,'specs:',specs,'packing_fee:',packing_fee,'sku_id:',sku_id,'stock:',stock);
+            console.log('shopid:',this.shopid,'category_id:',category_id,'item_id:',item_id,'food_id:',food_id,'name:',name,'price:',price,'specs:',specs,'packing_fee:',packing_fee,'sku_id:',sku_id,'stock:',stock);
         },
         // 移除购物车
         removeOutCart(category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock){
@@ -49,20 +59,25 @@ export default {
         // 监听 当前 shopid 商品,在购物车列表 cartList 的变化
         shopCart(){
             if(this.shopid){
-                console.log('处理获取的 vuex 中的购物车数据 shopCart',Object.assign({},this.cartList[this.shopid]));
                 return Object.assign({},this.cartList[this.shopid]);
             }
         },
         // 计算当前 cartList[shopid:'商铺 id'][category_id:'食品分类 id'][item_id:'当前食品'] ; 当前食品还有具体的规格是根据[food_id]去区分的,所以需要遍历,计算总数.
         foodNum(){
+            let _this = this;
             let total_num = 0;
+            let shopCart = Object.assign({},this.shopCart);
             let category_id = this.food.category_id;
             let item_id = this.food.item_id;
-            let food_id = this.food.specfoods[0].food_id;
-            if(this.shopCart[category_id]&&this.shopCart[category_id][item_id]){
-                // 单个商品规格的商品数量
-                total_num = this.shopCart[category_id][item_id][food_id].num;
-                return total_num;
+            if(shopCart[category_id]!=undefined&&shopCart[category_id][item_id]!=undefined){
+                if(shopCart[category_id][item_id]!=undefined){
+                    let food_id = this.food.specfoods[0].food_id;
+                    let total_num = this.shopCart[category_id][item_id][food_id];
+                    if(total_num!=undefined){
+                        total_num = this.shopCart[category_id][item_id][food_id].num;
+                        return total_num;
+                    }
+                }
             }
             return total_num;
         }
