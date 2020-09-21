@@ -98,12 +98,13 @@
                     <div class="delivery_fee">配送费{{shopDetails.float_delivery_fee}}</div>
                 </div>
                 <div>
-                    <span>还差¥{{shopDetails.float_minimum_order_amount}}起送</span>
+                    <span v-if="totalPrice<20">还差¥{{shopDetails.float_minimum_order_amount}}起送</span>
+                    <span v-else class="settle_account">去结算</span>
                 </div>
             </div>
         </section>
         <!-- 展示购物车商品列表 -->
-        <section class="showSelectedShopList_container" @click="hideShopCart"  v-if="shopStatus">
+        <section class="showSelectedShopList_container" @click="hideShopCart"  v-show="shopStatus">
             <section class="showSelectedShopList" @click.stop>
                 <div class="showSelectedShopList_title">
                     <span>购物车</span>
@@ -314,6 +315,9 @@ export default {
                     });
                  })
             });
+
+            // 4. 获取底部购物车列表
+            _this.initBuyCartData();
             
         },
         // 获取右边食品列表,每个 li 距离 ul 顶部的绝对距离(offsetTop)
@@ -357,10 +361,8 @@ export default {
             console.log('this.tipsIndex0',this.tipsIndex);
             if(this.tipsIndex == undefined){
                 this.tipsIndex = menuIndex;
-                console.log('this.tipsIndex1',this.tipsIndex);
             }else{
                 this.tipsIndex = null;
-                 console.log('this.tipsIndex2',this.tipsIndex);
 
             }
         },
@@ -379,34 +381,19 @@ export default {
         // 加入购物车
         addToCart(category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock){
             this.ADD_CART({shopid:this.id,category_id,item_id,food_id,name,price,specs,packing_fee,sku_id,stock})
-            console.log('shopid:',this.id,'category_id:',category_id,'item_id:',item_id,'food_id:',food_id,'name:',name,'price:',price,'specs:',specs,'packing_fee:',packing_fee,'sku_id:',sku_id,'stock:',stock);
+            // console.log('shopid:',this.id,'category_id:',category_id,'item_id:',item_id,'food_id:',food_id,'name:',name,'price:',price,'specs:',specs,'packing_fee:',packing_fee,'sku_id:',sku_id,'stock:',stock);
         },
         // 隐藏购物车
         hideShopCart(){
-            // if(this.totalNum>0){
+            if(this.totalNum>0){
                 this.shopStatus = !this.shopStatus;
-            // }
-        }
-
-    },
-    computed:{
-        ...mapState(['longitude','latitude','cartList']),
-        // 动态的设置头部的背景图片
-        background(){
-            return {
-                backgroundImage: `url(http://cangdu.org:8001/img/${this.shopDetails.image_path})`,
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center,center'
             }
         },
-        // 监听 当前 shopid 商品,在购物车列表 cartList 的变化
-        shopCart(){
+        initBuyCartData(){
             let _this = this;
             _this.totalNum = 0;
             _this.totalPrice = 0;
             let shopCartList = Object.assign({},this.cartList[this.id]);
-            console.log(11111);
             // 在购物车中存在商品的对应目录
             this.ativeCaterotyIndexArr = Object.keys(shopCartList);
             //   购物车中商品的总价和商品的总数量
@@ -414,15 +401,17 @@ export default {
                 Object.keys(shopCartList[categoryId]).forEach((itemId) => {
                     Object.keys(shopCartList[categoryId][itemId]).forEach((foodId)=> {
                         _this.totalNum += shopCartList[categoryId][itemId][foodId].num;
-                        console.log('num:',shopCartList[categoryId][itemId][foodId].num,'price:', shopCartList[categoryId][itemId][foodId].price);
                         _this.totalPrice += shopCartList[categoryId][itemId][foodId].num * shopCartList[categoryId][itemId][foodId].price;
                     })
                 })
             });
-            console.log('_this.totalPrice',_this.totalPrice);
+            // 当购物车列表商品数为0,则不显示底部的购物车商品列表
+            if(_this.totalNum == 0){
+                _this.shopStatus = false;
+            }
+
             // 整理购物车中数据结构,渲染页面
             let arr = [];
-            console.log('shopCartList',JSON.stringify(shopCartList));
             for(let categoryId in shopCartList){
                 for(let itemId in shopCartList[categoryId]){
                     for(let food_id in shopCartList[categoryId][itemId]){
@@ -442,8 +431,24 @@ export default {
                     }
                 }
             }
-            console.log('arr',arr);
             return arr;
+        }
+
+    },
+    computed:{
+        ...mapState(['longitude','latitude','cartList']),
+        // 动态的设置头部的背景图片
+        background(){
+            return {
+                backgroundImage: `url(http://cangdu.org:8001/img/${this.shopDetails.image_path})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center,center'
+            }
+        },
+        // 监听 当前 shopid 商品,在购物车列表 cartList 的变化
+        shopCart(){
+            return this.initBuyCartData();
         },
      
 
@@ -913,6 +918,12 @@ li{
     color: #f60;
     font-weight: bold;
     line-height: 42px;;
+}
+.settle_account{
+    background-color: #4cd964;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
 }
 
 </style>
