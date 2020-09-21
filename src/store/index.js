@@ -9,6 +9,7 @@ const SAVE_GEOHASH = "SAVE_GEOHASH";
 const ADD_CART = "ADD_CART";
 const REDUCE_CART = 'REDUCE_CART';
 const INIT_BUYCART = 'INIT_BUYCART';
+const CLEARN_CART = 'CLEARN_CART';
 export default new Vuex.Store({
 	state: {
     	latitude: "", // 纬度
@@ -99,6 +100,16 @@ export default new Vuex.Store({
 			if(initData){
 				state.cartList = {...initData};
 			}
+		},
+		// 清空购物车
+		[CLEARN_CART](state,{shopid}){
+			console.log('shopid',shopid)
+			let cart = state.cartList;
+			cart[shopid] = null;
+			console.log('cart',cart);
+			state.cartList = {...cart};
+			setStore('buyCart',state.cartList);
+
 		}
 		
   	},

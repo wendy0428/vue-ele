@@ -108,7 +108,7 @@
             <section class="showSelectedShopList" @click.stop>
                 <div class="showSelectedShopList_title">
                     <span>购物车</span>
-                    <span>清空</span>
+                    <span class="clear_cart" @click="clearShopCart">清空</span>
                 </div>
                 <ul v-if="shopCart">
                     <li v-for="(selected,selectedIndex) in shopCart" :key="selectedIndex">
@@ -196,6 +196,7 @@ import leftArrowIcon from '../../assets/img/left_arrow.png'
 import blueCartIcon from '../../assets/img/blueCart.png'
 import grayartIcon from '../../assets/img/grayCart.png'
 import closeIco from '../../assets/img/close.png'
+import trashIco from '../../assets/img/trash.png'
 export default {
     data(){
         return {
@@ -215,6 +216,7 @@ export default {
             blueCartIcon,
             grayartIcon,
             closeIco,
+            trashIco,
             tipsIndex: null, // 右边 li 的 description的显示与隐藏 
             chooseSpecs: '', // 选择规格 当前商品的信息 子组件给父组件传递的数据
             selectIndex: 0, // 选中的规格
@@ -244,7 +246,7 @@ export default {
 		console.log('INIT_BUYCART cartList', this.cartList);
     },
     methods:{
-        ...mapMutations(['RECORD_ADDRESS','ADD_CART','INIT_BUYCART']),
+        ...mapMutations(['RECORD_ADDRESS','ADD_CART','INIT_BUYCART','CLEARN_CART']),
         async initData(){
             let _this = this;
             // 1. 防止刷新页面时，vuex状态丢失，经度纬度需要重新获取，并存入vuex
@@ -389,6 +391,7 @@ export default {
                 this.shopStatus = !this.shopStatus;
             }
         },
+        // 页面初始化时,获取底部购物车商品列表
         initBuyCartData(){
             let _this = this;
             _this.totalNum = 0;
@@ -432,6 +435,10 @@ export default {
                 }
             }
             return arr;
+        },
+        // 清空购物车
+        clearShopCart(){
+            this.CLEARN_CART({shopid:this.id})
         }
 
     },
@@ -925,5 +932,19 @@ li{
     width: 100%;
     height: 100%;
 }
+.clear_cart{
+    position: relative;
+}
+.clear_cart::before{
+    content: '';
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background:  url('../../assets/img/trash.png') no-repeat;
+    background-size: contain;
+    position: absolute;
+    left: -50px;
+    top: 5px;
 
+}
 </style>
