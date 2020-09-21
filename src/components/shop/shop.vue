@@ -111,7 +111,7 @@
                         <div>{{selected.name}}</div>
                         <div v-if="selected.specs.length">{{selected.specs[0].value}}</div>
                     </div>
-                    <div class="selected_price">¥{{selected.num*selected.price}}</div>
+                    <div class="selected_price" v-if="selected.num">¥{{selected.num*selected.price}}</div>
                     <buy-cart 
                         :shopid="id" 
                         :food="{
@@ -428,7 +428,6 @@ export default {
                     }
                 }
             }
-            console.log('arr',JSON.stringify(arr));
             return arr;
         },
      
