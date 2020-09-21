@@ -27,10 +27,11 @@ export default {
         }
     },
     props:{
-        rating: Number
+        rating: [Number,String]
     },
     computed:{
         takeOneDecimal(){
+            console.log('this.rating',this.rating);
             return this.rating.toFixed(1).toString().replace(/\d+\.(\d*)/,'$1');
         }
     }
