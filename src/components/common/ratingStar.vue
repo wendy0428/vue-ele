@@ -31,7 +31,6 @@ export default {
     },
     computed:{
         takeOneDecimal(){
-            console.log('this.rating',this.rating);
             return this.rating.toFixed(1).toString().replace(/\d+\.(\d*)/,'$1');
         }
     }

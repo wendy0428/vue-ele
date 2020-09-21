@@ -14,12 +14,12 @@
         </section>
         <!-- 商品和评价 切换 -->
         <section class="menu_header">
-            <span class="select_title" :class="selected?'title_active':''" @click="changeNavBar">商品</span>
-            <span class="select_title" :class="selected?'':'title_active'"  @click="changeNavBar">评价</span>
+            <span class="select_title" :class="selected == '商品'?'title_active':''" @click="changeNavBar('商品')">商品</span>
+            <span class="select_title" :class="selected == '评价'?'title_active':''"  @click="changeNavBar('评价')">评价</span>
         </section>
         <section class="menu" ref="menu">
             <!-- 商品 -->
-            <div v-if="selected" class="menu_container"  :style="{height: menuContainerHight+'px'}" >
+            <div v-show="selected == '商品'" class="menu_container"  :style="{height: menuContainerHight+'px'}" >
                 <div class="menu_left" ref="menuClassification">
                     <ul>
                         <li v-for="(menuType,index) in menuList" :key="index" 
@@ -77,8 +77,10 @@
                     </ul>
                 </div>
             </div>
+        </section>
+        <section class="score" v-load-more="loadMoreShopList">
             <!-- 评价 -->
-            <div v-else>
+            <div v-show="selected == '评价'" >
                 <!-- 综合评分 -->
                 <div class="ratingScores_container" v-if="ratingScores">
                     <div class="ratingScores_container_left">
@@ -116,7 +118,7 @@
                     </ul>
                 </div>
                 <!-- 评分列表 -->
-                <div class="ratingList_container"  v-load-more="loadMoreShopList">
+                <div class="ratingList_container">
                     <ul v-if="ratingList.length!=0">
                         <li v-for="(rating,ratingIndex) in ratingList" :key="ratingIndex">
                             <div class="rating_left">
@@ -270,7 +272,7 @@ export default {
             geograph:'', // 当前商铺的地理信息
             id: '', // 当前商铺的 id
             shopDetails:'', //当前商铺详情
-            selected: true,
+            selected: '商品',
             menuList: [], // 当前商铺的菜单
             menuIndex: 0, // 左边 li 的 index
             foodListLiOffsetTop: [], //右边食品列表每个 li 的 offsetTop
@@ -299,6 +301,8 @@ export default {
             ratingTags: [], // 商铺评价分类
             activeTagIndex: 0, // 选中的商铺评价分类标签
             tag_name: '', // 商铺评价分类标签
+            touchend: false , // 没有更多数据
+            preventRepeatReuqest: false, // 到达底部加载数据,防止重复加载
 
         }
     },
@@ -319,7 +323,6 @@ export default {
 
         // 获取存储到本地的购物车列表数据,因为页面刷新,vuex 会丢失
         this.INIT_BUYCART()
-		console.log('INIT_BUYCART cartList', this.cartList);
     },
     methods:{
         ...mapMutations(['RECORD_ADDRESS','ADD_CART','INIT_BUYCART','CLEARN_CART']),
@@ -367,7 +370,17 @@ export default {
             });
              
             _this.$nextTick(() => {
-                // 获取右边食品列表,每个 li 距离 ul 顶部的绝对距离(offsetTop)
+                _this.todoNext()
+            });
+
+            // 4. 获取底部购物车列表
+            _this.initBuyCartData();
+
+            
+        },
+        todoNext(){
+            let _this = this;
+             // 获取右边食品列表,每个 li 距离 ul 顶部的绝对距离(offsetTop)
                 _this.getRightFoodListHeight();
               
                 // 初始化 左边商品分类
@@ -398,12 +411,6 @@ export default {
                         }
                     });
                  })
-            });
-
-            // 4. 获取底部购物车列表
-            _this.initBuyCartData();
-
-            
         },
         // 获取右边食品列表,每个 li 距离 ul 顶部的绝对距离(offsetTop)
         getRightFoodListHeight(){
@@ -438,8 +445,16 @@ export default {
             this.$router.push({path:'/shop/shopDetail',query:{shopDetails:JSON.stringify(this.shopDetails)}});
         },
         // 商品和评论切换
-        changeNavBar(){
-            this.selected = !this.selected;
+        changeNavBar(nav){
+            this.selected = nav;
+            // if(this.selected){
+            //     this.$nextTick(() => {
+            //         this.todoNext()
+            //     });
+            // }else{
+            //     this.foodScroll.destroy();
+            //     this.menuScroll.destroy();
+            // }
         },
         // 展示与隐藏每个产品分类的描述
         showDescription(menuIndex){
@@ -537,7 +552,31 @@ export default {
         selectTagName(name,index){
             this.activeTagIndex = index;
             this.tag_name = name;
-        }
+        },
+        async loadMoreShopList(){
+            let _this = this;
+            // 当第一次请求回来的商铺列表小于20条的时候,说明已经没有更多数据了就直接返回
+            if(_this.touchend){
+                return;
+            }
+            // 用该变量,防止重复加载
+            if(_this.preventRepeatReuqest){
+                return;
+            }
+            _this.preventRepeatReuqest = true;
+            // 数据定位加20
+            _this.offset += 20;
+            let res = await getRatingList(_this.id, _this.offset, _this.tag_name).then((res) => {
+                return  res;
+            });
+            _this.ratingList = [..._this.ratingList,...res];
+            // 当获取的数据小于20的时候,说明没有更多数据了,不需要再次请求数据
+            if(res.length < 9){
+                _this.touchend = true;
+                return;
+            }
+            _this.preventRepeatReuqest = false;
+        },
     },
     computed:{
         ...mapState(['longitude','latitude','cartList']),
@@ -568,7 +607,8 @@ export default {
         'load-more':{
             bind: (el,binding) => {
                 let windowHeight = window.screen.height;
-                // console.log("返回以像素计的访问者屏幕的高度",windowHeight);
+                console.log(111);
+                console.log("返回以像素计的访问者屏幕的高度",windowHeight);
                 let clientHeight;
                 let offsetTop;
                 let oldScrollTop;
@@ -577,10 +617,10 @@ export default {
                 el.addEventListener('touchstart',() => {
                     // element.clientHeight: 在页面上返回内容的可视高度（不包括边框，边距或滚动条）height+上下padding
                     clientHeight = el.clientHeight;
-                    // console.log('在页面上返回内容的可视高度',clientHeight);
+                    console.log('在页面上返回内容的可视高度',clientHeight);
                     // offsetTop:返回当前元素的相对垂直偏移位置的偏移容器. 可以理解为容器相对于document的top的绝对偏移。等于top+margin
                     offsetTop = el.offsetTop;
-                    // console.log('返回当前元素的相对垂直偏移位置的偏移容器',offsetTop);
+                    console.log('返回当前元素的相对垂直偏移位置的偏移容器',offsetTop);
                 },false)
 
                 el.addEventListener('touchmove',() => {
@@ -608,7 +648,9 @@ export default {
                 
                 const loadMore = () => {
                     // 当前 ul元素的高度+当前 ul元素相对于document的top的绝对偏移-可视窗口的高度-滚动条的高度>2
+                    console.log('clientHeight+offsetTop-windowHeight-oldScrollTop',clientHeight+offsetTop-windowHeight-oldScrollTop);
                     if(clientHeight+offsetTop-windowHeight-oldScrollTop<2){
+
                         binding.value();
                     }
                 }
@@ -1102,6 +1144,10 @@ li{
     top: 5px;
 }
 /* 评价 */
+.score{
+    position: absolute;
+    top:284px;
+}
 .ratingScores_container{
     width: 100%;
     display: flex;
@@ -1134,16 +1180,15 @@ li{
 }
 .ratingScores_container_right>div{
     display: flex;
-    /* justify-content: space-between; */
     margin: 20px 0;
 
 }
 .ratingScores_container_right>div>span{
-    margin-right: 20px;
+    margin-right: 10px;
 
 }
 .ratingScores_container_right>div>span:last-child{
-    margin-left: 30px;
+    margin-left: 10px;
 }
 
 .ratingTags{
