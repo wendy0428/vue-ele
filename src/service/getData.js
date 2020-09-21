@@ -127,3 +127,18 @@ export const getFoodMenu = (restaurant_id) =>
       restaurant_id,
     },
   });
+
+// 15.获取商铺评价分数
+export const getRatingScores = (shopid) => httpGet({url: '/ugc/v2/restaurants/' + shopid + '/ratings/scores'});
+
+
+// 16. 获取商铺评价列表
+export const getRatingList = (shopid, offset, tag_name = '') => httpGet({url:'/ugc/v2/restaurants/' + shopid + '/ratings',params:{
+	has_content: true,
+	offset,
+	limit: 10,
+	tag_name
+}});
+
+// 17.获取商铺评价分类
+export const getRatingTags = (shopid) => httpGet({url: '/ugc/v2/restaurants/' + shopid + '/ratings/tags'});

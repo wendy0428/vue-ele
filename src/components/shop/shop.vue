@@ -79,7 +79,10 @@
             </div>
             <!-- 评价 -->
             <div v-else>
-                111
+                <div class="ratingScores_container" v-if="ratingScores">
+                    <div class="ratingScores_container_left"></div>
+                    <div class="ratingScores_container_right"></div>
+                </div>
             </div>
         </section>
         <!-- 底部购物车 -->
@@ -178,13 +181,10 @@
                 </div>
             </div>
         </section>
-      
-
-
     </div>
 </template>
 <script>
-import {getMsiteAddress,getShopDetails,getFoodMenu} from '../../service/getData'
+import {getMsiteAddress,getShopDetails,getFoodMenu,getRatingScores,getRatingList,getRatingTags} from '../../service/getData'
 import {mapState,mapMutations} from 'vuex'
 import BScroll from 'better-scroll'
 
@@ -224,6 +224,13 @@ export default {
             totalPrice: 0, // 购物车总价格
             ativeCaterotyIndexArr: [], // 在购物车中的商品分别属于哪个分类
             shopStatus: false, // 控制购物车列表是否展示
+
+            // 评价
+            ratingScores: {}, // 商铺评价分数
+            ratingList: [], // 商铺评价列表
+            ratingTags: [], // 商铺评价分类
+            tag_name: '', // 商铺评价分类标签
+
         }
     },
     mounted(){
@@ -320,7 +327,13 @@ export default {
 
             // 4. 获取底部购物车列表
             _this.initBuyCartData();
-            
+
+            // 5. 获取商铺评价分数
+            _this.ratingScores = await getRatingScores(_this.id);
+            // 6. 获取商铺评价列表
+            _this.ratingList = await getRatingList(_this.id, _this.offset, _this.tag_name);
+            // 7. 获取商铺评价分类
+            _this.ratingTags = await getRatingTags(_this.id);
         },
         // 获取右边食品列表,每个 li 距离 ul 顶部的绝对距离(offsetTop)
         getRightFoodListHeight(){
