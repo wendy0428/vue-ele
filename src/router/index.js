@@ -45,9 +45,18 @@ Vue.use(VueRouter)
         }],
     },
     {
-        path: '/confirmOrder',
+        path: '/confirmOrder', // 订单确认页面
         name: 'ConfirmOrder',
         component: () => import("@/components/confirmOrder/confirmOrder"),
+    },
+    {
+        path: '/login', // 登录注册页面
+        name: 'Login',
+        component: () => import("@/components/login/login"),
+    },{
+        path: '/profile', // 退出登录
+        name: 'Profile',
+        component: () => import("@/components/profile/profile"),
     }
 ]
 

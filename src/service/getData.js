@@ -2,8 +2,8 @@ import { getStore } from "../config/utils";
 import { httpGet, httpPost } from "../config/axios";
 
 // 1. 获取 用户信息
-export const getUser = () =>
-  httpGet({ url: "/v1/user", params: { user_id: getStore("user_id") } });
+export const getUser = (user_id) =>
+  httpGet({ url: "/v1/user", params: { user_id } });
 
 // 2. 获取 猜想的城市
 export const guessCity = () =>
@@ -155,3 +155,13 @@ export const checkout = (geohash, entities, shopid) => httpPost({url: '/v1/carts
 	entities,
 	restaurant_id: shopid,
 }});
+
+// 19. 获取图片验证码
+export const getCaptchas = () => httpPost({url:'/v1/captchas'});
+
+// 20. 账号密码登录
+export const accountLogin = (username, password, captcha_code) => httpPost({url: '/v2/login', data:{username, password, captcha_code}});
+
+// 21. 退出登录
+
+export const signout = () => httpGet({url:'/v2/signout'});

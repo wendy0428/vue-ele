@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import {setStore,getStore} from '../config/utils'
+import {setStore,getStore,delStore} from '../config/utils'
 Vue.use(Vuex);
 
 // ES6中,用字面量定义对象时,用表达式作为对象的属性名,把表达式放在方括号内
@@ -10,12 +10,16 @@ const ADD_CART = "ADD_CART";
 const REDUCE_CART = 'REDUCE_CART';
 const INIT_BUYCART = 'INIT_BUYCART';
 const CLEARN_CART = 'CLEARN_CART';
+const RECORD_USERINFO = 'RECORD_USERINFO';
+const DELETE_USERINFO = 'DELETE_USERINFO';
 export default new Vuex.Store({
 	state: {
     	latitude: "", // 纬度
     	longitude: "", // 经度
     	geograph: "31.22299,121.36025", // 地理位置
-    	cartList: {}, // 加入购物车的商品列表
+		cartList: {}, // 加入购物车的商品列表
+		userInfo: null, // 用户信息
+		login: false, // 是否登录
   	},
   	mutations: {
     	// 保存地理位置
@@ -110,6 +114,17 @@ export default new Vuex.Store({
 			state.cartList = {...cart};
 			setStore('buyCart',state.cartList);
 
+		},
+		// 保存用户信息
+		[RECORD_USERINFO](state,userInfo){
+			state.userInfo = userInfo;
+			setStore('user_id',state.userInfo.user_id);
+			this.login = true;
+		},
+		// 删除用户信息
+		[DELETE_USERINFO](state,user_id){
+			delStore('user_id');
+			state.userInfo = {};
 		}
 		
   	},

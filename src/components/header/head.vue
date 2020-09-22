@@ -16,10 +16,11 @@
         </div>
         <div class="head_right">
             <slot name="head_right">
-                <router-link :to="{}" tag="span" v-if="userInfo.status == 0">登录/注册</router-link>
-                <router-link :to="{}" tag="span" v-else>
+                <router-link :to="{path: '/profile'}" tag="span" v-if="user_id">
                     <img :src="user_ico"/>
                 </router-link>
+                <router-link :to="{path:'/login'}" tag="span" v-else>登录/注册</router-link>
+               
             </slot>
         </div>
     </div>
@@ -29,10 +30,11 @@ import leftArrowIcon from '../../assets/img/left_arrow.png'
 import searchIco from '../../assets/img/search.png'
 import user_ico from '../../assets/img/user.png'
 import {getUser} from '../../service/getData'
+import {getStore} from '../../config/utils'
 export default {
     data(){
         return {
-            userInfo: '',
+            user_id: '', // 用户 id
             user_ico,
             leftArrowIcon,
             searchIco,
@@ -42,15 +44,22 @@ export default {
         headData: Object
     },
     created(){
-        getUser().then((res) => {
-            this.userInfo = res;
+        this.user_id = getStore("user_id");
+        getUser(this.user_id).then((res) => {
+            if(res.status == 0){
+                this.$toast({
+                    message: '请登录/注册',
+                    position: "center",
+                    duration: 1000
+                });
+            }
         }).catch((err) => {
             this.$toast({
                 message: err,
                 position: "center",
                 duration: 1000
             });
-        })
+        });
     },
     methods:{
          // 返回上一页
