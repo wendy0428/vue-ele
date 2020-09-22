@@ -11,7 +11,7 @@
                 <div class="profile_detail_left">
                     <img :src="'http://elm.cangdu.org/img/default.jpg'"/>
                 </div>
-                <div class="profile_detail_right">
+                <router-link :to="{path:'/profile/info'}" class="profile_detail_right" tag="div">
                     <div class="profile_detail_right_top">
                         <span v-if="user_id!='undefined'">{{userInfo.username}}</span>
                         <span v-else>登录/注册</span>
@@ -19,7 +19,7 @@
                     <div class="profile_detail_right_bottom">
                         <span>暂无绑定手机号</span>
                     </div>
-                </div>
+                </router-link>
             </section>
             <section class="profile_data">
                 <ul>
@@ -92,6 +92,8 @@
                 </ul>
             </section>
         </section>
+        <!-- 账户信息 info -->
+        <router-view></router-view>
     </div>
 </template>
 <script>

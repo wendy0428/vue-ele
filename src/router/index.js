@@ -54,9 +54,13 @@ Vue.use(VueRouter)
         name: 'Login',
         component: () => import("@/components/login/login"),
     },{
-        path: '/profile', // 退出登录
+        path: '/profile', // 个人中心
         name: 'Profile',
         component: () => import("@/components/profile/profile"),
+        children:[{
+            path:'info', // 账户信息 退出登录
+            component: () => import("@/components/profile/children/info"),
+        }]
     },
     {
         path: '/forget', // 重置密码
