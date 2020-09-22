@@ -174,7 +174,11 @@
                 </div>
                 <div>
                     <span v-if="totalPrice<20">还差¥{{shopDetails.float_minimum_order_amount}}起送</span>
-                    <span v-else class="settle_account">去结算</span>
+                    <router-link 
+                        :to="{path:'/confirmOrder'}" 
+                        tag="span" v-else 
+                        class="settle_account"
+                    >去结算</router-link>
                 </div>
             </div>
         </section>

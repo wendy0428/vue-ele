@@ -44,6 +44,11 @@ Vue.use(VueRouter)
             component: () => import("@/components/shop/children/foodDetail"),
         }],
     },
+    {
+        path: '/confirmOrder',
+        name: 'ConfirmOrder',
+        component: () => import("@/components/confirmOrder/confirmOrder"),
+    }
 ]
 
 const router = new VueRouter({
