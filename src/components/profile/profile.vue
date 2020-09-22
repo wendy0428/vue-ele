@@ -6,23 +6,100 @@
                 <template></template>
             </slot>
         </common-head>
-        <section class="profile_detail">
-            <div class="profile_detail_left">
-                <img :src="'http://elm.cangdu.org/img/default.jpg'"/>
-            </div>
-            <div class="profile_detail_right">
-                <div>
-                    <div>
+        <section v-if="userInfo">
+            <section class="profile_detail">
+                <div class="profile_detail_left">
+                    <img :src="'http://elm.cangdu.org/img/default.jpg'"/>
+                </div>
+                <div class="profile_detail_right">
+                    <div class="profile_detail_right_top">
                         <span v-if="user_id!='undefined'">{{userInfo.username}}</span>
                         <span v-else>登录/注册</span>
                     </div>
-                    <div>暂无绑定手机号</div>
+                    <div class="profile_detail_right_bottom">
+                        <span>暂无绑定手机号</span>
+                    </div>
                 </div>
-            </div>
+            </section>
+            <section class="profile_data">
+                <ul>
+                    <li>
+                        <div class="profile_data_num">
+                            <span>{{userInfo.balance.toFixed(2)}}</span>
+                            <span>元</span>
+                        </div>
+                        <div class="profile_data_title">
+                            <span>我的余额</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile_data_num">
+                            <span>{{userInfo.gift_amount}}</span>
+                            <span>元</span>
+                        </div>
+                        <div class="profile_data_title">
+                            <span>我的优惠</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="profile_data_num">
+                            <span>{{userInfo.point}}</span>
+                            <span>元</span>
+                        </div>
+                        <div class="profile_data_title">
+                            <span>我的积分</span>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+            <section class="profie_options">
+                <ul>
+                    <li>
+                        <span>
+                            <img :src="orderIcon"/>
+                        </span>
+                        <span>我的订单</span>
+                    </li>
+                    <li>
+                        <span>
+                            <img :src="pointIcon"/>
+                        </span>
+                        <span>积分商城</span>
+                    </li>
+                    <li>
+                        <span>
+                            <img :src="queenIcon"/>
+                        </span>
+                        <span>饿了么会员卡</span>
+                    </li>
+                    
+                </ul>
+            </section>
+            <section class="profie_options">
+                <ul>
+                    <li>
+                        <span>
+                            <img :src="serviewIcon"/>
+                        </span>
+                        <span>服务中心</span>
+                    </li>
+                    <li>
+                        <span>
+                            <img :src="eleIcon"/>
+                        </span>
+                        <span>下载饿了么APP</span>
+                    </li>
+                </ul>
+            </section>
         </section>
     </div>
 </template>
 <script>
+import orderIcon from '../../assets/img/order.png'
+import pointIcon from '../../assets/img/point.png'
+import queenIcon from '../../assets/img/queen.png'
+import serviewIcon from '../../assets/img/serview.png'
+import eleIcon from '../../assets/img/logo.png'
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
 import {getStore} from '../../config/utils'
@@ -33,12 +110,16 @@ export default {
             headData:{
                 goBack: true,
             },
+            orderIcon,
+            pointIcon,
+            queenIcon,
+            serviewIcon,
+            eleIcon,
             user_id: null,
         }
     },
     created(){
         this.user_id = getStore('user_id');
-        // console.log('userInfo',this.userInfo);
     },
     computed:{
         ...mapState(['userInfo']),
@@ -69,5 +150,123 @@ export default {
     width: 80%;
     text-align: left;
     padding-left: 10px;
+    position: relative;
+}
+.profile_detail_right::after{
+    content: '';
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background: url('../../assets/img/right_arrow.png') no-repeat;
+    background-size: contain;
+    position: absolute;
+    right: 0px;
+    top: 50%;
+}
+.profile_detail_right>div{
+    margin-top: 10px;
+}
+.profile_detail_right_top{
+    font-weight: bold;
+}
+.profile_detail_right_bottom{
+    font-size: 30px;
+}
+.profile_detail_right_bottom>span::before{
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: url('../../assets/img/phone.png') no-repeat;
+    background-size: contain;
+    position: relative;
+    top: 10px;
+}
+
+/*  */
+.profile_data>ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+}
+.profile_data>ul>li{
+    width: 33%;
+    font-size: 25px;
+    color: #666;
+    padding: 50px;
+}
+.profile_data>ul>li>div{
+    margin-bottom: 10px;
+}
+.profile_data>ul>li:nth-child(1) .profile_data_num span:nth-child(1){
+    color: #f90;
+    font-weight: bold;
+    font-size: 50px;
+    padding-right: 10px;
+}
+.profile_data>ul>li:nth-child(2){
+    border-left: 1px solid #f1f1f1;
+    border-right: 1px solid #f1f1f1;
+}
+.profile_data>ul>li:nth-child(2) .profile_data_num span:nth-child(1){
+    color: #ff5f3e;
+    font-weight: bold;
+    font-size: 50px;
+    padding-right: 10px;
+}
+.profile_data>ul>li:nth-child(3) .profile_data_num span:nth-child(1){
+    color: #6ac20b;
+    font-weight: bold;
+    font-size:50px;
+    padding-right: 10px;
+}
+
+.profie_options>ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 35px;
+    color: #333;
+    background-color: #fff;
+    margin-top: 20px;
+}
+.profie_options>ul>li{
+    display: flex;
+    justify-content: space-around;
+}
+.profie_options>ul>li>span:nth-child(1){
+    display: inline-block;
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+.profie_options>ul>li>span:nth-child(1) img{
+    display: inline-block;
+    width: 50%;
+    vertical-align: middle;
+}
+.profie_options>ul>li>span:nth-child(2){
+    display: inline-block;
+    width: 90%;
+    padding: 30px 0;
+    box-sizing: border-box;
+    border-bottom: 2px solid #f1f1f1;
+    text-align: left;
+    position: relative;
+}
+.profie_options>ul>li>span:nth-child(2)::after{
+    content: '';
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background: url('../../assets/img/right_arrow.png') no-repeat;
+    background-size: contain;
+    position: absolute;
+    right: 0px;
+    top: 40%;
 }
 </style>
