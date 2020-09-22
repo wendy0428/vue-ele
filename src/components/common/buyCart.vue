@@ -84,7 +84,7 @@ export default {
     },
     props:{
         shopid:[Number,String],
-        food: Object
+        food: Object,
     }
 }
 </script>

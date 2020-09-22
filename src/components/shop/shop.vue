@@ -27,6 +27,7 @@
                             @click="chooseMenu(index)"
                         >
                             <span>{{menuType.name}}</span>
+                            <span v-if="selectedCategoryObj[menuType.id]" class="hasNum">{{selectedCategoryObj[menuType.id]}}</span>
                         </li>
                     </ul>
                 </div>
@@ -68,7 +69,10 @@
                                         </div>
                                         <div class="price">
                                             <div><span>¥{{food.specfoods[0].price}}&nbsp;&nbsp;</span>起</div>
-                                            <buy-cart :shopid="id" :food="food" @getSpecs="getSpecs"></buy-cart>
+                                            <buy-cart 
+                                                :shopid="id" 
+                                                :food="food" 
+                                            @getSpecs="getSpecs"></buy-cart>
                                         </div>
                                     </div>
                                 </li>
@@ -291,7 +295,7 @@ export default {
             selectIndex: 0, // 选中的规格
             totalNum: 0, // 购物车总件数
             totalPrice: 0, // 购物车总价格
-            ativeCaterotyIndexArr: [], // 在购物车中的商品分别属于哪个分类
+            selectedCategoryObj: [], // 在购物车中的商品分别属于哪个分类
             shopStatus: false, // 控制购物车列表是否展示
 
             // 评价
@@ -447,14 +451,6 @@ export default {
         // 商品和评论切换
         changeNavBar(nav){
             this.selected = nav;
-            // if(this.selected){
-            //     this.$nextTick(() => {
-            //         this.todoNext()
-            //     });
-            // }else{
-            //     this.foodScroll.destroy();
-            //     this.menuScroll.destroy();
-            // }
         },
         // 展示与隐藏每个产品分类的描述
         showDescription(menuIndex){
@@ -495,8 +491,7 @@ export default {
             _this.totalNum = 0;
             _this.totalPrice = 0;
             let shopCartList = Object.assign({},this.cartList[this.id]);
-            // 在购物车中存在商品的对应目录
-            this.ativeCaterotyIndexArr = Object.keys(shopCartList);
+            
             //   购物车中商品的总价和商品的总数量
             Object.keys(shopCartList).forEach((categoryId)=>{
                 Object.keys(shopCartList[categoryId]).forEach((itemId) => {
@@ -532,6 +527,17 @@ export default {
                     }
                 }
             }
+            // 在购物车中存在商品的对应目录
+            // this.ativeCaterotyIndexArr = Object.keys(shopCartList);
+            let selectedCategoryObj = {};
+            for(let i=0; i<arr.length; i++){
+                selectedCategoryObj[arr[i].category_id] = arr[i].num;
+            }
+            this.selectedCategoryObj = selectedCategoryObj;
+            console.log('selectedCategoryObj',selectedCategoryObj)
+            console.log('arr',arr)
+
+
             return arr;
         },
         // 清空购物车
@@ -552,6 +558,9 @@ export default {
         selectTagName(name,index){
             this.activeTagIndex = index;
             this.tag_name = name;
+            _this.ratingList = getRatingList(_this.id, _this.offset, _this.tag_name).then((res) => {
+                return  res;
+            });
         },
         async loadMoreShopList(){
             let _this = this;
@@ -703,6 +712,25 @@ export default {
     left: 0;
     height: 100%;
     overflow: hidden;
+}
+
+.menu_left li{
+    position: relative;
+}
+.menu_left .hasNum{
+    position: absolute;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+    line-height: 20px;
+    border-radius: 50%;
+    background-color:#ff461d;
+    border: 1px solid #ff461d;
+    color: #fff;
+    font-size: 10px;
+    top: 0px;
+    right: 0px;
 }
 
  ul{
