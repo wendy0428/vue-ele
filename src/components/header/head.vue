@@ -16,7 +16,7 @@
         </div>
         <div class="head_right">
             <slot name="head_right">
-                <router-link :to="{path: '/profile'}" tag="span" v-if="user_id">
+                <router-link :to="{path: '/profile'}" tag="span" v-if="user_id!='undefined'">
                     <img :src="user_ico"/>
                 </router-link>
                 <router-link :to="{path:'/login'}" tag="span" v-else>登录/注册</router-link>
@@ -31,10 +31,11 @@ import searchIco from '../../assets/img/search.png'
 import user_ico from '../../assets/img/user.png'
 import {getUser} from '../../service/getData'
 import {getStore} from '../../config/utils'
+import {mapMutations} from 'vuex'
 export default {
     data(){
         return {
-            user_id: '', // 用户 id
+            user_id: null, // 用户 id
             user_ico,
             leftArrowIcon,
             searchIco,
@@ -44,25 +45,24 @@ export default {
         headData: Object
     },
     created(){
-        this.user_id = getStore("user_id");
-        getUser(this.user_id).then((res) => {
-            if(res.status == 0){
-                this.$toast({
-                    message: '请登录/注册',
-                    position: "center",
-                    duration: 1000
-                });
-            }
-        }).catch((err) => {
-            this.$toast({
-                message: err,
-                position: "center",
-                duration: 1000
-            });
-        });
+        this.initData();
     },
     methods:{
-         // 返回上一页
+        ...mapMutations(['RECORD_USERINFO']),
+        async initData(){
+            let userInfo = await getUser(this.user_id).then((res) => {
+                if(res['user_id']){
+                    return res;
+                }else{
+                    return {};
+                }
+            });
+            console.log('userInfo',userInfo);
+            this.RECORD_USERINFO(userInfo);
+            this.user_id = getStore("user_id");
+            console.log('this.user_id',this.user_id);
+        },
+        // 返回上一页
         goBackPage(){
             this.$router.go(-1);
         },
