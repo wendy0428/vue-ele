@@ -163,5 +163,8 @@ export const getCaptchas = () => httpPost({url:'/v1/captchas'});
 export const accountLogin = (username, password, captcha_code) => httpPost({url: '/v2/login', data:{username, password, captcha_code}});
 
 // 21. 退出登录
-
 export const signout = () => httpGet({url:'/v2/signout'});
+
+// 22. 修改密码
+
+export const changePassword = (username, oldpassWord, newpassword, confirmpassword, captcha_code) => httpPost({url: '/v2/changepassword', data:{username, oldpassWord, newpassword, confirmpassword, captcha_code}});

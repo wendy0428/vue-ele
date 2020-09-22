@@ -1,7 +1,7 @@
 <template>
-    <div class="login">
+    <div class="forget">
         <common-head :headData=headData>
-            <template>密码登录</template>
+            <template>重置密码</template>
             <slot name="head_right">
                 <template></template>
             </slot>
@@ -11,15 +11,16 @@
                 <input type="text" v-model="userName" class="user_name" placeholder="账号" autocomplete="false"/>
             </div>
             <div class="login_password">
-                <input type="text" v-model="password" class="user_password" placeholder="密码" autocomplete="false" v-if="isProclaimed"/>
-                <input type="password" v-model="password" class="user_password" placeholder="密码" autocomplete="false" v-else/>
-                <div class="notice_box">
-                    <span class="notice" :class="isProclaimed?'add_bg':''" >abc...</span>
-                    <span class="translate" @click="proclaimedPassword" :class="isProclaimed?'add_transform':''"></span>
-                </div>
+                <input type="text" v-model="oldPassword" class="user_password" placeholder="旧密码" autocomplete="false"/>
+            </div>
+            <div>
+                <input type="text" v-model="newPassword" class="user_password" placeholder="请输入新密码" autocomplete="false"/>
+            </div>
+            <div>
+                <input type="text" v-model="confirmPassword" class="user_password" placeholder="请确认密码" autocomplete="false"/>
             </div>
             <div class="login_verification_code">
-                <input type="number" v-model="code" class="user_code" placeholder="验证码" autocomplete="false"/>
+                <input type="number" v-model="captcha_code" class="user_code" placeholder="验证码" autocomplete="false"/>
                 <img :src="captchaCodeImg.code" v-if="captchaCodeImg"/>
                 <div>
                     <span @click="changeCaptchaCodeImg">看不清</span>
@@ -27,60 +28,43 @@
                 </div>
             </div>
         </section>
-        <section class="reminder">
-            <p>温馨提示:未注册过的账号,登录时将自动注册</p>
-            <p>注册过的用户可凭账号密码登录</p>
-        </section>
-
-        <section class="login_btn">
-            <span @click="loginIn">登录</span>
-        </section>
-
-        <section class="reset">
-            <router-link :to="{path: '/forget'}" tag="span">重置密码?</router-link>
+         <section class="login_btn">
+            <span @click="confirmModify">确认修改</span>
         </section>
     </div>
 </template>
 <script>
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
-import {getCaptchas,accountLogin} from '../../service/getData'
-import {mapState,mapMutations} from 'vuex'
-export default{
+import {getCaptchas,changePassword} from '../../service/getData'
+export default {
     data(){
         return {
             headData:{
                 goBack: true,
-                // hideLogin: false,
             },
             userName: '', // 用户名
-            password: '', // 密码
-            code: '', // 验证码
-            captchaCodeImg: null, // 验证码图片
-            isProclaimed: false, // 是否明文显示密码
-            userInfo: null,
+            oldPassword: '', // 老密码
+            newPassword: '', // 新密码
+            confirmPassword: '', // 确认密码
+            captcha_code: '', // 验证码
+            captchaCodeImg: '', // 验证码图片
         }
     },
     created(){
         this.initData();
     },
     methods:{
-        ...mapMutations(['RECORD_USERINFO']),
         async initData(){
             // 获取图形验证码
             this.captchaCodeImg = await getCaptchas();
-        },
-        // 控制是否明文显示密码
-        proclaimedPassword(){
-            this.isProclaimed = !this.isProclaimed;
         },
         // 看不清 和 换一张 的时候,获取新的一张图形验证码
         async changeCaptchaCodeImg(){
             // 获取图形验证码
             this.captchaCodeImg = await getCaptchas();
         },
-        loginIn(){
-            // 用户名不能为空
+        confirmModify(){
             if(!this.userName){
                 this.$toast({
                     message: '请填写用户名',
@@ -88,40 +72,62 @@ export default{
                     duration: 1000
                 });
                 return;
-            };
-            // 密码不能为空
-            if(!this.password){
+            }
+            if(!this.oldPassword){
                 this.$toast({
-                    message: '请填写密码',
-                    position: "center",
-                    duration: 1000
-                });
-                return;
-            };
-            if(!this.code){
-                this.$toast({
-                    message: '请填写验证码',
+                    message: '请填写旧密码',
                     position: "center",
                     duration: 1000
                 });
                 return;
             }
-            accountLogin(this.userName,this.password,this.code).then((res) => {
-                if(res.user_id){
-                    this.RECORD_USERINFO(res);
-                    this.$router.push({path:'/profile'});
-                }else{
-                    this.changeCaptchaCodeImg();
-                }
-            }).catch((err) => {
+
+            if(!this.newPassword){
                 this.$toast({
-                    message: err,
+                    message: '请填写新密码',
                     position: "center",
                     duration: 1000
                 });
-            })
+                return;
+            }
+            if(!this.confirmPassword){
+                this.$toast({
+                    message: '请填写确认密码',
+                    position: "center",
+                    duration: 1000
+                });
+                return;
+            }
+            if(this.newPassword != this.confirmPassword){
+                this.$toast({
+                    message: '请保持两次输入密码相同',
+                    position: "center",
+                    duration: 1000
+                });
+                return;
+            }
+            changePassword(this.userName, this.oldPassword, this.newPassword, this.confirmPassword, this.captcha_code).then((res) => {
+                if(res.status == 1){
+                    this.$toast({
+                        message: res.success,
+                        position: "center",
+                        duration: 1000
+                    });
+                }else{
+                    this.$toast({
+                        message: res.message,
+                        position: "center",
+                        duration: 1000
+                    });
+                }
+            }).catch((err) => {
+                this.$toast({
+                    message: res.err,
+                    position: "center",
+                    duration: 1000
+                });
+            });
         }
-
     },
     components:{
         commonHead,
@@ -148,7 +154,6 @@ export default{
     color: #666;
     font-size: 30px;
 }
-
 .login_verification_code>img{
     /* width: 100%; */
     display: inline-block;
@@ -168,40 +173,6 @@ export default{
 .login_verification_code>div>span:nth-child(1){
     color: #666;
 }
-.login_password{
-    justify-content: space-between;
-}
-.notice{
-    display: inline-block;
-    background-color: #ccc;
-    color: #fff;
-    border-radius: 10px;
-    font-size: 20px;
-    padding: 0px 20px;
-}
-.notice_box{
-    position: relative;
-}
-.translate{
-    position: absolute;
-    top: 35px;
-    left: -20px;
-    display: inline-block;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #f1f1f1;
-}
-.add_bg{
-    background-color: #4cd964 !important;
-}
-.add_transform{
-    transform: translate(100%);
-}
-.reminder{
-    font-size: 30px;
-    color: #ff0000;
-}
 .login_btn span{
     display: inline-block;
     width: 80%;
@@ -210,11 +181,5 @@ export default{
     color: #fff;
     font-size: 40px;
     padding: 20px 40px;
-}
-.reset{
-    font-size: 30px;
-    color: #3b95e9;
-    text-align: right;
-    margin-top: 30px;
 }
 </style>

@@ -57,7 +57,12 @@ Vue.use(VueRouter)
         path: '/profile', // 退出登录
         name: 'Profile',
         component: () => import("@/components/profile/profile"),
-    }
+    },
+    {
+        path: '/forget', // 重置密码
+        name: 'Forget',
+        component: () => import("@/components/forget/forget"),
+    },
 ]
 
 const router = new VueRouter({
