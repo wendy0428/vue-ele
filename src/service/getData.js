@@ -142,3 +142,16 @@ export const getRatingList = (shopid, offset, tag_name = '') => httpGet({url:'/u
 
 // 17.获取商铺评价分类
 export const getRatingTags = (shopid) => httpGet({url: '/ugc/v2/restaurants/' + shopid + '/ratings/tags'});
+
+// 18. 确认订单
+export const checkout = (geohash, entities, shopid) => httpPost({url: '/v1/carts/checkout',data:{
+	come_from: "web",
+	geohash,
+	entities,
+	restaurant_id: shopid,
+}, params:{
+	come_from: "web",
+	geohash,
+	entities,
+	restaurant_id: shopid,
+}});

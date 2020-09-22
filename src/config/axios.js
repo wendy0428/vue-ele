@@ -99,22 +99,21 @@ export function httpPost({
 	params = {}
   }) {
 	return new Promise((resolve, reject) => {
-		console.log("url", url)
 		axios({
 			url,
 			method: 'POST',
 			// post请求提交前需要对它进行序列号操作，这里是通过transformRequest做处理
-			transformRequest: [function (data) {
-				let ret = ''
-			  	for (let it in data) {
-					ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-			  	}
-			  	return ret
-			}],
+			// transformRequest: [function (data) {
+			// 	let ret = ''
+			//   	for (let it in data) {
+			// 		ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+			//   	}
+			//   	return ret
+			// }],
 			// 发送的数据
 			data,
 			// url参数
-			params
+			// params
 	  	}).then(res => {
 			resolve(res.data)
 	  	})

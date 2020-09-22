@@ -175,7 +175,7 @@
                 <div>
                     <span v-if="totalPrice<20">还差¥{{shopDetails.float_minimum_order_amount}}起送</span>
                     <router-link 
-                        :to="{path:'/confirmOrder'}" 
+                        :to="{path:'/confirmOrder',query:{geograph,shopCart:JSON.stringify(shopCart),shopid:this.id}}" 
                         tag="span" v-else 
                         class="settle_account"
                     >去结算</router-link>
@@ -514,6 +514,7 @@ export default {
             let arr = [];
             for(let categoryId in shopCartList){
                 for(let itemId in shopCartList[categoryId]){
+                    console.log('itemId',shopCartList[categoryId]);
                     for(let food_id in shopCartList[categoryId][itemId]){
                         let food = {};
                         food['category_id'] = categoryId;
@@ -555,12 +556,13 @@ export default {
             return Math.round(num*10)/10
         },
         // 选择评价分类的标签
-        selectTagName(name,index){
+        async selectTagName(name,index){
             this.activeTagIndex = index;
             this.tag_name = name;
-            _this.ratingList = getRatingList(_this.id, _this.offset, _this.tag_name).then((res) => {
-                return  res;
-            });
+            let resList =await getRatingList(this.id, this.offset, this.tag_name).then((res)=>{
+                return res;
+            })
+            this.ratingList = resList;
         },
         async loadMoreShopList(){
             let _this = this;
@@ -605,11 +607,6 @@ export default {
         shopCart(){
             return this.initBuyCartData();
         },
-    },
-    watch:{
-        tag_name(){
-            getRatingList(this.id, this.offset, this.tag_name);
-        }
     },
     components:{
         buyCart,
