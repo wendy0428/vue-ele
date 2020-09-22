@@ -39,6 +39,9 @@ Vue.use(VueRouter)
                 path:'shopSafe', // 食品监督安全公示
                 component: () => import("@/components/shop/children/children/shopSafe")
             }]
+        },{
+            path: 'foodDetail',// 食品详情
+            component: () => import("@/components/shop/children/foodDetail"),
         }],
     },
 ]

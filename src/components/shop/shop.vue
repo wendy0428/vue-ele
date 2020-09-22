@@ -43,7 +43,7 @@
                                 </div>
                             </header>
                             <ul class="foods">
-                                <li v-for="(food,foodIndex) in menuType.foods" :key="foodIndex">
+                                <li v-for="(food,foodIndex) in menuType.foods" :key="foodIndex" @click="goToShopDetail(food)">
                                     <div class="food_left">
                                         <img :src="'http://cangdu.org:8001/img/'+food.image_path"/>
                                     </div>
@@ -215,7 +215,7 @@
             </section>
         </section>
         
-        <!-- 当前商家详细信息 -->
+        <!-- 当前商家详细信息 && 商品详情 -->
         <router-view></router-view>
 
           <!-- 选规格 弹窗 -->
@@ -534,10 +534,6 @@ export default {
                 selectedCategoryObj[arr[i].category_id] = arr[i].num;
             }
             this.selectedCategoryObj = selectedCategoryObj;
-            console.log('selectedCategoryObj',selectedCategoryObj)
-            console.log('arr',arr)
-
-
             return arr;
         },
         // 清空购物车
@@ -586,6 +582,9 @@ export default {
             }
             _this.preventRepeatReuqest = false;
         },
+        goToShopDetail(food){
+            this.$router.push({path:'/shop/foodDetail',query:{food:JSON.stringify(food)}});
+        }
     },
     computed:{
         ...mapState(['longitude','latitude','cartList']),
