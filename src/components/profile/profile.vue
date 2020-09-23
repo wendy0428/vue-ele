@@ -9,7 +9,7 @@
         <section v-if="userInfo">
             <section class="profile_detail">
                 <div class="profile_detail_left">
-                    <img :src="'http://elm.cangdu.org/img/default.jpg'"/>
+                    <img :src="user_id!='undefined'?'http://cangdu.org:8001/img/'+userInfo.avatar:'http://elm.cangdu.org/img/default.jpg'"/>
                 </div>
                 <div class="profile_detail_right">
                     <div class="profile_detail_right_top">
