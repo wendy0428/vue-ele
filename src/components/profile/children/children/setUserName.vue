@@ -45,7 +45,6 @@ export default {
         },
         // 提交修改的用户名,这里没有真正意义上的修改用户名,只是修改了保存到 vuex 的 userInfo 的用户信息
         confirmEdit(){
-
             if(!this.activeConfirm){
                 return;
             }

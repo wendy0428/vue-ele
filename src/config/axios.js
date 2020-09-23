@@ -91,12 +91,13 @@ export function httpGet({ url, params = {}, type = "GET" }) {
 // post 请求
 export function httpPost({ 
     url, 
-    data = {}
+    data = {},
+    method ="POST"
 }){
     return new Promise((resolve, reject) => {
         axios({
             url,
-            method: "POST",
+            method,
             // 发送的数据
             data,
         }).then((res) => {

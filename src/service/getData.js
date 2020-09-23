@@ -170,3 +170,25 @@ export const changePassword = (username, oldpassWord, newpassword, confirmpasswo
 
 // 23. 上传头像
 export const uploadAvatar = (user_id,data) => uploadFile({url:'/eus/v1/users/' + user_id + '/avatar',data})
+
+// 24.搜索地址
+export const searchNearby = (keyword) => httpGet({url: '/v1/pois', params:{ type: 'nearby',keyword}});
+
+// 25.添加地址
+export const addAddress = (userId, address, address_detail, geohash, name, phone, phone_bk, poi_type, sex, tag, tag_type) => httpPost({url: '/v1/users/' + userId + '/addresses',data:{
+	address,
+	address_detail,
+	geohash,
+	name,
+	phone,
+	phone_bk,
+	poi_type,
+	sex,
+	tag,
+	tag_type,
+}});
+
+// 26. 获取已经添加的地址列表
+export const getAddressList = (user_id) => httpGet({url: '/v1/users/'+user_id+'/addresses'})
+// 27.删除已有的地址
+export const deleteAddress = (userid, addressid) => httpPost({url: '/v1/users/' + userid + '/addresses/' + addressid,method: 'DELETE'})

@@ -13,6 +13,9 @@ const CLEARN_CART = 'CLEARN_CART';
 const RECORD_USERINFO = 'RECORD_USERINFO';
 const DELETE_USERINFO = 'DELETE_USERINFO';
 const RETSET_NAME = 'RETSET_NAME';
+const GET_ADDRESS = 'GET_ADDRESS';
+const ADD_ADDRESS = 'ADD_ADDRESS';
+const DELETE_ADDRESS = 'DELETE_ADDRESS';
 export default new Vuex.Store({
 	state: {
     	latitude: "", // 纬度
@@ -21,6 +24,7 @@ export default new Vuex.Store({
 		cartList: {}, // 加入购物车的商品列表
 		userInfo: null, // 用户信息
 		login: false, // 是否登录
+		allAddressList: [], // 收获地址列表
   	},
   	mutations: {
     	// 保存地理位置
@@ -130,7 +134,20 @@ export default new Vuex.Store({
 		// 修改用户名
 		[RETSET_NAME](state,username){
 			state.userInfo = Object.assign({}, state.userInfo,{username})
-		}		
+		},
+		// 获取所有的地址
+		[GET_ADDRESS](state,address){
+			state.allAddressList = address;
+		},
+		// 添加地址
+		[ADD_ADDRESS](state,address){
+			state.allAddressList = [...state.allAddressList,address];
+		},
+		// 删除地址
+		[DELETE_ADDRESS](state,addressIndex){
+			state.allAddressList.splice(addressIndex,1);
+		}
+
   	},
   	actions: {},
   	modules: {},

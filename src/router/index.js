@@ -61,11 +61,19 @@ Vue.use(VueRouter)
             path:'info', // 账户信息 退出登录
             component: () => import("@/components/profile/children/info"),
             children: [{
-                path: 'setUserName',
+                path: 'setUserName', // 设置用户名
                 component: () => import("@/components/profile/children/children/setUserName"),
             },{
-                path: 'address',
+                path: 'address', // 编辑地址
                 component: () => import("@/components/profile/children/children/address"),
+                children: [{
+                    path: 'add', // 新增地址
+                    component: () => import("@/components/profile/children/children/children/add"),
+                    children:[{
+                        path: 'addDetail', // 搜索地址
+                        component: () => import("@/components/profile/children/children/children/children/addDetail"),
+                    }],
+                }],
             }
         ]
         }]
