@@ -12,6 +12,7 @@ const INIT_BUYCART = 'INIT_BUYCART';
 const CLEARN_CART = 'CLEARN_CART';
 const RECORD_USERINFO = 'RECORD_USERINFO';
 const DELETE_USERINFO = 'DELETE_USERINFO';
+const RETSET_NAME = 'RETSET_NAME';
 export default new Vuex.Store({
 	state: {
     	latitude: "", // 纬度
@@ -125,8 +126,11 @@ export default new Vuex.Store({
 		[DELETE_USERINFO](state,user_id){
 			delStore('user_id');
 			state.userInfo = {};
-		}
-		
+		},
+		// 修改用户名
+		[RETSET_NAME](state,username){
+			state.userInfo = Object.assign({}, state.userInfo,{username})
+		}		
   	},
   	actions: {},
   	modules: {},
