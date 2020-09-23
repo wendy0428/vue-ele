@@ -88,6 +88,11 @@ Vue.use(VueRouter)
         path: '/order', // 订单列表
         name: 'Order',
         component: () => import("@/components/order/order"),
+    },
+    {
+        path: '/search', // 搜索
+        name: 'Search',
+        component: () => import("@/components/search/search"),
     }
 ]
 
