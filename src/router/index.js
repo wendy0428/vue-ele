@@ -60,6 +60,14 @@ Vue.use(VueRouter)
         children:[{
             path:'info', // 账户信息 退出登录
             component: () => import("@/components/profile/children/info"),
+            children: [{
+                path: 'setUserName',
+                component: () => import("@/components/profile/children/children/setUserName"),
+            },{
+                path: 'address',
+                component: () => import("@/components/profile/children/children/address"),
+            }
+        ]
         }]
     },
     {

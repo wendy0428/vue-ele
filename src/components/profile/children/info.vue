@@ -14,17 +14,19 @@
                 </span>
                 <input type="file" class="inputAvatar" @change="upLoadAvator"/>
             </div>
-            <div class="info_name">
+            <router-link :to="{path:'/profile/info/setUserName'}" tag="div" class="info_name">
                 <span>用户名</span>
                 <span>{{userInfo.username}}</span>
-            </div>
-            <div class="info_address">
+            </router-link>
+            <router-link :to="{path:'/profile/info/address'}" tag="div" class="info_address">
                 <span>收货地址</span>
-            </div>
+            </router-link>
         </section>
         <section class="login_btn">
             <span @click="loginOut">退出登录</span>
         </section>
+        <!-- 修改用户名&&编辑地址 -->
+        <router-view></router-view>
     </div>
 </template>
 <script>
