@@ -57,12 +57,12 @@
             </section>
             <section class="profie_options">
                 <ul>
-                    <li>
+                    <router-link :to="{path: '/order'}" tag="li">
                         <span>
                             <img :src="orderIcon"/>
                         </span>
                         <span>我的订单</span>
-                    </li>
+                    </router-link>
                     <li>
                         <span>
                             <img :src="pointIcon"/>

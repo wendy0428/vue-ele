@@ -190,5 +190,12 @@ export const addAddress = (userId, address, address_detail, geohash, name, phone
 
 // 26. 获取已经添加的地址列表
 export const getAddressList = (user_id) => httpGet({url: '/v1/users/'+user_id+'/addresses'})
+
 // 27.删除已有的地址
 export const deleteAddress = (userid, addressid) => httpPost({url: '/v1/users/' + userid + '/addresses/' + addressid,method: 'DELETE'})
+
+// 28.获取叮当列表
+export const getOrderList = (user_id, offset) => httpGet({url: '/bos/v2/users/' + user_id + '/orders',params:{
+	limit: 10,
+	offset,
+}});
