@@ -1,8 +1,7 @@
-import { baseUrl } from './env'
-import { getStore,setStore } from './utils'
-import store from '../store'
-import axios from 'axios' 
-
+import { baseUrl } from "./env";
+import { getStore, setStore } from "./utils";
+import store from "../store";
+import axios from "axios";
 
 // axios很好用，其中之一就是它的拦截器十分强大，我们就可以为请求和响应设置拦截器
 // 请求拦截器可以在每个请求里加上token，做了统一处理后维护起来也方便，
@@ -73,80 +72,55 @@ import axios from 'axios'
 // 	}
 // )
 
-
 // get 请求
-export function httpGet({
-	url,
-	params = {},
-	type = 'GET'
-}){
-	return new Promise((resolve, reject) => {
-		axios({
-			url,
-			type,
-			params,
-		}).then((res) => {
-			resolve(res.data)
-	  	}).catch(err => {
-			reject(err)
-	  	})
-	})
+export function httpGet({ url, params = {}, type = "GET" }) {
+  return new Promise((resolve, reject) => {
+    axios({
+      url,
+      type,
+      params,
+    })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }
 // post 请求
-export function httpPost({
-	url,
-	data = {},
-	params = {}
-  }) {
-	return new Promise((resolve, reject) => {
-		axios({
-			url,
-			method: 'POST',
-			// post请求提交前需要对它进行序列号操作，这里是通过transformRequest做处理
-			transformRequest: [function (data) {
-				let ret = ''
-			  	for (let it in data) {
-					ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-			  	}
-			  	return ret
-			}],
-			// 发送的数据
-			data,
-			// url参数
-			params
-
-	  	}).then(res => {
-			resolve(res.data)
-	  	})
-	})
-  }
-
-  //post 发送 formData 请求
-export function httpFormDataPost({
-	url,
-	data = {},
+export function httpPost({ 
+    url, 
+    data = {}
 }){
-	return new Promise((resolve, reject) => {
-		axios({
-			url,
-			method: 'POST',
-			// post请求提交前需要对它进行序列号操作，这里是通过transformRequest做处理
-			transformRequest: [function (data) {
-				let ret = ''
-			  	for (let it in data) {
-					ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-			  	}
-			  	return ret
-			}],
-			// 发送的数据
-			data,
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded'
-			}
-
-	  	}).then(res => {
-			resolve(res.data)
-	  	})
-	})
+    return new Promise((resolve, reject) => {
+        axios({
+            url,
+            method: "POST",
+            // 发送的数据
+            data,
+        }).then((res) => {
+            resolve(res.data);
+        });
+    });
 }
-  
+
+//post 发送 formData 请求
+export function uploadFile({ 
+    url, 
+    data = {} 
+}){
+    return new Promise((resolve, reject) => {
+        axios({
+            url,
+            method: "POST",
+            // 发送的数据
+            data,
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }).then((res) => {
+            resolve(res.data);
+        });
+    });
+}

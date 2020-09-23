@@ -46,6 +46,7 @@ export default {
             this.DELETE_USERINFO(userInfo.user_id);
             signout();
         },
+        // 上传头像
         async upLoadAvator(){
             if (this.userInfo) {
                 let input = document.querySelector('.inputAvatar')
@@ -54,19 +55,15 @@ export default {
                 console.log('data',data);
                 try{
                     let response = await uploadAvatar(this.userInfo.user_id,data)
-                    // ('/eus/v1/users/' + this.userInfo.user_id + '/avatar', {
-                    //     method: 'POST',
-                    //     credentials: 'include',
-                    //     body: data
-                    // })
-                    let res = await response.json();
-                    if (res.status == 1) {
-                        this.userInfo.avatar = res.image_path;
+                    if(response.status == 1) {
+                        this.userInfo.avatar = response.image_path;
                     }
                 }catch (error) {
-                    this.showAlert = true;
-                    this.alertText = '上传失败';
-                    throw new Error(error);
+                    this.$toast({
+                        message: error,
+                        position: 'center',
+                        duration: 1000
+                    })
                 }
             }
         }

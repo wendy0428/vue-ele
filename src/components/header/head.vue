@@ -57,10 +57,8 @@ export default {
                     return {};
                 }
             });
-            console.log('userInfo',userInfo);
             this.RECORD_USERINFO(userInfo);
             this.user_id = getStore("user_id");
-            console.log('this.user_id',this.user_id);
         },
         // 返回上一页
         goBackPage(){

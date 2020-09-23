@@ -1,5 +1,5 @@
 import { getStore } from "../config/utils";
-import { httpGet, httpPost, httpFormDataPost} from "../config/axios";
+import { httpGet, httpPost, uploadFile} from "../config/axios";
 
 // 1. 获取 用户信息
 export const getUser = (user_id) =>
@@ -169,4 +169,4 @@ export const signout = () => httpGet({url:'/v2/signout'});
 export const changePassword = (username, oldpassWord, newpassword, confirmpassword, captcha_code) => httpPost({url: '/v2/changepassword', data:{username, oldpassWord, newpassword, confirmpassword, captcha_code}});
 
 // 23. 上传头像
-export const uploadAvatar = (user_id,data) => httpFormDataPost({url:'/eus/v1/users/' + user_id + '/avatar',data})
+export const uploadAvatar = (user_id,data) => uploadFile({url:'/eus/v1/users/' + user_id + '/avatar',data})
