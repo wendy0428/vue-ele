@@ -22,6 +22,22 @@
                 <span>收货地址</span>
             </router-link>
         </section>
+        <section class="account_binding">
+            <div>
+                <span>绑定账号</span>
+            </div>
+            <div>
+                <span>手机</span>
+            </div>
+        </section>
+        <section class="security_setting">
+            <div>
+                <span>安全设置</span>
+            </div>
+            <router-link :to="{path:'/forget'}" tag="div">
+                <span>登录密码</span>
+            </router-link >
+        </section>
         <section class="login_btn">
             <span @click="loginOut">退出登录</span>
         </section>
@@ -44,9 +60,11 @@ export default {
     },
     methods:{
         ...mapMutations(['DELETE_USERINFO']),
+        // 退出登录
         loginOut(){
-            this.DELETE_USERINFO(userInfo.user_id);
+            this.DELETE_USERINFO(this.userInfo.user_id);
             signout();
+            this.$router.push({path:'/profile'});
         },
         // 上传头像
         async upLoadAvator(){
@@ -85,14 +103,17 @@ export default {
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: #fff;
+    background-color: #f2f2f2;
     z-index: 11;
+}
+.login_btn{
+    margin-top: 20px;
 }
 .login_btn span{
     display: inline-block;
     width: 80%;
     border-radius: 20px;
-    background-color: #4cd964;
+    background-color: #d8584a;
     color: #fff;
     font-size: 40px;
     padding: 20px 40px;
@@ -100,6 +121,7 @@ export default {
 .count_info{
     margin-top: 90px;
     font-size: 30px;
+    background-color: #fff;
     color: #333;
     font-weight: bold;
 }
@@ -158,5 +180,48 @@ export default {
     width: 100%;
     height: 60px;
     opacity: 0;
+}
+
+.account_binding,.security_setting{
+    font-size: 30px;
+    text-align: left;
+}
+.account_binding>div,.security_setting>div{
+    padding: 20px;
+}
+.security_setting>div:nth-child(2){
+    background-color: #fff;
+    position: relative;
+}
+.account_binding>div:nth-child(2){
+    background-color: #fff;
+    padding-left: 70px;
+    position: relative;
+
+}
+.account_binding>div:nth-child(2)>span,.security_setting>div:nth-child(2)>span{
+    position: relative;
+}
+.account_binding>div:nth-child(2)>span::before{
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: url('../../../assets/img/mobile.png') no-repeat;
+    background-size: contain;
+    position: absolute;
+    left: -50px;
+    top: 0%;
+}
+.account_binding>div:nth-child(2)::after,.security_setting>div:nth-child(2)::after{
+    content: '';
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    background: url('../../../assets/img/right_arrow.png') no-repeat;
+    background-size: contain;
+    position: absolute;
+    right: 0px;
+    top: 20%;
 }
 </style>

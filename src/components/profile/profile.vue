@@ -11,21 +11,22 @@
                 <div class="profile_detail_left">
                     <img :src="'http://elm.cangdu.org/img/default.jpg'"/>
                 </div>
-                <router-link :to="{path:'/profile/info'}" class="profile_detail_right" tag="div">
+                <div class="profile_detail_right">
                     <div class="profile_detail_right_top">
-                        <span v-if="user_id!='undefined'">{{userInfo.username}}</span>
-                        <span v-else>登录/注册</span>
+                        <router-link :to="{path:'/profile/info'}" tag='span' v-if="user_id!='undefined'">{{userInfo.username}}</router-link>
+                        <router-link :to="{path:'/login'}" tag='span' v-else>登录/注册</router-link>
                     </div>
                     <div class="profile_detail_right_bottom">
                         <span>暂无绑定手机号</span>
                     </div>
-                </router-link>
+                </div>
             </section>
             <section class="profile_data">
                 <ul>
                     <li>
                         <div class="profile_data_num">
-                            <span>{{userInfo.balance.toFixed(2)}}</span>
+                            <span v-if="user_id!='undefined'">{{userInfo.balance.toFixed(2)}}</span>
+                            <span v-else>0.00</span>
                             <span>元</span>
                         </div>
                         <div class="profile_data_title">
@@ -34,7 +35,8 @@
                     </li>
                     <li>
                         <div class="profile_data_num">
-                            <span>{{userInfo.gift_amount}}</span>
+                            <span v-if="user_id!='undefined'">{{userInfo.gift_amount}}</span>
+                            <span v-else>0</span>
                             <span>元</span>
                         </div>
                         <div class="profile_data_title">
@@ -43,7 +45,8 @@
                     </li>
                     <li>
                         <div class="profile_data_num">
-                            <span>{{userInfo.point}}</span>
+                            <span v-if="user_id!='undefined'">{{userInfo.point}}</span>
+                            <span v-else>0</span>
                             <span>元</span>
                         </div>
                         <div class="profile_data_title">
@@ -167,9 +170,11 @@ export default {
 }
 .profile_detail_right>div{
     margin-top: 10px;
+
 }
 .profile_detail_right_top{
     font-weight: bold;
+    text-align: left;
 }
 .profile_detail_right_bottom{
     font-size: 30px;
