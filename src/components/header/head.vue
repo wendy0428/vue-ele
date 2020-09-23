@@ -15,12 +15,11 @@
             <slot></slot>
         </div>
         <div class="head_right">
-            <slot name="head_right">
+            <slot name="headRight">
                 <router-link :to="{path: '/profile'}" tag="span" v-if="user_id!='undefined'">
                     <img :src="user_ico"/>
                 </router-link>
                 <router-link :to="{path:'/login'}" tag="span" v-else>登录/注册</router-link>
-               
             </slot>
         </div>
     </div>

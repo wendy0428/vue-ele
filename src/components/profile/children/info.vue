@@ -2,9 +2,9 @@
     <div class="info">
         <common-head :headData=headData>
             <template>账户信息</template>
-            <slot name="head_right">
-                <template></template>
-            </slot>
+            <template v-slot:headRight>
+               <span></span>
+            </template>
         </common-head>
         <section class="count_info" v-if="userInfo">
             <div class="info_avatar">

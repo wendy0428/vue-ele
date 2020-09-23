@@ -2,9 +2,9 @@
     <div class="profile">
         <common-head :headData=headData>
             <template>我的</template>
-            <slot name="head_right">
-                <template></template>
-            </slot>
+            <template v-slot:headRight>
+               <span></span>
+            </template>
         </common-head>
         <section v-if="userInfo">
             <section class="profile_detail">
