@@ -10,7 +10,7 @@ let routerMode = 'hash';
 let imgBaseUrl = '';
 
 if (process.env.NODE_ENV == 'development') {
-	// baseUrl = 'http://cangdu.org:8001';
+	baseUrl = 'http://cangdu.org:8001';
     imgBaseUrl = 'https://fuss10.elemecdn.com';
 
 }else if(process.env.NODE_ENV == 'production'){

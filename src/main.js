@@ -18,7 +18,7 @@ Vue.config.productionTip = false;
 
 Vue.prototype.axios = axios;
 
-axios.defaults.baseURL = "/api";
+// axios.defaults.baseURL = "/api";
 
 // 自定义指令,实现列表加载更多
 Vue.directive("loadMore", {
