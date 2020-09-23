@@ -9,7 +9,7 @@
         <section class="count_info">
         </section>
         <!-- 公共的底部 Tabber 组件 -->
-        <tabbar :selected="selected"></tabbar>
+        <tabbar :selectedTab="selectedTab"></tabbar>
     </div>
 </template>
 <script>
@@ -27,7 +27,7 @@ export default {
             },
             orderList: [], // 订单列表
             offset: 10,
-            selected:'搜索',
+            selectedTab:'搜索',
         }
     },
     created(){

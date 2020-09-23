@@ -19,14 +19,16 @@
         <section class="shop_list_container">
             <span class="shop_list_container_title">附近商家</span>
             <shop-list :geograph=geograph></shop-list>
-        </section>
-        
+        </section> 
+        <!-- 公共的底部 Tabber 组件 -->
+        <tabbar :selectedTab="selectedTab"></tabbar>
     </div>
 </template>
 <script>
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
 const shopList = () => import('@/components/common/shopList')
+const tabbar = () => import('@/components/common/tabbar')
 
 // 接口
 import {getMsiteAddress,getMsiteFoodTypes,guessCity} from '../../service/getData'
@@ -34,6 +36,7 @@ import {getMsiteAddress,getMsiteFoodTypes,guessCity} from '../../service/getData
 import {imgBaseUrl} from '../../config/env'
 // 引入 vuex
 import {mapMutations} from 'vuex'
+
 export default {
     data(){
         return {
@@ -48,11 +51,13 @@ export default {
             swipeList : [],
             mShopList: [],
             offset:0,
+            selectedTab:'外卖',
         }
     },
     components:{
         commonHead,
-        shopList
+        shopList,
+        tabbar
     },
     created(){
         this.initData();
@@ -116,7 +121,8 @@ export default {
     		}else{
     			return ''
     		}
-    	}
+        },
+
     }
 }
 </script>

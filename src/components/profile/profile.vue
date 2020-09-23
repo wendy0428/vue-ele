@@ -95,7 +95,8 @@
                 </ul>
             </section>
         </section>
-
+        <!-- 公共的底部 Tabber 组件 -->
+        <tabbar :selectedTab="selectedTab"></tabbar>
         <!-- 账户信息 info -->
         <router-view></router-view>
     </div>
@@ -108,6 +109,8 @@ import serviewIcon from '../../assets/img/serview.png'
 import eleIcon from '../../assets/img/logo.png'
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
+const tabbar = () => import('@/components/common/tabbar')
+
 
 import {getStore} from '../../config/utils'
 import {mapState} from 'vuex'
@@ -123,7 +126,7 @@ export default {
             serviewIcon,
             eleIcon,
             user_id: null,
-
+            selectedTab:'我的',
         }
     },
     created(){
@@ -134,6 +137,7 @@ export default {
     },
     components:{
         commonHead,
+        tabbar,
     }
 }
 </script>
