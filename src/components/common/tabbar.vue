@@ -29,7 +29,7 @@ import blueOrderIcon from '../../assets/img/blueOrder.png'
 import grayOrderIcon from '../../assets/img/grayOrder.png'
 import bluePersonIcon from '../../assets/img/bluePerson.png'
 import grayPersonIcon from '../../assets/img/grayPerson.png'
-import {mapState} from 'vuex'
+import {getStore} from '../../config/utils'
 export default {
     data(){
         return {
@@ -41,17 +41,20 @@ export default {
             grayOrderIcon,
             bluePersonIcon,
             grayPersonIcon,
-            selected:this.selectedTab
+            selected:this.selectedTab,
+            longitude: '',
+            latitude: '',
         }
     },
     created(){
-        console.log('this.selected',this.selected);
+        this.longitude = getStore('longitude');
+        this.latitude = getStore('latitude');
     },
     methods:{
         // 底部 Tabbar 切换不同的页面
         jumpTo(url){
             if(this.selected == '外卖'){
-                this.$router.push({path: `/msite?longitude=${this.longitude}&longitude=${this.longitude}`})
+                this.$router.push({path: `/msite?latitude=${this.latitude}&longitude=${this.longitude}`})
             };
             if(this.selected == '搜索'){
                 this.$router.push({path:'/search'})
@@ -63,9 +66,6 @@ export default {
                 this.$router.push({path:'/profile'})
             };
         }
-    },
-    computed:{
-        ...mapState(['latitude','longitude']),
     },
     props:{
         selectedTab: String

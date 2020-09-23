@@ -113,6 +113,8 @@ export default {
                 this.placeHistory.unshift(selectedPlace);
             }
             setStore('placeHistory',this.placeHistory)
+            setStore('latitude',place.latitude);
+            setStore('longitude',place.longitude);
         }
        
     }

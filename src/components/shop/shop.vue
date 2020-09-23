@@ -167,7 +167,7 @@
                 </span>
                 <span v-if="totalNum" class="show_totalNum">{{totalNum}}</span>
             </div>
-            <div class="cart_container_right">
+            <div class="cart_container_right" v-if="totalPrice">
                 <div>
                     <div class="total_money">¥{{totalPrice.toFixed(2)}}</div>
                     <div class="delivery_fee">配送费{{shopDetails.float_delivery_fee}}</div>
@@ -175,7 +175,7 @@
                 <div>
                     <span v-if="totalPrice<20">还差¥{{shopDetails.float_minimum_order_amount}}起送</span>
                     <router-link 
-                        :to="{path:'/confirmOrder',query:{geograph,shopCart:JSON.stringify(shopCart),shopid:this.id}}" 
+                        :to="{path:'/confirmOrder',query:{geograph,shopCart:JSON.stringify(shopCart),shopid:id}}" 
                         tag="span" v-else 
                         class="settle_account"
                     >去结算</router-link>
