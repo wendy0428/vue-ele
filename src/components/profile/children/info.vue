@@ -26,7 +26,7 @@
             <div>
                 <span>绑定账号</span>
             </div>
-            <div>
+            <div @click="changePhone">
                 <span>手机</span>
             </div>
         </section>
@@ -41,6 +41,8 @@
         <section class="login_btn">
             <span @click="loginOut">退出登录</span>
         </section>
+        <!-- 弹窗组件 -->
+        <alert-tip :alertText="alertText" v-if="alertStatus" @closeAlertTip="closeAlertTip"></alert-tip>
         <!-- 修改用户名&&编辑地址 -->
         <router-view></router-view>
     </div>
@@ -48,6 +50,8 @@
 <script>
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
+const alertTip = () => import('@/components/common/alertTip')
+
 import {signout,uploadAvatar} from '../../../service/getData'
 import {mapState,mapMutations} from 'vuex'
 export default {
@@ -56,6 +60,8 @@ export default {
             headData:{
                 goBack: true,
             },
+            alertStatus:false,
+            alertText: '',
         }
     },
     methods:{
@@ -86,6 +92,15 @@ export default {
                     })
                 }
             }
+        },
+        // 绑定手机
+        changePhone(){
+            this.alertText = '请在手机 APP 中设置';
+            this.alertStatus = true;
+        },
+        // 关闭弹窗
+        closeAlertTip(){
+            this.alertStatus = false;
         }
     },
     computed:{
@@ -93,6 +108,7 @@ export default {
     },
     components:{
         commonHead,
+        alertTip
     }
 }
 </script>

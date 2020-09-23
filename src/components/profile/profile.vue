@@ -95,6 +95,7 @@
                 </ul>
             </section>
         </section>
+
         <!-- 账户信息 info -->
         <router-view></router-view>
     </div>
@@ -107,6 +108,7 @@ import serviewIcon from '../../assets/img/serview.png'
 import eleIcon from '../../assets/img/logo.png'
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
+
 import {getStore} from '../../config/utils'
 import {mapState} from 'vuex'
 export default {
@@ -121,6 +123,7 @@ export default {
             serviewIcon,
             eleIcon,
             user_id: null,
+
         }
     },
     created(){
