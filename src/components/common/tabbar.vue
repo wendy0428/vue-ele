@@ -2,20 +2,20 @@
     <div>
         <mt-tabbar v-model="selected">
             <mt-tab-item id="外卖" @click.native="jumpTo" >
-              <img slot="icon" :src="selected == '外卖' ? blueEleIcon :grayEleIcon">
-              外卖
+                <img slot="icon" :src="selected == '外卖' ? blueEleIcon :grayEleIcon">
+                外卖
             </mt-tab-item>
             <mt-tab-item id="搜索" @click.native="jumpTo">
-              <img slot="icon" :src="selected == '搜索' ? blueSearchIcon :graySearchIcon">
-              搜索
+                <img slot="icon" :src="selected == '搜索' ? blueSearchIcon :graySearchIcon">
+                搜索
             </mt-tab-item>
             <mt-tab-item id="订单" @click.native="jumpTo">
-              <img slot="icon" :src="selected == '订单' ? blueOrderIcon :grayOrderIcon">
-              订单
+               <img slot="icon" :src="selected == '订单' ? blueOrderIcon :grayOrderIcon">
+               订单
             </mt-tab-item>
             <mt-tab-item id="我的" @click.native="jumpTo">
-              <img slot="icon" :src="selected == '我的' ? bluePersonIcon :grayPersonIcon">
-              我的
+               <img slot="icon" :src="selected == '我的' ? bluePersonIcon :grayPersonIcon">
+               我的
             </mt-tab-item>
         </mt-tabbar>
     </div>
