@@ -199,3 +199,11 @@ export const getOrderList = (user_id, offset) => httpGet({url: '/bos/v2/users/' 
 	limit: 10,
 	offset,
 }});
+
+// 29. 获取search页面搜索结果
+export const searchRestaurant = (geohash, keyword) => httpGet({url: '/v4/restaurants', params:{
+	'extras[]': 'restaurant_activity',
+	geohash,
+	keyword,
+	type: 'search'
+}});
