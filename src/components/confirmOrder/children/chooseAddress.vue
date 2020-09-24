@@ -86,6 +86,10 @@ export default {
     },
     components:{
         commonHead,
+    },
+    watch:{
+
+        '$route':'initData'
     }
 }
 </script>

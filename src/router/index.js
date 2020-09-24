@@ -60,6 +60,10 @@ Vue.use(VueRouter)
             children:[{
                 path: 'addAddress', // 添加地址
                 component: () => import("@/components/confirmOrder/children/children/addAddress"),
+                children:[{
+                    path: 'searchAddress', // 搜索地址
+                    component: () => import("@/components/profile/children/children/children/children/addDetail"),
+                }],
             }]
         }]
     },

@@ -11,14 +11,14 @@
                 <span class="person_title">联系人</span>
                 <div class="person_info">
                     <div>
-                        <input type="text" placeholder="你的名字" autocomplete="false" class="person_name"/>
+                        <input type="text" placeholder="你的名字" autocomplete="false" class="person_name" v-model="userName"/>
                     </div>
                     <div class="choose_sex">
-                        <div>
+                        <div @click="changeSex(1)">
                             <img :src="sexStatus==1?checkedIcon:uncheckedIcon"/><span>先生</span>
                         </div>
-                        <div>
-                            <img :src="sexStatus==0?checkedIcon:uncheckedIcon"/><span>女士</span>
+                        <div @click="changeSex(2)">
+                            <img :src="sexStatus==2?checkedIcon:uncheckedIcon"/><span>女士</span>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                 <span class="person_title">联系电话</span>
                 <div class="person_info">
                     <div>
-                        <input type="number" placeholder="你的手机号" autocomplete="false" class="person_name"/>
+                        <input type="number" placeholder="你的手机号" autocomplete="false" class="person_name" v-model="phone"/>
                     </div>
                     <div class="choose_sex">
                         <input type="number" placeholder="你的备用号" autocomplete="false" class="person_name"/>
@@ -38,10 +38,10 @@
                 <span class="person_title">送餐地址</span>
                 <div class="person_info">
                     <div>
-                        <input type="text" placeholder="小区/写字楼/学校等" autocomplete="false" class="person_name" readonly/>
+                        <input type="text" placeholder="小区/写字楼/学校等" autocomplete="false" class="person_name" readonly @click="goToSearchPlace" v-model="address"/>
                     </div>
                     <div class="choose_sex">
-                        <input type="text" placeholder="详细地址(如门牌号等)" autocomplete="false" class="person_name"/>
+                        <input type="text" placeholder="详细地址(如门牌号等)" autocomplete="false" class="person_name"  v-model="addressDetail"/>
                     </div>
                 </div>
             </div>
@@ -49,16 +49,16 @@
                 <span class="person_title">标签</span>
                 <div class="person_info">
                     <div>
-                        <input type="text" placeholder="无/家/学校/公司" autocomplete="false" class="person_name" readonly/>
+                        <input type="text" placeholder="无/家/学校/公司" autocomplete="false" class="person_name" v-model="tag"/>
                     </div>
                 </div>
             </div>
         </section>
         <section class="login_btn">
-            <span>确定</span>
+            <span @click="confirm">确定</span>
         </section>
         <!-- 添加地址 -->
-        <router-view></router-view>
+        <router-view @selectedAddress="selectedAddress"></router-view>
     </div>
 </template>
 <script>
@@ -67,6 +67,9 @@ const commonHead = () => import('@/components/header/head')
 import {mapMutations} from 'vuex'
 import checkedIcon from '../../../../assets/img/checked.png'
 import uncheckedIcon from '../../../../assets/img/unchecked.png'
+
+import {addAddress} from '../../../../service/getData'
+import {getStore} from '../../../../config/utils'
 export default {
     data(){
         return {
@@ -75,12 +78,53 @@ export default {
             },
             uncheckedIcon,
             checkedIcon,
-            sexStatus:0,
-      
+            geohash: '',
+            user_id: '', // 用户 id
+            userName: '', // 联系人姓名
+            sexStatus:1, // 联系人性别
+            phone: '', //手机号码
+            phoneBf: '', //备用手机
+            address: '', // 小区/写字楼/学校等
+            addressDetail:'', // 详细地址
+            tag: '',  // 标签 无/家/学校/公司
         }
     },
+    created(){
+        this.user_id = getStore('user_id');
+        this.geohash = getStore('latitude')+','+getStore('longitude');
+    },
     methods:{
-        
+        // 跳到搜索地址的页面
+        goToSearchPlace(){
+            this.$router.push({path:'/confirmOrder/chooseAddress/addAddress/searchAddress'});
+        },
+        //  接收子视图选中的地址
+        selectedAddress(val){
+            this.address = val;
+        },
+        // 确认增加地址
+        confirm(){
+            addAddress(this.user_id, this.address, this.addressDetail, this.geohash, this.userName,  this.phone, this.phoneBf, 0, this.sexStatus, this.tag, 1).then((res)=>{
+                if(res.status == 1){
+                    this.$toast({
+                        message: res.success,
+                        position: "center",
+                        duration: 1000
+                    });
+                    this.$router.go(-1);
+                }
+            }).catch((err)=>{
+                this.$toast({
+                    message: err,
+                    position: "center",
+                    duration: 1000
+                });
+            });
+        },
+        //  改变性别
+        changeSex(val){
+            this.sexStatus = val;
+        }
     },
     components:{
         commonHead,
