@@ -105,7 +105,7 @@
     </div>
 </template>
 <script>
-import {mapState,mapMutation} from 'vuex'
+import {mapState,mapMutation, mapMutations} from 'vuex'
 import {checkout,getAddressList} from '../../service/getData'
 import {getStore} from '../../config/utils'
 // 公共头部组件
@@ -127,6 +127,7 @@ export default{
             checkedIco,
             uncheckedIco,
             geograph: '',
+            user_id: '',
             shopid: '',
             shopCart: '',
             orderInfo: null, // 配送的相关信息
@@ -134,10 +135,12 @@ export default{
             remarks: '',
             needInvoices: false,
             addressList:[],
+            // choosedAddress:null,
 
         }
     },
     created(){
+        this.user_id = getStore('user_id');
         // 地理位置
         this.geograph = this.$route.query.geograph;
         // 购物车中的商品
@@ -148,6 +151,7 @@ export default{
         this.initData();
     },
     methods:{
+        ...mapMutations(['CHOOSE_ADDRESS']),
         async initData(){
             let _this = this;
             let confirmOrderArr = []
@@ -168,10 +172,14 @@ export default{
             // 获取订单信息
             _this.orderInfo = await checkout(_this.geograph,[confirmOrderArr],_this.shopid);
 
-            // 获取地址
-            _this.addressList = getAddressList(getStore('user_id')).then((res) => {
+            // 初始化地址
+            let addressList = await getAddressList(this.user_id).then((res) => {
                 return res;
             })
+            // this.choosedAddress = await getAddressList(this.user_id).then((res) => {
+            //     return res[0];
+            // })
+            this.CHOOSE_ADDRESS({address:addressList[0],index:0});
         },
         // 展示支付方式
         showPayType(){
