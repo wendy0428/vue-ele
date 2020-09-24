@@ -9,7 +9,6 @@
         <section class="addressList_box">
             <ul v-if="addressList.length!=0">
                 <li v-for="(addr,addrIndex) in addressList" :key="addrIndex">
-                    <!-- {{addr}} -->
                     <div class="box_left">
                         <img :src="selectedIndex==addrIndex?checkedIcon:unCheckedIcon" @click="changeAddress(addr,addrIndex)"/>
                     </div>
@@ -26,8 +25,15 @@
                     </div>
                 </li>
             </ul>
-            
         </section>
+        <section class="addNewAddress">
+            <router-link :to="{path:'/confirmOrder/chooseAddress/addAddress'}" tag="div">
+                <img :src="addIcon"/>
+                <span>新增收货地址</span>
+            </router-link >
+        </section>
+        <!-- 添加地址 -->
+        <router-view></router-view>
     </div>
 </template>
 <script>
@@ -41,6 +47,7 @@ import {getStore} from '../../../config/utils'
 import {mapMutations} from 'vuex'
 import checkedIcon from '../../../assets/img/checked.png'
 import unCheckedIcon from '../../../assets/img/unchecked.png'
+import addIcon from '../../../assets/img/add.png'
 export default {
     data(){
         return {
@@ -49,6 +56,7 @@ export default {
             },
             checkedIcon,
             unCheckedIcon,
+            addIcon,
             id: '',
             sig: '',
             user_id: '', // 用户名
@@ -138,5 +146,20 @@ export default {
     color: #777;
     padding-left: 10px;
 
+}
+.addNewAddress{
+    position: fixed;
+    bottom: 20px;
+    font-size: 35px;
+    color: #3190e8;
+    width: 100%;
+}
+.addNewAddress>div{
+    text-align: center;
+}
+.addNewAddress img{
+    width: 50px;
+    vertical-align: middle;
+    margin-right: 20px;
 }
 </style>

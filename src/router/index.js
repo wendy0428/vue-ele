@@ -57,6 +57,10 @@ Vue.use(VueRouter)
         },{
             path: 'chooseAddress', // 选择地址
             component: () => import("@/components/confirmOrder/children/chooseAddress"),
+            children:[{
+                path: 'addAddress', // 添加地址
+                component: () => import("@/components/confirmOrder/children/children/addAddress"),
+            }]
         }]
     },
     {
