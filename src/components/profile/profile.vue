@@ -80,12 +80,12 @@
             </section>
             <section class="profie_options">
                 <ul>
-                    <li>
+                    <router-link :to="{path:'/service'}" tag="li">
                         <span>
                             <img :src="serviewIcon"/>
                         </span>
                         <span>服务中心</span>
-                    </li>
+                    </router-link>
                     <li>
                         <span>
                             <img :src="eleIcon"/>

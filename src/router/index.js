@@ -90,9 +90,19 @@ Vue.use(VueRouter)
         component: () => import("@/components/order/order"),
     },
     {
-        path: '/search', // 搜索
+        path: '/search', // 搜索商家或者食品名称
         name: 'Search',
         component: () => import("@/components/search/search"),
+    },
+    {
+        path: '/service', // 服务中心
+        name: 'Service',
+        component: () => import("@/components/service/service"),
+        children:[{
+            path: 'questionDetail',
+            component:() => import("@/components/service/children/questionDetail"),
+        }],
+
     }
 ]
 
