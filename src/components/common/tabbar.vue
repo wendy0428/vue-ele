@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mt-tabbar v-model="selected">
+        <mt-tabbar v-model="selected" fixed>
             <mt-tab-item id="外卖" @click.native="jumpTo" >
                 <img slot="icon" :src="selected == '外卖' ? blueEleIcon :grayEleIcon">
                 外卖

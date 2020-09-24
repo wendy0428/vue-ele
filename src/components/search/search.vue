@@ -20,10 +20,22 @@
                 <router-link 
                     v-for="(place,place_index) in searchPlaceList" :key="place_index"
                     tag="li"
-                    :to="{path:'/msite',query:{latitude:place.latitude,longitude:place.longitude}}"
+                    :to="{path:'/shop',query:{geograph:`${place.latitude},${place.longitude}`,id:place.id}}"
                 >
-                    <div class="place_name">{{place.name}}</div>
-                    <div class="pace_address">{{place.address}}</div>
+                    <div class="place_left">
+                        <img :src="'http://cangdu.org:8001/img/'+place.image_path"/>
+                    </div>
+                    <div class="place_right">
+                        <div>
+                            <span>{{place.name}}</span>
+                        </div>
+                        <div>
+                            <span>月售{{place.recent_order_num}}单</span>
+                        </div>
+                        <div>
+                            <span>{{place.float_minimum_order_amount}}元起送/距离{{place.distance}}</span>
+                        </div>
+                    </div>
                 </router-link>
             </ul>
         </section>
@@ -33,7 +45,7 @@
         <section v-if="searchHistoryList.length!=0&&showHistory" class="history_container">
             <div>搜索历史</div>
             <ul class="history_ul">
-                <li v-for="(search,searchIndex) in searchHistoryList" :key="searchIndex">
+                <li v-for="(search,searchIndex) in searchHistoryList" :key="searchIndex" @click="chooseThisHistory(search)">
                     <span>{{search}}</span>
                     <img :src="deleteIco" @click="deleteThisHistory(searchIndex)"/>
                 </li>
@@ -120,7 +132,16 @@ export default {
         emptyHistoryList(){
             delStore('searchHistory');
             this.showHistory = false;
-        }
+        },
+        // 选中当前搜索历史,作为搜索条件
+        chooseThisHistory(search){
+            this.inputKeyValue = search;
+            this.searchAddress();
+        },
+        // 根据搜索到的商家,跳转到对应的商铺列表
+        // goToThisShop(id,latitude,longitude){
+        //     this.$router.push();
+        // }
     },
     watch:{
         // 监听输入的值
@@ -200,11 +221,29 @@ export default {
     background-color: #fff;
 }
 .searchPlaceList_box ul li{
-    border-bottom: 1px solid #e4e4e4;
-    padding: 30px;
-    text-align: left;
+    display: flex;
+    border-bottom: 1px solid #ededed;
 }
-.searchPlaceList_box ul li div{
+
+.place_left{
+    width: 25%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 15px;
+}
+.place_left img{
+    width: 80%;
+}
+.place_right{
+    width: 75%;
+    text-align: left;
+    color: #333;
+    box-sizing: border-box;
+    padding: 15px;
+}
+.place_right>div{
     margin-bottom: 10px;
 }
 
