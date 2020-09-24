@@ -16,6 +16,7 @@ const RETSET_NAME = 'RETSET_NAME';
 const GET_ADDRESS = 'GET_ADDRESS';
 const ADD_ADDRESS = 'ADD_ADDRESS';
 const DELETE_ADDRESS = 'DELETE_ADDRESS';
+const CHOOSE_ADDRESS = 'CHOOSE_ADDRESS';
 export default new Vuex.Store({
 	state: {
     	latitude: "", // 纬度
@@ -25,6 +26,8 @@ export default new Vuex.Store({
 		userInfo: null, // 用户信息
 		login: false, // 是否登录
 		allAddressList: [], // 收获地址列表
+		choosedAddress: null,//选择地址
+		addressIndex: null,//选择地址的索引值
   	},
   	mutations: {
     	// 保存地理位置
@@ -146,6 +149,12 @@ export default new Vuex.Store({
 		// 删除地址
 		[DELETE_ADDRESS](state,addressIndex){
 			state.allAddressList.splice(addressIndex,1);
+		},
+		// 保存选择的地址
+		[CHOOSE_ADDRESS](state,{address,index}){
+			state.choosedAddress = address;
+			state.addressIndex = index;
+			console.log("保存的地址:",state.choosedAddress,"保存的 index:",state.addressIndex);
 		}
 
   	},

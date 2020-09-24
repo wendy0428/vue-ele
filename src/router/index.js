@@ -54,6 +54,9 @@ Vue.use(VueRouter)
         },{
             path: 'invoice', // 发票抬头
             component: () => import("@/components/confirmOrder/children/invoice"),
+        },{
+            path: 'chooseAddress', // 选择地址
+            component: () => import("@/components/confirmOrder/children/chooseAddress"),
         }]
     },
     {

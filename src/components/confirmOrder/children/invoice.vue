@@ -40,7 +40,7 @@ export default {
         },
         // 确定
         confirm(){
-            this.$emit('sendInvoice',this.needInvoice);
+            this.$emit('sendInvoice',this.needInvoices);
             this.$router.go(-1);
         }
     },
