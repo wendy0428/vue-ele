@@ -28,7 +28,6 @@ export default {
     },
     props:{
         alertText: String,
-        alertStatus: Boolean
     },
 }
 </script>

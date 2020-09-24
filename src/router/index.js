@@ -102,8 +102,12 @@ Vue.use(VueRouter)
             path: 'questionDetail',
             component:() => import("@/components/service/children/questionDetail"),
         }],
-
-    }
+    },
+    {
+        path: '/download', // 搜索商家或者食品名称
+        name: 'Download',
+        component: () => import("@/components/download/download"),
+    },
 ]
 
 const router = new VueRouter({
