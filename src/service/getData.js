@@ -210,3 +210,8 @@ export const searchRestaurant = (geohash, keyword) => httpGet({url: '/v4/restaur
 
 // 30. 获取服务中心信息
 export const getService = () => httpGet({url:'/v3/profile/explain'});
+
+// 31. 获取快速备注列表
+export const getRemark = (id, sig) => httpGet({url: '/v1/carts/' + id + '/remarks', params:{
+	sig
+}});

@@ -48,6 +48,10 @@ Vue.use(VueRouter)
         path: '/confirmOrder', // 订单确认页面
         name: 'ConfirmOrder',
         component: () => import("@/components/confirmOrder/confirmOrder"),
+        children:[{
+            path: 'remark', //订单备注
+            component: () => import("@/components/confirmOrder/children/remark"),
+        }]
     },
     {
         path: '/login', // 登录注册页面
