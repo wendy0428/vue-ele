@@ -19,15 +19,13 @@
         <!-- 搜索地址列表 -->
         <section class="searchPlaceList_box" v-if="searchPlaceList.length!=0">
             <ul>
-                <router-link 
+                <li
                     v-for="(place,place_index) in searchPlaceList" :key="place_index"
-                    tag="li"
-                    :to="{path:'/msite',query:{latitude:place.latitude,longitude:place.longitude}}"
-                    @click.native="pushToPlaceHistory(place)"
+                    @click="pushToPlaceHistory(place)"
                 >
                     <div class="place_name">{{place.name}}</div>
                     <div class="pace_address">{{place.address}}</div>
-                </router-link>
+                </li>
             </ul>
         </section>
         <section v-else class="has_no_result">
@@ -102,6 +100,9 @@ export default {
         // 搜索历史 存入缓存
         pushToPlaceHistory(place){
             let selectedPlace = place;
+            setStore('latitude',selectedPlace.latitude);
+            setStore('longitude',selectedPlace.longitude);
+            this.$router.push({path:'/msite',query:{latitude:selectedPlace.latitude,longitude:selectedPlace.longitude}});
             if(this.placeHistory.length!=0){
                 for(var i=0;i<this.placeHistory.length;i++){
                     if(this.placeHistory[i].latitude==selectedPlace.latitude){
@@ -113,8 +114,8 @@ export default {
                 this.placeHistory.unshift(selectedPlace);
             }
             setStore('placeHistory',this.placeHistory)
-            setStore('latitude',place.latitude);
-            setStore('longitude',place.longitude);
+            console.log('selectedPlace',selectedPlace);
+            
         }
        
     }
