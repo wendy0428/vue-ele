@@ -51,6 +51,9 @@ Vue.use(VueRouter)
         children:[{
             path: 'remark', //订单备注
             component: () => import("@/components/confirmOrder/children/remark"),
+        },{
+            path: 'invoice', // 发票抬头
+            component: () => import("@/components/confirmOrder/children/invoice"),
         }]
     },
     {
