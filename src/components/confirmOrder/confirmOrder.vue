@@ -102,11 +102,17 @@
         </section>
         <!-- 订单备注和发票抬头 -->
         <router-view @sendRemark="getRemark" @sendInvoice="getInvoice"></router-view>
+
+        <!-- 底部提交订单 -->
+        <section class="submit_order" v-if="orderInfo">
+            <span class="total">待支付¥{{orderInfo.cart.total}}</span>
+            <span class="confirm_btn" @click="placeAnOrder">确认下单</span>
+        </section>
     </div>
 </template>
 <script>
 import {mapState,mapMutation, mapMutations} from 'vuex'
-import {checkout,getAddressList} from '../../service/getData'
+import {checkout,getAddressList,placeOrders} from '../../service/getData'
 import {getStore} from '../../config/utils'
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
@@ -135,7 +141,7 @@ export default{
             remarks: '',
             needInvoices: false,
             addressList:[],
-            // choosedAddress:null,
+            entities: [],
 
         }
     },
@@ -151,7 +157,7 @@ export default{
         this.initData();
     },
     methods:{
-        ...mapMutations(['CHOOSE_ADDRESS']),
+        ...mapMutations(['CHOOSE_ADDRESS','ORDER_SUCCESS']),
         async initData(){
             let _this = this;
             let confirmOrderArr = []
@@ -169,6 +175,7 @@ export default{
                 newObj['stock'] = _this.shopCart[i].stock;
                 confirmOrderArr.push(newObj);
             }
+            _this.entities = confirmOrderArr;
             // 获取订单信息
             _this.orderInfo = await checkout(_this.geograph,[confirmOrderArr],_this.shopid);
 
@@ -176,9 +183,7 @@ export default{
             let addressList = await getAddressList(this.user_id).then((res) => {
                 return res;
             })
-            // this.choosedAddress = await getAddressList(this.user_id).then((res) => {
-            //     return res[0];
-            // })
+           
             this.CHOOSE_ADDRESS({address:addressList[0],index:0});
         },
         // 展示支付方式
@@ -196,6 +201,24 @@ export default{
         // 获取子视图传来的值
         getInvoice(val){
             this.needInvoices = val;
+        },
+        placeAnOrder(){
+            // 下单成功
+            placeOrders(this.user_id,this.orderInfo.cart.id,this.choosedAddress.id,this.remarks,[this.entities],this.geograph,this.orderInfo.sig)
+            .then((res) => {
+                if(res.status == 1){
+                    // 保存下单成功,返回的信息
+                    this.ORDER_SUCCESS(res);
+                    this.$toast({
+                        message: res.success,
+                        position: 'center',
+                        duration: 1000
+                    })
+                }
+            });
+            // 跳转付款页面
+            this.$router.push({path:'/confirmOrder/payment'});
+
         }
     },
     computed:{
@@ -464,5 +487,27 @@ export default{
     color: #777;
     padding-left: 10px;
 
+}
+.submit_order{
+    background-color: #3c3c3c;
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    font-size: 35px;
+    height: 100px;
+    line-height: 100px;
+    padding-left: 20px;
+
+}
+.confirm_btn{
+    display: inline-block;
+    width: 30%;
+    background-color: #56d176;
+    /* height: 100vh; */
+    text-align: center;
 }
 </style>

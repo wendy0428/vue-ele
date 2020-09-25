@@ -215,3 +215,24 @@ export const getService = () => httpGet({url:'/v3/profile/explain'});
 export const getRemark = (id, sig) => httpGet({url: '/v1/carts/' + id + '/remarks', params:{
 	sig
 }});
+
+// 32. 下订单
+export const placeOrders = (user_id, cart_id, address_id, description, entities, geohash, sig) => httpPost({url: '/v1/users/' + user_id + '/carts/' + cart_id + '/orders', data:{
+	address_id,
+	come_from: "mobile_web",
+	deliver_time: "",
+	description,
+	entities,
+	geohash,
+	paymethod_id: 1,
+	sig,
+}});
+
+// 33. 重新发送订单验证码
+export const payRequest = (merchantOrderNo, userId) => httpGet({url: '/payapi/payment/queryOrder', params:{
+	merchantId: 5,
+	merchantOrderNo,
+	source: 'MOBILE_WAP',
+	userId,
+	version: '1.0.0',
+}});

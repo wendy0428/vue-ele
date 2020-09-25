@@ -65,6 +65,9 @@ Vue.use(VueRouter)
                     component: () => import("@/components/profile/children/children/children/children/addDetail"),
                 }],
             }]
+        },{
+            path: 'payment', // 支付页面
+            component: () => import("@/components/confirmOrder/children/payment"),
         }]
     },
     {

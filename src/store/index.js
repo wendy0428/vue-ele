@@ -17,6 +17,7 @@ const GET_ADDRESS = 'GET_ADDRESS';
 const ADD_ADDRESS = 'ADD_ADDRESS';
 const DELETE_ADDRESS = 'DELETE_ADDRESS';
 const CHOOSE_ADDRESS = 'CHOOSE_ADDRESS';
+const ORDER_SUCCESS = 'ORDER_SUCCESS';
 export default new Vuex.Store({
 	state: {
     	latitude: "", // 纬度
@@ -28,6 +29,7 @@ export default new Vuex.Store({
 		allAddressList: [], // 收获地址列表
 		choosedAddress: null,//选择地址
 		addressIndex: null,//选择地址的索引值
+		orderMessage: '', // 下单成功保存返回的信息
   	},
   	mutations: {
     	// 保存地理位置
@@ -155,7 +157,11 @@ export default new Vuex.Store({
 			state.choosedAddress = address;
 			state.addressIndex = index;
 			console.log("保存的地址:",state.choosedAddress,"保存的 index:",state.addressIndex);
-		}
+		},
+		// 下单成功，保存订单返回信息
+		[ORDER_SUCCESS](state, order) {
+			state.orderMessage = order;
+		},
 
   	},
   	actions: {},
