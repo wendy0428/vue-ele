@@ -5,7 +5,7 @@
                 <router-link :to="{path:'/'}" tag="span">ele.me</router-link>
             </slot>
             <slot name="search" v-if="headData.showSearchIco">
-                <img :src="searchIco"/>
+                <img :src="searchIco" @click="goToSearchPage"/>
             </slot>
             <slot name="goBack" v-if="headData.goBack">
                 <img :src="leftArrowIcon" @click="goBackPage"/>
@@ -63,6 +63,9 @@ export default {
         goBackPage(){
             this.$router.go(-1);
         },
+        goToSearchPage(){
+            this.$router.push({path:'/search'});
+        }
     }
 }
 </script>
