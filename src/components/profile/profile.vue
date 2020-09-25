@@ -23,7 +23,7 @@
             </section>
             <section class="profile_data">
                 <ul>
-                    <li>
+                    <router-link :to="{path:'/balance'}" tag="li">
                         <div class="profile_data_num">
                             <span v-if="user_id!='undefined'">{{userInfo.balance.toFixed(2)}}</span>
                             <span v-else>0.00</span>
@@ -32,7 +32,7 @@
                         <div class="profile_data_title">
                             <span>我的余额</span>
                         </div>
-                    </li>
+                    </router-link>
                     <li>
                         <div class="profile_data_num">
                             <span v-if="user_id!='undefined'">{{userInfo.gift_amount}}</span>

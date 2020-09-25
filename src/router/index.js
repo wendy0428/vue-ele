@@ -151,6 +151,15 @@ Vue.use(VueRouter)
             component: () => import("@/components/points/children/detail"),
         }],
     },
+    {
+        path: '/balance', // 我的余额
+        name: 'Balance',
+        component: () => import("@/components/balance/balance"),
+        children:[{ 
+            path: 'detail', //积分问题
+            component: () => import("@/components/balance/children/detail"),
+        }],
+    },
 ]
 
 const router = new VueRouter({
