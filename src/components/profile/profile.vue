@@ -69,12 +69,12 @@
                         </span>
                         <span>积分商城</span>
                     </li>
-                    <li>
+                    <router-link :to="{path: '/vipcard'}" tag="li">
                         <span>
                             <img :src="queenIcon"/>
                         </span>
                         <span>饿了么会员卡</span>
-                    </li>
+                    </router-link>
                     
                 </ul>
             </section>

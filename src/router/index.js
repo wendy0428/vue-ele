@@ -133,6 +133,15 @@ Vue.use(VueRouter)
         name: 'Download',
         component: () => import("@/components/download/download"),
     },
+    {
+        path: '/vipcard', // 搜索商家或者食品名称
+        name: 'Vipcard',
+        component: () => import("@/components/vipcard/vipcard"),
+        children:[{
+            path: 'vipDescription',
+            component: () => import("@/components/vipcard/children/vipDescription"),
+        }],
+    },
 ]
 
 const router = new VueRouter({
