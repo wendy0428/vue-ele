@@ -109,6 +109,10 @@ Vue.use(VueRouter)
         path: '/order', // 订单列表
         name: 'Order',
         component: () => import("@/components/order/order"),
+        children:[{
+            path: 'orderDetail', // 订单详情
+            component: () => import("@/components/order/children/orderDetail"),
+        }],
     },
     {
         path: '/search', // 搜索商家或者食品名称

@@ -9,30 +9,33 @@
         <section class="order_list" v-if="orderList.length!=0">
             <ul>
                 <li v-for="(order,orderIndex) in orderList" :key="orderIndex">
-                    <div class="order_left">
-                        <img :src="'http://cangdu.org:8001/img/'+order.restaurant_image_url"/>
-                    </div>
-                    <div class="order_right">
-                        <div class="order_right_top">
-                            <span>{{order.restaurant_name}}</span>
-                            <span>支付超时</span>
+                    <router-link :to="{path:'/order/orderDetail',query:{order:JSON.stringify(order)}}" tag="div">
+                        <div class="order_left">
+                            <img :src="'http://cangdu.org:8001/img/'+order.restaurant_image_url"/>
                         </div>
-                        <div class="order_right_middle">
-                            <span>{{order.formatted_created_at}}</span>
+                        <div class="order_right">
+                            <div class="order_right_top">
+                                <span>{{order.restaurant_name}}</span>
+                                <span>支付超时</span>
+                            </div>
+                            <div class="order_right_middle">
+                                <span>{{order.formatted_created_at}}</span>
+                            </div>
+                            <div class="order_right_bottom">
+                                <span class="total_quantity">{{order.basket.group[0][0].name}}{{order.basket.group[0].length>1?'等'+order.total_quantity+'件商品':''}}</span>
+                                <span class="total_amount">¥{{order.total_amount}}</span>
+                            </div>
                         </div>
-                        <div class="order_right_bottom">
-                            <span class="total_quantity">{{order.basket.group[0][0].name}}{{order.basket.group[0].length>1?'等'+order.total_quantity+'件商品':''}}</span>
-                            <span class="total_amount">¥{{order.total_amount}}</span>
-                        </div>
-                        <!-- <div class="oneMore"> -->
-                            <router-link :to="{path:'/shop',query:{geograph,id:order.restaurant_id}}" class="oneMore" tag="span">再来一单</router-link>
-                        <!-- </div> -->
+                    </router-link>
+                    <div>
+                        <router-link :to="{path:'/shop',query:{geograph,id:order.restaurant_id}}" class="oneMore" tag="span">再来一单</router-link>
                     </div>
                 </li>
             </ul>
         </section>
         <!-- 公共的底部 Tabber 组件 -->
         <tabbar :selectedTab="selectedTab"></tabbar>
+        <router-view></router-view>
     </div>
 </template>
 <script>
@@ -90,9 +93,14 @@ export default {
     margin: 0;
 }
 .order_list ul li{
-    display: flex;
     /* font-size: 30px; */
     background: #fff;
+}
+.order_list ul li>div:nth-child(1){
+    display: flex;
+}
+.order_list ul li>div:nth-child(2){
+    text-align: right;
 }
 .order_left{
     width: 25%;

@@ -236,3 +236,6 @@ export const payRequest = (merchantOrderNo, userId) => httpGet({url: '/payapi/pa
 	userId,
 	version: '1.0.0',
 }});
+
+// 34. 获取订单详情
+export const getOrderDetail = (user_id, orderid) => httpGet({url: '/bos/v1/users/' + user_id + '/orders/' + orderid + '/snapshot'});
