@@ -142,6 +142,15 @@ Vue.use(VueRouter)
             component: () => import("@/components/vipcard/children/vipDescription"),
         }],
     },
+    {
+        path: '/points', // 积分中心
+        name: 'Points',
+        component: () => import("@/components/points/points"),
+        children:[{ 
+            path: 'detail', //积分问题
+            component: () => import("@/components/points/children/detail"),
+        }],
+    },
 ]
 
 const router = new VueRouter({

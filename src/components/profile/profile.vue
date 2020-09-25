@@ -43,7 +43,7 @@
                             <span>我的优惠</span>
                         </div>
                     </li>
-                    <li>
+                    <router-link :to="{path:'/points'}" tag="li">
                         <div class="profile_data_num">
                             <span v-if="user_id!='undefined'">{{userInfo.point}}</span>
                             <span v-else>0</span>
@@ -52,7 +52,7 @@
                         <div class="profile_data_title">
                             <span>我的积分</span>
                         </div>
-                    </li>
+                    </router-link>
                 </ul>
             </section>
             <section class="profie_options">
