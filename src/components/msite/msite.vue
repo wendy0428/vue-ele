@@ -28,7 +28,7 @@
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
 const shopList = () => import('@/components/common/shopList')
-const tabbar = () => import('@/components/common/tabbar')
+const tabbar = () => import('@/components/footer/footGuide')
 
 // 接口
 import {getMsiteAddress,getMsiteFoodTypes,guessCity} from '../../service/getData'

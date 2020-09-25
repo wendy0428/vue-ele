@@ -264,8 +264,9 @@ import {getMsiteAddress,getShopDetails,getFoodMenu,getRatingScores,getRatingList
 import {mapState,mapMutations} from 'vuex'
 import BScroll from 'better-scroll'
 
-import ratingStar from '../../components/common/ratingStar'
-import buyCart from '../../components/common/buyCart'
+// 引入评分组件
+const ratingStar = () => import('@/components/common/ratingStar')
+const buyCart = () => import('@/components/common/buyCart')
 
 import dotsIcon from '../../assets/img/dots.png'
 import rightArrowIcon from '../../assets/img/right_arrow.png'

@@ -42,7 +42,7 @@
 import { getStore } from '../../config/utils'
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
-const tabbar = () => import('@/components/common/tabbar')
+const tabbar = () => import('@/components/footer/footGuide')
 
 import {getOrderList} from '../../service/getData'
 export default {

@@ -109,7 +109,7 @@ import serviewIcon from '../../assets/img/serview.png'
 import eleIcon from '../../assets/img/logo.png'
 // 公共头部组件
 const commonHead = () => import('@/components/header/head')
-const tabbar = () => import('@/components/common/tabbar')
+const tabbar = () => import('@/components/footer/footGuide')
 
 
 import {getStore} from '../../config/utils'
