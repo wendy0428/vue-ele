@@ -19,7 +19,6 @@ module.exports = {
                     // Provide path to the file with resources
                     // 要公用的scss的路径
                     resources: "./src/assets/css/common.scss",
-                    resources: "./src/assets/css/index.scss",
                 })
                 .end();
         });
