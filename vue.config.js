@@ -12,6 +12,7 @@ module.exports = {
         remUnit: 75,
       });
   },
+  /*
   // 本项目是vue cli3搭建的，代理配置是在vue.config.js文件中:
   devServer: {
     host: "127.0.0.1",
@@ -32,4 +33,5 @@ module.exports = {
       },
     },
   },
+  */
 };

@@ -76,7 +76,7 @@ import axios from "axios";
 export function httpGet({ url, params = {}, type = "GET" }) {
   return new Promise((resolve, reject) => {
     axios({
-      url,
+      url: baseUrl + url,
       type,
       params,
     })
@@ -89,39 +89,49 @@ export function httpGet({ url, params = {}, type = "GET" }) {
   });
 }
 // post 请求
-export function httpPost({ 
-    url, 
-    data = {},
-    method ="POST"
-}){
-    return new Promise((resolve, reject) => {
-        axios({
-            url,
-            method,
-            // 发送的数据
-            data,
-        }).then((res) => {
-            resolve(res.data);
-        });
+export function httpPost({
+  url,
+  data = {},
+  method = "POST"
+}) {
+  return new Promise((resolve, reject) => {
+    axios({
+      url,
+      method,
+      // 发送的数据
+      data,
+    }).then((res) => {
+      resolve(res.data);
     });
+  });
 }
 
 //post 发送 formData 请求
-export function uploadFile({ 
-    url, 
-    data = {} 
-}){
-    return new Promise((resolve, reject) => {
-        axios({
-            url,
-            method: "POST",
-            // 发送的数据
-            data,
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        }).then((res) => {
-            resolve(res.data);
-        });
+export function uploadFile({
+  url,
+  data = {}
+}) {
+  return new Promise((resolve, reject) => {
+    axios({
+      url,
+      method: "POST",
+      // 发送的数据
+      data,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }).then((res) => {
+      resolve(res.data);
     });
+  });
+}
+
+export function loadJson({
+  path
+}) {
+  return new Promise((resolve, reject) => {
+    axios.get(path).then((res) => {
+      resolve(res.data);
+    });
+  });
 }

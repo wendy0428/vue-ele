@@ -167,7 +167,7 @@
                 </span>
                 <span v-if="totalNum" class="show_totalNum">{{totalNum}}</span>
             </div>
-            <div class="cart_container_right" v-if="totalPrice">
+            <div class="cart_container_right">
                 <div>
                     <div class="total_money">¥{{totalPrice.toFixed(2)}}</div>
                     <div class="delivery_fee">配送费{{shopDetails.float_delivery_fee}}</div>
