@@ -131,7 +131,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .addAddress{
     position: fixed;
     top:0;

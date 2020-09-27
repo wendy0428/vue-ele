@@ -36,7 +36,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 #ratingStar ul{
     list-style: none;
     padding: 0;

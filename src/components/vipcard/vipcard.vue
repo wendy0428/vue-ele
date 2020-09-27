@@ -100,7 +100,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .vipcard{
     position: fixed;
     top:0;

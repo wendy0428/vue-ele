@@ -70,7 +70,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .vipDescription{
     position: fixed;
     top:0;

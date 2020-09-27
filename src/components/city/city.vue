@@ -121,7 +121,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .search_box{
     margin-top: 90px;
     background-color: #fff;

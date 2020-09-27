@@ -334,7 +334,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .navbar_container{
     top: 90px;
     width: 100%;

@@ -69,7 +69,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 #head {
     background-color: #3190e8;
     height: 90px;

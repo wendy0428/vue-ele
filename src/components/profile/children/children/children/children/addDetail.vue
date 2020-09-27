@@ -77,7 +77,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .searchAddress{
     position: absolute;
     top:0;

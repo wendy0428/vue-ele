@@ -229,7 +229,7 @@ export default{
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .select_address{
     margin-top: 90px;
     background-color: #fff;

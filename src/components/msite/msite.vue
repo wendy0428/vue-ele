@@ -126,7 +126,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .swipe_container{
     margin-top: 100px;
     background-color: #fff;

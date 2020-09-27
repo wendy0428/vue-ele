@@ -161,7 +161,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .search{
     position: fixed;
     top:0;

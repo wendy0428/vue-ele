@@ -176,7 +176,7 @@ export default {
     
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 #CommonshopList{
     height: 100vh;
 }

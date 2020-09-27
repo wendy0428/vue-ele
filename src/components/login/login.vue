@@ -128,7 +128,7 @@ export default{
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .login_container{
     background-color: #fff;
     margin-top: 90px;

@@ -141,7 +141,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .profile_detail{
     background-color: #3190e8;
     color: #fff;

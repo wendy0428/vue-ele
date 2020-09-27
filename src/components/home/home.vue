@@ -115,11 +115,11 @@ export default {
     },
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 /* 猜想的城市 */
 .cityGuess_box{
     margin-top: 90px;
-    background-color: #fff;
+    background-color: $bg-red;
 }
 .cityGuess_box>div{
     display: flex;

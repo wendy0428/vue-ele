@@ -123,7 +123,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .orderDetail{
     position: fixed;
     top:0;

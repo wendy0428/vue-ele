@@ -53,7 +53,7 @@ export default{
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .foodDetail{
     position: fixed;
     top: 0;

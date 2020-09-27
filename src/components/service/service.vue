@@ -123,7 +123,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .service{
     position: fixed;
     top:0;

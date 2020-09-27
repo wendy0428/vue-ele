@@ -615,7 +615,7 @@ export default {
     },
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 /* 头部布局 */
 .shop_header{
     width: 100%;

@@ -91,7 +91,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .edit{
     position: absolute;
     top:0;

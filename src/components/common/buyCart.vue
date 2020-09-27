@@ -88,7 +88,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .buyCart{
     font-size: 20px;
 }
