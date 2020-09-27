@@ -1,33 +1,18 @@
 //  配置px2rem
 module.exports = {
-    // chainWebpack(config) {
-    //     config.module
-    //         .rule("css")
-    //         .test(/\.css$/)
-    //         .oneOf("vue")
-    //         .resourceQuery(/\?vue/)
-    //         .use("px2rem")
-    //         .loader("px2rem-loader")
-    //         .options({
-    //             remUnit: 75,
-    //         });
-        
-    // },
-    chainWebpack: config => {
-        const oneOfsMap = config.module.rule('scss').oneOfs.store
-        oneOfsMap.forEach(item => {
-            item
-                .use('sass-resources-loader')
-                .loader('sass-resources-loader')
-                .options({
-                    // Provide path to the file with resources
-                    // 要公用的scss的路径
-                    resources: './src/assets/css/common.scss'
-                })
-                .end()
-        })
-    }
-    /*
+  chainWebpack(config) {
+    config.module
+      .rule("css")
+      .test(/\.css$/)
+      .oneOf("vue")
+      .resourceQuery(/\?vue/)
+      .use("px2rem")
+      .loader("px2rem-loader")
+      .options({
+        remUnit: 75,
+      });
+  },
+  /*
   // 本项目是vue cli3搭建的，代理配置是在vue.config.js文件中:
   devServer: {
     host: "127.0.0.1",
