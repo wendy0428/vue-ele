@@ -338,132 +338,137 @@ export default {
 .navbar_container{
     top: 90px;
     width: 100%;
-    background-color: #f1f1f1;
+    background-color: $color-bg-f1f1f1;
     position: fixed;
-    /* height: 700px; */
     z-index: 11;
 }
 .category_container{
-    background-color: #fff;
+    background-color:  $color-bg-fff;
     font-size: 25px;
+    li{
+        display: flex;
+        &>div{
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left;
+        };
+        .category_left{
+            background-color: $color-bg-f1f1f1;
+            &>div{
+                position: relative;
+                padding: 20px;
+                .icon{
+                    width: 40px;
+                    display: inline-block;
+                    vertical-align: middle;
+                };
+                .name{
+                    margin-left: 30px;
+                    color: $color-font-666;
+                };
+                .count{
+                    color: $color-font-fff;
+                    background-color: $color-bg-ccc;
+                    @include border(1px,1px,1px,1px,#ccc);
+                    border-radius: 10px;
+                    margin-left: 40px;
+                    padding: 5px;
+                };
+            };
+            &>div.activeClass1{
+                background-color: $color-bg-fff;
+            }
+            &>div::after{
+                @include backgroundICon(40px,40px,url(../../assets/img/right_arrow.png),10px,10px,0px,0px);
+            }
+        };
+        .category_right{
+            margin: 0 20px;
+            height: 700px;
+            li {
+                border-bottom : 1px solid #e4e4e4;
+                padding: 20px 10px;
+                @extend %common-container-flex-between;
+                span{
+                    margin-left: 30px;
+                    color: $color-font-666;
+                }
+                &.activeClass2{
+                    span{
+                        color: $color-font-3190e8 !important;
+                    }
+                } 
+            };
+        }
+    }
 }
-.category_container li{
-    list-style: none;
-    display: flex;
-}
-.category_left,.category_right{
-    width: 100%;
-    box-sizing: border-box;
-    text-align: left;
-}
-.category_left{
-    background-color: #f1f1f1;
 
-}
-.category_left>div{
-    position: relative;
+%common-box{
+    @include border(1px,1px,1px,1px,#eee);
     padding: 20px;
-}
-.icon{
-    width: 40px;
-    display: inline-block;
-    vertical-align: middle;
-}
-.name,.sub_name,.sub_count{
-    margin-left: 30px;
-    color: #666;
-}
-
-.count{
-    background-color: #ccc;
-    border: 1px solid #ccc;
-    color: #fff;
-    border-radius: 10px;
-    margin-left: 40px;
-    padding: 5px;
-}
-.category_left>div::after{
-    content:'';
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background: url(../../assets/img/right_arrow.png) no-repeat;
-    background-size: contain;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-}
-.category_right{
-    margin: 0 20px;
-    overflow: auto;
-    height: 700px;
-
-
-}
-.category_right li {
-    border-bottom : 1px solid #e4e4e4;
-    padding: 20px 10px;
-    display: flex;
-    justify-content: space-between;
-}
-.activeClass1{
-    background-color: #fff;
-}
-.activeClass2>span{
-    color: #3190e8 !important;
-}
-.delivery_attr_container{
-    font-size: 25px;
-    color: #333;
-    background-color: #fff;
-}
-.delivery_title{
-    text-align: left;
-    padding: 20px 0;
-}
-.attr_title{
-    text-align: left;
-    margin: 20px 0;
-}
-.each_delivery,.each_atrr{
-    border: 1px solid #eee;
-    padding: 20px;
-    margin: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
     width: 180px;
     text-align: left;
-    
+    img{
+        width: 40px;
+        vertical-align: middle;
+        display: inline-block;
+        margin-right: 20px;
+    }
 }
-.each_delivery img,.each_atrr img{
-    width: 40px;
-    vertical-align: middle;
-    display: inline-block;
-    margin-right: 20px;
+
+.delivery_attr_container{
+    font-size: 25px;
+    color:$color-font-333;
+    background-color: $color-bg-fff;
+    padding: 0 20px;
+    .delivery_title{
+        text-align: left;
+        padding: 20px 0;
+    };
+    .delivery_container{
+        @extend %common-container-flex-between;
+        .each_delivery{
+            @extend %common-box;
+        };
+    };
+    .attr_title{
+        text-align: left;
+        padding: 20px 0;
+    }
+    .attr_container{
+        @extend %common-container-flex-between;
+        .each_atrr{
+            @extend %common-box;
+        };
+    };
 }
-.delivery_container,.attr_container{
-    display: flex;
-    flex-wrap: wrap;
-}
+
+
 .btns{
     margin-bottom: 20px;
+    &>span{
+        font-size: 40px;
+        width: 200px;
+        display: inline-block;
+        border-radius: 10px;
+        padding: 10px 50px;
+        margin: 0 20px;
+    };
+    .clear{
+        background-color: $color-bg-fff;
+        color: $color-font-333;
+        @include border(1px,1px,1px,1px,#fff);
+    };
+    .confirm{
+        background-color: $color-bg-56d176;
+        @include border(1px,1px,1px,1px,#56d176);
+        color: $color-bg-fff;
+    }
 }
-.btns>span{
-    font-size: 40px;
-    width: 200px;
-    display: inline-block;
-    border-radius: 10px;
-    padding: 10px 50px;
-    margin: 0 20px;
-}
-.clear{
-    background-color: #fff;
-    color: #333;
-    border: 1px solid #fff;
-}
-.confirm{
-    background-color: #56d176;
-    border: 1px solid #56d176;
-    color: #fff;
-}
+
+
 .back_cover{
     position: fixed;
     width: 100%;
@@ -473,35 +478,33 @@ export default {
 }
 .shop_list{
     margin-top: 180px;
-    background-color: #fff;
+    background-color: $color-bg-fff;
 }
 
 .sort_container{
-    background: #fff;
-    color: #666;
+    background: $color-bg-fff;
+    color: $color-font-666;
     font-size: 20px;
-}
-.sortType{
-    position: relative;
-}
-.sortType>img{
-    width: 45px;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.sortType>span{
-    display: inline-block;
-    width: 80%;
-    text-align: left;
-    border-bottom: 1px solid #e4e4e4;
-    padding: 40px 20px;
-    margin-left: 10px;
-
-}
-.is_selected{
-    position: absolute;
-    top: 30px;
-    right: 30px
+    .sortType{
+        position: relative;
+        img{
+            width: 45px;
+            display: inline-block;
+            vertical-align: middle;
+        };
+        span{
+            display: inline-block;
+            width: 80%;
+            text-align: left;
+            @include border(0px,0px,1px,0px,#e4e4e4);
+            padding: 40px 20px;
+            margin-left: 10px;
+        };
+        .is_selected{
+            position: absolute;
+            top: 30px;
+            right: 30px
+        }
+    }
 }
 </style>
