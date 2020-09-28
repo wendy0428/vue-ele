@@ -1,0 +1,31 @@
+// 混用
+// 边框 border
+@mixin border($top,$right,$bottom,$left,$color){
+    border-top: $top solid $color;
+    border-right: $right solid $color;
+    border-bottom: $bottom solid $color;
+    border-left: $left solid $color;
+}
+// 右箭头
+@mixin rightArrow($width,$heihgt,$url,$top,$right,$bottom,$left){
+    @if $top!=0{
+        top: $top;
+    }
+    @if $right!=0{
+        right: $right;
+    }
+    @if $bottom!=0{
+        right: $right;
+    }
+    @if $left!=0{
+        left: $left;
+    }
+    content:'';
+    display: inline-block;
+    width: $width;
+    height: $heihgt;
+    display: inline-block;
+    background: $url no-repeat;
+    background-size: contain;
+    position: absolute;
+}

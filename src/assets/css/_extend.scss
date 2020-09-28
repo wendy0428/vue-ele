@@ -1,0 +1,11 @@
+%common-container-flex{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+%common-text-overflow{
+    text-overflow:ellipsis; 
+    white-space:nowrap;
+    overflow:hidden; 
+}
