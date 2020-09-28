@@ -9,8 +9,16 @@
     justify-content: center;
     align-items: center; 
 }
+// 超出部分显示...
 %common-text-overflow{
     text-overflow:ellipsis; 
     white-space:nowrap;
     overflow:hidden; 
+}
+// img 在一个 div 中居中显示
+%common-img-center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
 }
