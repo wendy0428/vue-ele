@@ -116,95 +116,100 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+// 继承的样式
+%common-container{
+    @extend %common-container-flex;
+    @include border(1px,0px,0px,0px,#e4e4e4);
+}
+%common-li{
+    width: 25%;
+    padding: 20px;
+    color: $color-font-blue;
+    font-size: 30px;
+    @include border(0px,1px,1px,0px, #e4e4e4);
+    box-sizing: border-box;
+    @extend %common-text-overflow;
+}
+
 /* 猜想的城市 */
 .cityGuess_box{
     margin-top: 90px;
-    background-color: $bg-red;
+    background-color: $color-bg-white;
+    & > div{
+        display: flex;
+        justify-content: space-between;
+        padding: 25px;
+    }
+    & > div:nth-child(1){
+        font-size: 30px;
+        color: $color-font-666;
+        @include border(0px,0px,2px,0px,#e4e4e4);
+        & > span:nth-child(2){
+            color: $color-font-9f9f9f;
+            font-weight: 900;
+            font-size: 25px;
+        }
+    }
+    & > div:nth-child(2){
+        font-size: 35px;
+        color: $color-font-blue;
+        @include border(0px,0px,4px,0px,#e4e4e4);
+        position: relative;
+        > span{
+            position: relative;
+        }
+    }
+    .right_arrow::after{
+        @include rightArrow(50px,50px,url('../../assets/img/right_arrow.png'),10px,5px,0px,0px);
+    }
 }
-.cityGuess_box>div{
-    display: flex;
-    justify-content: space-between;
-}
-.cityGuess_box>div:nth-child(1){
-    font-size: 30px;
-    color: #666;
-    padding: 25px;
-    border-bottom: 2px solid #e4e4e4
-}
-.cityGuess_box>div:nth-child(2){
-    color: #3190e8;
-    font-size: 35px;
-    padding: 15px 25px;
-    border-bottom: 4px solid #e4e4e4
-}
-.cityGuess_box>div:nth-child(1)>span:nth-child(2){
-    color: #9f9f9f;
-    font-weight: 900;
-    font-size: 25px;
-}
-.right_arrow{
-    width: 50px;
-    height: 50px;
-    display: inline-block;
-    background: url(../../assets/img/right_arrow.png) no-repeat;
-    background-size:contain;
-}
+
+
 /* 热门城市 */
 .hot_city_box{
-    background-color: #fff;
+    background-color: $color-bg-white;
+    .hot_city_box_title{
+        font-size: 30px;
+        color: $color-font-666;
+        text-align: left;
+        padding: 10px 25px;
+        @include border(0px,0px,4px,0px,#e4e4e4);
+        margin-top:25px;
+    };
+    .hot_city_box_container{
+        @extend %common-container;
+        .each_hot_city{
+            @extend %common-li;
+        }
+    }   
 }
-.hot_city_box_title{
-    font-size: 30px;
-    color: #666;
-    text-align: left;
-    padding: 10px 25px;
-    border-top: 4px solid #e4e4e4;
-    margin-top:25px;
-}
-.hot_city_box_container,.groupCity_list_container{
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    border-top: 1px solid #e4e4e4;
-}
-.each_hot_city,.each_city{
-    width: 25%;
-    padding: 20px;
-    color: #3190e8;
-    font-size: 30px;
-    border-right: 1px solid  #e4e4e4;
-    border-bottom: 1px solid  #e4e4e4;
-    box-sizing: border-box;
-}
-.hot_city_box_container>div:nth-child(4n){
-    border-right: 0;
-}
-/* 所有城市列表 */
-.each_groupCity{
-    background-color: #fff;
-    font-size: 35px;
-    margin: 20px 0px;
-    border-top: 4px solid #e4e4e4;
-}
+.city_group{
+    .each_groupCity{
+        background-color: $color-bg-white;
+        font-size: 35px;
+        margin: 20px 0px;
 
-.each_city{
-    color:#666;
-    text-overflow:ellipsis; 
-    white-space:nowrap;
-    overflow:hidden; 
+        .tips{
+            color: $color-font-999;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        @include border(4px,0px ,0px ,0px ,#e4e4e4);
+        .each_groupCity_title{
+            font-size: 25px;
+            text-align: left;
+            color: $color-font-666;
+            padding: 10px 0px 10px 25px;
+        }
+        .groupCity_list_container{
+            @extend %common-container;
+            & >div:nth-child(4n){
+                border-right: 0;
+            }
+            .each_city{
+                @extend %common-li;
+            }
+        }
+    }
 }
-
-.each_groupCity_title{
-    font-size: 25px;
-    text-align: left;
-    color: #666;
-    padding: 10px 0px 10px 25px;
-}
-.tips{
-    color: #999;
-    font-size: 20px;
-    margin-left: 10px;
-}
-
-
 </style>
