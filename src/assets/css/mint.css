@@ -3,7 +3,7 @@
     background-color: #007aff;
     margin: 5px;
     position: relative;
-    top: 20px;
+    top: 10px;
 }
 .mint-swipe-indicator.is-active{
     opacity: 0.5;

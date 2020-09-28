@@ -128,55 +128,46 @@ export default {
 </script>
 <style lang="scss" scoped>
 .swipe_container{
-    margin-top: 100px;
-    background-color: #fff;
-    height: 300px;
-}
-.swipe_page{
-    font-size: 20px;
-    color: #666;
     width: 100%;
     height: 300px;
-}
-.swipe{
-    float: left;
-    width: 25%;
-}
-.swipe img{
-    width: 40%;
-    display: block;
-    margin: 0 auto;
-}
-.swipe span{
-    display: block;
-    margin: 20px;
-}
-.swipe_container{
-   border-bottom: 2px solid #e4e4e4; 
+    margin-top: 100px;
+    padding-bottom: 40px;
+    background-color: $color-bg-fff;
+    @include border(0px,0px,2px,0px,#e4e4e4);
+    font-size: 20px;
+    .swipe_page{
+        color: $color-font-666;
+        .swipe{
+            float: left;
+            width: 25%;
+            img{
+                width: 40%;
+                display: block;
+                margin: 0 auto;
+            }
+            span{
+                display: block;
+                margin: 20px;
+            }
+        }
+    }
 }
 
 .shop_list_container{
-    background-color: #fff;
+    background-color: $color-bg-fff;
     margin-top: 20px;
-    border-top: 2px solid #e4e4e4;
+    @include border(2px,0px,0px,0px,#e4e4e4);
+    .shop_list_container_title{
+        color: $color-font-999;
+        font-size: 0.4rem;
+        display: block;
+        text-align: left;
+        margin: 10px 0px 0px 50px;
+        &::after{
+            @include backgroundICon(40px,40px,url('../../assets/img/house.png'),0px,0px,0px,10px);
+        }
+    }
 }
-.shop_list_container_title{
-    color: #999;
-    font-size: 0.4rem;
-    display: block;
-    text-align: left;
-    margin-left: 50px;
-    margin-top: 10px;
-}
-.shop_list_container_title::before{
-    content: '';
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background: url('../../assets/img/house.png') no-repeat;
-    background-size:cover;
-    position: relative;
-    top: 8px;
-    right: 15px;
-}
+
+
 </style>
