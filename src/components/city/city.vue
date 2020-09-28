@@ -123,71 +123,66 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search_box{
-    margin-top: 90px;
-    background-color: #fff;
-    color: #333;
-    position: relative;
+    margin-top: 90px ;
     padding-bottom: 20px;
-    border-bottom: 4px solid #e4e4e4;
+    background-color: $color-bg-fff;
+    color: $color-font-333;
+    @include border(0px,0px,4px,0px,#e4e4e4);
+    position: relative;
+
+    input{
+        outline: 0;
+        @include border(1px,1px,1px,1px, #e4e4e4);
+        width: 90%;
+        padding: 25px 40px;
+        box-sizing: border-box;
+        border-radius: 10px;
+    }
+    .submit{
+        width: 100%;
+        font-size: 30px;
+        margin-top: 20px;
+        span{
+            display: inline-block;
+            width: 90%;
+            margin: 0 auto;
+            background: $color-font-3190e8;
+            padding: 8px 40px;
+            box-sizing: border-box;
+            border-radius: 10px;
+            color: $color-font-fff;
+        }
+    }
+
+    .clear_btn{
+        @include backgroundICon(50px,50px,url(../../assets/img/clear.png),40px,50px,0px,0px)
+    }
 }
-.search_box input{
-    outline: 0;
-    border: 1px solid #e4e4e4;
-    width: 90%;
-    padding: 25px 40px;
-    box-sizing: border-box;
-    border-radius: 10px;
-}
-.submit{
-    width: 100%;
+.searchPlaceList_box{
     font-size: 30px;
-    margin-top: 20px;
-}
-.submit span{
-    display: inline-block;
-    width: 90%;
-    margin: 0 auto;
-    background: #3190e8;
-    padding: 8px 40px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    color: #fff;
-}
-.clear_btn{
-    display: block;
-    width: 50px;
-    height: 50px;
-    background: url(../../assets/img/clear.png) no-repeat;
-    background-size: contain;
-    position: absolute;
-    top: 40px;
-    right: 50px
-}
-/* 搜索地址列表 */
-.searchPlaceList_box ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 30px;
-    background-color: #fff;
-}
-.searchPlaceList_box ul li{
-    border-bottom: 1px solid #e4e4e4;
-    padding: 30px;
-    text-align: left;
-}
-.searchPlaceList_box ul li div{
-    margin-bottom: 10px;
+    background-color: $color-bg-fff;
+    li{
+        @include border(0px,0px,1px,0px,#ededed);
+        padding: 30px;
+        text-align: left;
+        div{
+            margin-bottom: 10px;
+        }
+        div.pace_address{
+            color: $color-font-999;
+            font-size: 25px;
+        }
+    }
+
+    .has_no_result{
+        font-size: 20px;
+        color: $color-font-333;
+        background: $color-bg-fff;
+        padding-top: 30px;
+    }
 }
 
-.pace_address{
-    color: #999;
-    font-size: 25px;
-}
-.has_no_result{
-    font-size: 20px;
-    color: #333;
-    background: #fff;
-    padding-top: 30px;
-}
+
+
+
 </style>

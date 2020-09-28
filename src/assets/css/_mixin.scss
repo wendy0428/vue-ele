@@ -7,7 +7,7 @@
     border-left: $left solid $color;
 }
 // 右箭头
-@mixin rightArrow($width,$heihgt,$url,$top,$right,$bottom,$left){
+@mixin backgroundICon($width,$heihgt,$url,$top,$right,$bottom,$left){
     @if $top!=0{
         top: $top;
     }

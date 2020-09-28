@@ -124,7 +124,7 @@ export default {
 %common-li{
     width: 25%;
     padding: 20px;
-    color: $color-font-blue;
+    color: $color-font-3190e8;
     font-size: 30px;
     @include border(0px,1px,1px,0px, #e4e4e4);
     box-sizing: border-box;
@@ -134,7 +134,7 @@ export default {
 /* 猜想的城市 */
 .cityGuess_box{
     margin-top: 90px;
-    background-color: $color-bg-white;
+    background-color: $color-bg-fff;
     & > div{
         display: flex;
         justify-content: space-between;
@@ -152,7 +152,7 @@ export default {
     }
     & > div:nth-child(2){
         font-size: 35px;
-        color: $color-font-blue;
+        color: $color-font-3190e8;
         @include border(0px,0px,4px,0px,#e4e4e4);
         position: relative;
         > span{
@@ -160,14 +160,14 @@ export default {
         }
     }
     .right_arrow::after{
-        @include rightArrow(50px,50px,url('../../assets/img/right_arrow.png'),10px,5px,0px,0px);
+        @include backgroundICon(50px,50px,url('../../assets/img/right_arrow.png'),10px,5px,0px,0px);
     }
 }
 
 
 /* 热门城市 */
 .hot_city_box{
-    background-color: $color-bg-white;
+    background-color: $color-bg-fff;
     .hot_city_box_title{
         font-size: 30px;
         color: $color-font-666;
@@ -185,7 +185,7 @@ export default {
 }
 .city_group{
     .each_groupCity{
-        background-color: $color-bg-white;
+        background-color: $color-bg-fff;
         font-size: 35px;
         margin: 20px 0px;
 
