@@ -118,7 +118,7 @@ export default {
 <style lang="scss" scoped>
 // 继承的样式
 %common-container{
-    @extend %common-container-flex;
+    @extend %common-container-flex-between;
     @include border(1px,0px,0px,0px,#e4e4e4);
 }
 %common-li{

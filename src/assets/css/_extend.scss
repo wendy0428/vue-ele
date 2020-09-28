@@ -1,8 +1,13 @@
-%common-container-flex{
+%common-container-flex-between{
     width: 100%;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+}
+%common-container-flex-center{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
 }
 %common-text-overflow{
     text-overflow:ellipsis; 

@@ -179,96 +179,87 @@ export default {
 <style lang="scss" scoped>
 #CommonshopList{
     height: 100vh;
-}
-.box_left{
-    width: 25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;  
-}
-.box_right{
-    width: 70%;
-    padding-right: 20px;
-}
-ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.each_shop{
-    display: flex;
-    width: 100%;
-    height: 220px;
-    border-bottom: 2px solid #e4e4e4;
-    box-sizing: border-box;
-}
+    .each_shop{
+        display: flex;
+        box-sizing: border-box;
+        width: 100%;
+        height: 220px;
+        @include border(0px,0px,2px,0px,#e4e4e4);
+        .box_left{
+            width: 25%;
+            @extend %common-container-flex-center;
+            img{
+                width: 70%;
+            };
+        }
+        .box_right{
+            width: 70%;
+            padding-right: 20px;
+            &>div{
+                @extend %common-container-flex-between;
+                margin-top: 20px;
+            };
+            .box_right_top{
+                .box_right_top_name{
+                    font-size: 35px;
+                    font-weight: bold;
+                    width: 300px;
+                    @extend %common-text-overflow;
+                    text-align: left;
+                    &.is_premium::before{
+                        content: '品牌';
+                        display: inline-block;
+                        font-size: 25px;
+                        background-color: $color-font-ffd930;
+                        padding:  2px 10px;
+                        border-radius: 10px;
+                        margin-right:10px;
+                    };
+                };
 
-
-.box_left img{
-    width: 70%;
-}
-
-.is_premium::before{
-    content: '品牌';
-    display: inline-block;
-    background-color:#ffd930;
-    font-size: 25px;
-    padding:  2px 10px;
-    border-radius: 10px;
-    margin-right:10px;
-}
-.is_premium,.box_right_top_name{
-    font-size: 35px;
-    font-weight: bold;
-    font-size: 0.466667rem;
-    font-weight: bold;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 300px;
-    text-align: left;
-}
-.box_right_top,.box_right_mid,.box_right_bottom{
-    width : 100%;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-.box_right_top_icon_name{
-    font-size: 20px;
-    color: #999;
-}
-.box_right_top_icon_name span{
-    display: inline-block;
-    border: 1px solid #f1f1f1;
-    padding: 5px;
-}
-.shop_rating{
-    color: #ff6000;
-    font-size: 20px;
-}
-.recent_order_num,.box_right_mid_delivery_mode{
-    font-size: 20px;
-    color: #666;
-}
-.box_right_mid_rating{
-    display: flex;
-}
-.delivery_mode{
-    color: #fff;
-    background-color: #3190e8;
-    border: 1px solid #3190e8;
-}
-.supports{
-    color:#3190e8;
-    border: 1px solid #3190e8;
-    margin-left:2px;
-}
-.box_right_bottom span{
-    color: #666;
-    font-size: 20px;
-}
-.serch_no_shop{
-    font-size: 20px;
+                .box_right_top_icon_name{
+                    font-size: 20px;
+                    color: $color-font-999;
+                    span{
+                        display: inline-block;
+                        @include border(1px,1px,1px,1px,#f1f1f1);
+                        padding: 5px;
+                    };
+                };
+            };
+            .box_right_mid{
+                .box_right_mid_rating{
+                    display: flex;
+                    color: $color-font-ff6000;
+                    font-size: 20px;
+                    .recent_order_num{
+                        color: $color-font-666;
+                    };
+                };
+                .box_right_mid_delivery_mode{
+                    font-size: 20px;
+                };
+                .delivery_mode{
+                    color: $color-font-fff;
+                    background-color: $color-bg-3190e8;
+                    @include border(1px,1px,1px,1px,#3190e8);
+                };
+                .supports{
+                    color:$color-font-3190e8;
+                    @include border(1px,1px,1px,1px,#3190e8);
+                    margin-left:2px;
+                };
+            };
+            .box_right_bottom{
+                span{
+                    color: $color-font-666;
+                    font-size: 20px;
+                };
+            };
+        };
+    };
+    .serch_no_shop{
+        font-size: 20px;
+    };
 }
 </style>
