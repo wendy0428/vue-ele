@@ -33,14 +33,6 @@ npm run build
 │   │   │   ├── [√] balance.vue                 // 余额页
 │   │   │   └── children
 │   │   │       └── [√] detail.vue              // 余额说明
-│   │   ├── benefit
-│   │   │   ├── [x] benefit.vue                 // 红包页
-│   │   │   └── children
-│   │   │       ├── [x] commend.vue             // 推荐有奖
-│   │   │       ├── [x] coupon.vue              // 代金券说明
-│   │   │       ├── [x] exchange.vue            // 兑换红包
-│   │   │       ├── [x] hbDescription.vue       // 红包说明
-│   │   │       └── [x] hbHistory.vue           // 历史红包
 │   │   ├── city
 │   │   │   └── [√] city.vue                    // 当前城市页
 │   │   ├── confirmOrder
